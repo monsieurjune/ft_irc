@@ -1,0 +1,69 @@
+# Project Executable
+ircserv
+
+# Object files
+*.o
+*.obj
+
+# Executable files
+*.exe
+*.out
+*.app
+*.elf
+
+# Libraries
+*.a
+*.so
+*.dylib
+*.lib
+*.dll
+
+# Debug files
+*.dSYM/
+*.core
+*.pdb
+*.idb
+
+# Dependency files
+*.d
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.old
+*.orig
+
+# IDE and editor files
+.vscode/
+*.code-workspace
+*.idea/
+*.sublime-workspace
+*.sublime-project
+*.user
+*.project
+*.classpath
+*.cproject
+*.launch
+
+# Version control directories
+.svn/
+.hg/
+.cvsignore
+*.git/
+
+# Build directories
+/build/
+/out/
+
+# Generated files
+tags
+TAGS
+cscope.out
+*.map
+
+# Custom rule for specific environments (optional)
+/node_modules/
+/.env
