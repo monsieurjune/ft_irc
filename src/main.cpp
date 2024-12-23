@@ -1,7 +1,9 @@
+#include "network/ft_irc.hpp"
 #include "network/network.hpp"
 #include "utils/ft_utils.hpp"
 
 #include <unistd.h>
+#include <fcntl.h>
 
 #include <poll.h>
 #include <sys/errno.h>
@@ -28,7 +30,7 @@ static inline void	sb_add_pollfd(std::vector<struct pollfd>& pollfd_vector, int 
 
 	ft_utils::memset(&new_pollfd, 0, sizeof(new_pollfd));
 
-	if (ft_utils::set_non_blocking(fd) < 0)
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 	{
 		return;
 	}
@@ -52,25 +54,36 @@ static inline void	sb_delete_pollfd(std::vector<struct pollfd>& pollfd_vector, i
 	}
 }
 
-int	main(const int argc, char *argv[])
+static inline int	sb_argv_parser(const int argc, const char *argv[], std::string& password)
 {
-	std::vector<struct pollfd>	pollfd_vector(1024);
-	int							listen_socketfd;
-	int							poll_count				= 0;
-	int							poll_check_count		= 0;
-	char						recv_buff[512 + 1];
-	// struct sockaddr_storage
-
 	if (argc != 3)
 	{
 		// TODO: Fix log here
-		std::cerr << "[ERROR]: You must provide exactly 2 argument (port, password)" << std::endl;
-		return 1;
+		return -1;
 	}
 
-	// Create Listen Socket
-	listen_socketfd = ft_net::get_listener_scoket_fd(argv[1]);
-	if (listen_socketfd < 0)
+	if (argv[2][0] == '\0')
+	{
+		// TODO: Fix log here
+		return -1;
+	}
+	password.assign(argv[2]);
+
+	return ft_net::get_listener_scoket_fd(argv[1]);
+}
+
+int	main(const int argc, const char *argv[])
+{
+	std::string					password;
+	std::vector<struct pollfd>	pollfd_vector(1024);
+	int							listen_socketfd;
+	int							poll_count					= 0;
+	int							poll_check_count			= 0;
+	char						recv_buff[IRC_MAXSIZE + 1];
+	// struct sockaddr_storage
+
+	listen_socketfd = sb_argv_parser(argc, argv, password);
+	if (listen_socketfd == -1)
 	{
 		return 1;
 	}
@@ -122,16 +135,16 @@ int	main(const int argc, char *argv[])
 				else
 				{
 					// It mean that client send irc msg
-					long re = recv(pollfd_vector[i].fd, recv_buff, 512, 0);
+					long recv_len = recv(pollfd_vector[i].fd, recv_buff, 512, 0);
 
-					if (re <= 0)
+					if (recv_len <= 0)
 					{
-						std::cout << "Someone Unexceptly Disconnect with code: " << re << std::endl;
+						std::cout << "Someone Unexceptly Disconnect with code: " << recv_len << std::endl;
 						sb_delete_pollfd(pollfd_vector, pollfd_vector[i].fd);
 					}
 					else
 					{
-						recv_buff[re] = 0;
+						recv_buff[recv_len] = 0;
 
 						std::cout << "Receive: " << recv_buff << std::endl;
 					}

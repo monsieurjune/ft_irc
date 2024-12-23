@@ -27,8 +27,7 @@ UTILS_SRC_DIR	:= $(SRC_DIR)/utils/
 UTILS_SRC		:= stoi.cpp \
 					log.cpp \
 					is_number.cpp \
-					memset.cpp \
-					set_non_blocking.cpp
+					memset.cpp
 UTILS_SRCS		:= $(addprefix $(UTILS_SRC_DIR), $(UTILS_SRC))
 
 # Main Source
