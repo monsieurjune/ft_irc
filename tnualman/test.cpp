@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 19:47:15 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/24 21:24:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:57:54 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int main(int argc, char ** argv)
 
     while (std::getline(file, line))
     {
-        Message msg(line);
+        Message msg(line.c_str());
         std::cout << "Message number " << i++ << ":\n";
-        std::cout << "  Raw     : " << msg.getRawMessage() << "\n";
-        if (msg.getIsValid() == false)
+        std::cout << "  Raw     : " << line << "\n";
+        if (msg.isValid() == false)
         {
             std::cout << "  Message is invalid, parsing may be incomplete, and does not matter! :p\n";
         }

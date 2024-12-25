@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/24 21:00:52 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:56:21 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 class Message
 {
 	private:
-		std::string							_raw;
+		// std::string							_raw; // Memory usage is at premium... :p
 		// std::map<std::string, std::string>	_tags; // Not to be implemented (?)
 		std::string							_source; // a.k.a. prefix 
 		std::string							_command;
@@ -31,7 +31,6 @@ class Message
 	
 	public:
 		Message(std::string const raw);
-		Message(char * const raw);
 		
 		~Message(void);
 		
@@ -39,15 +38,16 @@ class Message
 		// Message(Message const & origin);
 		// Message & operator=(Message const & rhs);
 
-		int	parse(void); // returns status value
+		// Returns status value, implemented separately from the constructor for the sake of modularity.
+		int	parse(std::string const raw);  
 
 		// Getters
-		std::string 						getRawMessage(void) const;
+		// std::string 						getRawMessage(void) const;
 		// std::map<std::string, std::string>	getTags(void) const; // Not to be implemented (?)
 		std::string							getSource(void) const;
 		std::string							getCommand(void) const;
 		std::vector<std::string>			getParams(void) const;
-		bool								getIsValid(void) const;
+		bool								isValid(void) const;
 
 		// Setters
 		// char *							setRawMessage(void) const;

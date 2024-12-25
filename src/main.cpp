@@ -89,7 +89,7 @@ int	main(const int argc, const char *argv[])
 	}
 
 	// Set Up listen socket to pollfd
-	sb_add_pollfd(pollfd_vector, listen_socketfd, POLLIN);
+	sb_add_pollfd(pollfd_vector, listen_socketfd, POLLIN | POLLOUT);
 
 	// Infinite Loop
 	while (1)
@@ -139,12 +139,14 @@ int	main(const int argc, const char *argv[])
 
 					if (recv_len <= 0)
 					{
-						std::cout << "Someone Unexceptly Disconnect with code: " << recv_len << std::endl;
+						std::cout << "Someone unexpectedly disconnected with code: " << recv_len << std::endl;
 						sb_delete_pollfd(pollfd_vector, pollfd_vector[i].fd);
 					}
 					else
 					{
 						recv_buff[recv_len] = 0;
+
+						// herukgkurf
 
 						std::cout << "Receive: " << recv_buff << std::endl;
 					}

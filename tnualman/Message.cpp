@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/24 21:14:36 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:57:01 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,16 @@ std::vector<std::string> split(std::string const & s, std::string const & delimi
 
 Message::Message(void) {}
 
-Message::Message(std::string const raw): _raw(raw)
+Message::Message(std::string const raw)
 {
-	parse();
-}
-
-Message::Message(char * const raw): _raw(raw)
-{
-	parse();
+	parse(raw);
 }
 
 Message::~Message(void) {}
 
-int Message::parse(void)
+int Message::parse(std::string const raw)
 {
-	if (_raw.empty()) // Empty message
+	if (raw.empty()) // Empty message
 	{
 		_is_valid = false;
 		return (1);
@@ -58,9 +53,9 @@ int Message::parse(void)
 	
 	// _raw = _raw.substr(0, _raw.find("\r\n")); // Discard everything after \r\n
 	
-	std::vector<std::string> raw_splitted = split(_raw, " ");
+	std::vector<std::string> raw_splitted = split(raw, " ");
 	
-	bool has_source = (_raw.at(0) == ':');
+	bool has_source = (raw.at(0) == ':');
 	int param_idx;	
 	
 	if (has_source) // Message has a source/prefix
@@ -89,8 +84,8 @@ int Message::parse(void)
 		}
 		else // IS the trailing param
 		{
-			int temp_pos = has_source ? _raw.find(':', 1) : _raw.find(':');
-			std::string temp = _raw.substr(temp_pos + 1, _raw.find("\r\n"));
+			int temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
+			std::string temp = raw.substr(temp_pos + 1, std::string::npos);
 			_params.push_back(temp);
 			break ;
 		}
@@ -99,10 +94,10 @@ int Message::parse(void)
 	return (0);
 }
 
-std::string Message::getRawMessage(void) const
-{
-	return (_raw);
-}
+// std::string Message::getRawMessage(void) const
+// {
+// 	return (_raw);
+// }
 
 std::string Message::getSource(void) const
 {
@@ -119,7 +114,7 @@ std::vector<std::string> Message::getParams(void) const
 	return (_params);
 }
 
-bool Message::getIsValid(void) const
+bool Message::isValid(void) const
 {
 	return (_is_valid);
 }
