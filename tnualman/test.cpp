@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 19:47:15 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/25 15:57:54 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:01:08 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int main(int argc, char ** argv)
         {
             std::cout << "  Param   : " << *it << "\n";
         }
+        std::cout << std::endl;
     }
     return (0);
 }
