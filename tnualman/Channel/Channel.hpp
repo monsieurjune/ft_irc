@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/28 11:42:45 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/28 13:06:04 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ class Channel
 		 */
 		// time_t _timeCreated;
 
-		/** User list. (Tat: Should this be list of client for our ft_irc ?)
+		/** User map. associated int value is for user-channel membership flags.
 		 */
-		std::vector<Client*> _userList;
+		std::map<Client*, int> _user_vec;
 
 		/** Channel topic.
 		 * If this is an empty string, no channel topic is set.
@@ -78,7 +78,7 @@ class Channel
 
 		std::string				getName(void) const;
 		// time_t				getTimeCreated(void) const;
-		std::vector<Client*>	getUserList(void) const;
+		std::map<Client*, int>	getUserVec(void) const;
 		int						getUserCount(void) const; // Simply returns the size of the vector from above.
 		std::string				getTopic(void) const;
 		time_t					getTimeTopicSet(void) const;
