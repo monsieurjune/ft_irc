@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/28 13:06:04 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/28 23:07:37 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ class Channel
 		 */
 		// time_t _timeCreated;
 
-		/** User map. associated int value is for user-channel membership flags.
+		/** User map. associated int value is for user-channel membership flags/statuses.
 		 */
-		std::map<Client*, int> _user_vec;
+		std::map<Client*, int> _userMap;
 
 		/** Channel topic.
 		 * If this is an empty string, no channel topic is set.
@@ -66,7 +66,7 @@ class Channel
 
 	public:
 
-		Channel(std::string const & name);
+		Channel(std::string const name);
 		~Channel(void);
 
 		// Orthodox Canonical Form fluff :p
@@ -78,11 +78,22 @@ class Channel
 
 		std::string				getName(void) const;
 		// time_t				getTimeCreated(void) const;
-		std::map<Client*, int>	getUserVec(void) const;
-		int						getUserCount(void) const; // Simply returns the size of the vector from above.
+		int						getUserStatus(Client * const client) const;
+		int						getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string				getTopic(void) const;
 		time_t					getTimeTopicSet(void) const;
 		std::string				getTopicSetter(void) const;
+
+		// Setters
+
+		void	setName(std::string const name);
+		
+		/** status MUST be positive, because I define negative as user/client not found.
+		 * Returns status or -1 if user/client is not found.
+		 */
+		int		setUserStatus(Client * const client, int const status); 
+		
+		void 	setTopic(std::string const name, Client const * const client);
 
 };
 

@@ -6,18 +6,104 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/28 13:06:04 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/29 02:41:07 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-Channel::Channel(void) {}
-
-Channel::Channel(std::string const & name): _name(name)
+Channel::Channel(void)
 {
-    // std::time(&_timeCreated);
-    std::time(&_timeTopicSet);
+	// std::time(&_timeCreated); // Not yet used...
+	std::time(&_timeTopicSet);
+}
+
+Channel::Channel(std::string const name): _name(name)
+{
+	// std::time(&_timeCreated); // Not yet used...
+	std::time(&_timeTopicSet);
 }
 
 Channel::~Channel(void) {}
+
+std::string Channel::getName(void) const
+{
+	return (_name);
+}
+
+int Channel::getUserStatus(Client * const client) const
+{
+	/** I define any negative status value to represent user not being found.
+	 * This means any existing user must have the status be a positive value.
+	 * (int sign bit logic)
+	 * I believe this is better than using zero as user not found, because
+	 * that would require all users to always have at least one flag be positive,
+	 * which likely will not be the case when we get to implement the
+	 * user-membership logic.
+	 */
+	try
+	{
+		return (_userMap.at(client));
+	}
+	catch (std::exception const & e)
+	{
+		return (-1);
+	}	
+}
+
+int Channel::getUserCount(void) const
+{
+	return (_userMap.size());
+}
+
+std::string Channel::getTopic(void) const
+{
+	return (_topic);
+}
+
+time_t Channel::getTimeTopicSet(void) const
+{
+	return (_timeTopicSet);
+}
+
+std::string Channel::getTopicSetter(void) const
+{
+	return (_topicSetter);
+}
+
+void Channel::setName(std::string const name)
+{
+	_name = name;
+}
+
+int Channel::setUserStatus(Client * const client, int const status)
+{
+	/** Same logic as getUserStatus() .
+	 */
+	try
+	{
+		return (_userMap.at(client) = status);
+	}
+	catch (std::exception const & e)
+	{
+		return (-1);
+	}	
+}
+
+void Channel::setTopic(std::string const topic, Client const * const client)
+{
+	_topic = topic;
+	
+	if (client)
+	{
+		/** I don't know whether this should be nickname or username.
+		 */
+		_topicSetter = client->getNickname();
+	}
+	else
+	{
+		_topicSetter = "<unspecified>";
+	}
+
+	std::time(&_timeTopicSet);
+}

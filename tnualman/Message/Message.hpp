@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/25 15:56:21 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/28 23:10:13 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ class Message
 		// Message(Message const & origin);
 		// Message & operator=(Message const & rhs);
 
-		// Returns status value, implemented separately from the constructor for the sake of modularity.
+		// Returns status value, implemented separately from the constructor for the sake of modularity,
+		// in case we add something to the constructor later.
 		int	parse(std::string const raw);  
 
 		// Getters
