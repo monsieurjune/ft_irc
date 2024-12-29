@@ -1,0 +1,16 @@
+#ifndef __IRC_INVALID_PACKET_EXCEPTION_HPP__
+#define __IRC_INVALID_PACKET_EXCEPTION_HPP__
+#include <exception>
+#include <string>
+
+class IrcInvalidPacketException : public std::exception
+{
+	private:
+		std::string	msg;
+	
+	public:
+		IrcInvalidPacketException();
+		virtual const char* what() const throw();
+};
+
+#endif
