@@ -1,6 +1,6 @@
-#include "utils/ft_utils.hpp"
+#include "std/ft_cstd.hpp"
 
-namespace ft_utils
+namespace ft_std
 {
 
 void	*memset(void *ptr, int c, size_t byte)

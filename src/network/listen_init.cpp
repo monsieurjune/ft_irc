@@ -1,5 +1,6 @@
 #include "network/network.hpp"
-#include "utils/ft_utils.hpp"
+#include "std/ft_cstd.hpp"
+#include "std/ft_cppstd.hpp"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -15,13 +16,13 @@ static ssize_t	sb_check_port_str(const char *num)
 {
 	ssize_t	port_no;
 
-	if (!ft_utils::isnumber(num))
+	if (!ft_std::isnumber(num))
 	{
 		// TODO: Put log here
 		return -1;
 	}
 
-	port_no = ft_utils::stoi(num);
+	port_no = ft_std::stoi(num);
 	if (port_no < 0 || port_no > 65535)
 	{
 		// TODO: Put log here
@@ -35,7 +36,7 @@ static bool sb_get_addr_info(const char *port_no, struct addrinfo **pai)
 	struct addrinfo hints;
 	int				res;
 
-	ft_utils::memset(&hints, 0, sizeof(hints));
+	ft_std::memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;

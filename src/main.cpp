@@ -1,5 +1,6 @@
 #include "network/ft_irc.hpp"
 #include "network/network.hpp"
+#include "std/ft_cstd.hpp"
 #include "utils/ft_utils.hpp"
 
 #include <unistd.h>
@@ -28,7 +29,7 @@ static inline void	sb_add_pollfd(std::vector<struct pollfd>& pollfd_vector, int 
 {
 	struct pollfd	new_pollfd;
 
-	ft_utils::memset(&new_pollfd, 0, sizeof(new_pollfd));
+	ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
 
 	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 	{

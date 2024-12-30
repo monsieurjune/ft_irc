@@ -1,6 +1,6 @@
-#include "utils/ft_utils.hpp"
+#include "std/ft_cstd.hpp"
 
-namespace ft_utils
+namespace ft_std
 {
 
 bool	isnumber(const char *num)
