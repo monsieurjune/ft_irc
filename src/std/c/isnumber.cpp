@@ -3,7 +3,7 @@
 namespace ft_utils
 {
 
-bool	is_number(const char *num)
+bool	isnumber(const char *num)
 {
 	size_t	i = 0;
 

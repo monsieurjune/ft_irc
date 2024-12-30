@@ -15,7 +15,7 @@ static ssize_t	sb_check_port_str(const char *num)
 {
 	ssize_t	port_no;
 
-	if (!ft_utils::is_number(num))
+	if (!ft_utils::isnumber(num))
 	{
 		// TODO: Put log here
 		return -1;

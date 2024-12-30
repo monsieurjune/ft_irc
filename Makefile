@@ -22,12 +22,26 @@ NETWORK_SRC_DIR	:= $(SRC_DIR)/network/
 NETWORK_SRC		:= listen_init.cpp
 NETWORK_SRCS	:= $(addprefix $(NETWORK_SRC_DIR), $(NETWORK_SRC))
 
+# STD
+STD_SRC_DIR		:= $(SRC_DIR)/std
+
+#  CSTD
+CSTD_SRC_DIR	:= $(STD_SRC_DIR)/c/
+CSTD_SRC		:= memset.cpp \
+					isnumber.cpp
+CSTD_SRCS		:= $(addprefix $(CSTD_SRC_DIR), $(CSTD_SRC))
+
+#  CPPSTD
+CPPSTD_SRC_DIR	:= $(STD_SRC_DIR)/cpp/
+CPPSTD_SRC		:= stoi.cpp \
+					itoa.cpp
+CPPSTD_SRCS		:= $(addprefix $(CPPSTD_SRC_DIR), $(CPPSTD_SRC))
+
+STD_SRCS		:= $(CSTD_SRCS) $(CPPSTD_SRCS)
+
 # Utils Source
 UTILS_SRC_DIR	:= $(SRC_DIR)/utils/
-UTILS_SRC		:= stoi.cpp \
-					log.cpp \
-					is_number.cpp \
-					memset.cpp
+UTILS_SRC		:= log.cpp
 UTILS_SRCS		:= $(addprefix $(UTILS_SRC_DIR), $(UTILS_SRC))
 
 # Main Source
@@ -36,7 +50,7 @@ MAIN_DIR	:= $(SRC_DIR)/
 MAIN_SRCS	:= $(addprefix $(MAIN_DIR), $(MAIN_SRC))
 
 # Objects & Dependencies File
-SRCS	:= $(MAIN_SRCS) $(NETWORK_SRCS) $(UTILS_SRCS)
+SRCS	:= $(MAIN_SRCS) $(STD_SRCS) $(NETWORK_SRCS) $(UTILS_SRCS)
 OBJS	:= $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEPS	:= $(OBJS:.o=.d)
 
