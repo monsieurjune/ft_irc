@@ -6,10 +6,10 @@
 class IrcUnknownCmdException : public std::exception
 {
 	private:
-		std::string	msg;
+		std::string	_msg;
 
 	public:
-		IrcUnknownCmdException();
+		IrcUnknownCmdException(const char *msg);
 		virtual const char* what() const throw();
 };
 

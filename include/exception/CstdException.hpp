@@ -6,10 +6,10 @@
 class CstdException : public std::exception
 {
 	private:
-		std::string	msg;
+		std::string	_msg;
 
 	public:
-		CstdException();
+		CstdException(int code);
 		virtual const char* what() const throw();
 };
 
