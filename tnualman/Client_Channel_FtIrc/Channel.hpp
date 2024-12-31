@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/31 20:05:32 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/31 20:56:25 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ class Channel
 		/** status MUST be positive, because I define negative as user/client not found.
 		 * Returns status or -1 if user/client is not found.
 		 */
-		int		setUserStatus(Client * const client, int const status); 
-		
+		int		setUserStatus(Client * const client, int const status);
 		void 	setTopic(std::string const name, Client const * const client);
+
+		// Adder
+		int	addUserToChannel(Client * const client, int const status);
 
 };
 
