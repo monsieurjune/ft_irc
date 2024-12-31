@@ -8,6 +8,8 @@ namespace ft_std
 
 void	*memset(void *ptr, int c, size_t byte);
 bool	isnumber(const char *num);
+size_t	strcnlen(const char *str, int c, size_t n);
+char	*strnstr(const char *str, const char *find, size_t n);
 
 }
 

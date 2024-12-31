@@ -1,10 +1,12 @@
 #ifndef __NETWORK_HPP__
 #define __NETWORK_HPP__
+#include <string>
 
 namespace ft_net
 {
 
 int	get_listener_scoket_fd(const char *port_str);
+bool	irc_recv(int fd, std::string& msg);
 
 }
 
