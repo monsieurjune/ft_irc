@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/29 02:41:07 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/31 20:05:27 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int Channel::getUserStatus(Client * const client) const
 	}
 	catch (std::exception const & e)
 	{
+		std::cerr << "Client with socket " << client->getFd() 
+			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
 }
@@ -86,6 +88,8 @@ int Channel::setUserStatus(Client * const client, int const status)
 	}
 	catch (std::exception const & e)
 	{
+		std::cerr << "Client with socket " << client->getFd() 
+			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Ft_irc.hpp                                         :+:      :+:    :+:   */
+/*   FtIrc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/29 02:59:57 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/31 20:50:08 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@
 # include <vector>
 # include <map>
 # include <string>
+# include <iostream>
 
-// TODO: Replace these forward declarations for these classes
-// with #include once those classes are done.
+# include "Client.hpp"
+# include "Channel.hpp"
 
-class Client;
-class Channel;
-
-class Ft_irc
+class FtIrc
 {
 	private:
 		
@@ -42,12 +40,12 @@ class Ft_irc
 		std::string						_serverPassword;
 		time_t							_timeServerStarted;
 
-		Ft_irc(void);
+		FtIrc(void);
 
 	public:
 		
-		Ft_irc(std::string const server_password);
-		~Ft_irc(void);
+		FtIrc(std::string const server_password);
+		~FtIrc(void);
 
 		// Getters
 
@@ -56,12 +54,16 @@ class Ft_irc
 		Channel*	getChannelByName(std::string const name) const;
 		std::string	getServerPassword(void) const;
 
-		// Changers; will discuss these before implementing...
+		// Changers
 
 		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
 		int		changeUsername(std::string const name, std::string newname);
 		int		changeChannelName(std::string const name, std::string newname);
 		void	changeServerPassword(std::string password);
+
+		// Add user/client
+		int	addClient(Client * const client);
+		int	addChannel(Channel * const channel);
 
 };
 
