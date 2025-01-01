@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/31 21:07:38 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:25:11 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Channel::Channel(std::string const name): _name(name)
 
 Channel::~Channel(void) {}
 
-std::string Channel::getName(void) const
+std::string const & Channel::getName(void) const
 {
 	return (_name);
 }
@@ -58,7 +58,7 @@ int Channel::getUserCount(void) const
 	return (_userMap.size());
 }
 
-std::string Channel::getTopic(void) const
+std::string const & Channel::getTopic(void) const
 {
 	return (_topic);
 }
@@ -68,7 +68,7 @@ time_t Channel::getTimeTopicSet(void) const
 	return (_timeTopicSet);
 }
 
-std::string Channel::getTopicSetter(void) const
+std::string const & Channel::getTopicSetter(void) const
 {
 	return (_topicSetter);
 }

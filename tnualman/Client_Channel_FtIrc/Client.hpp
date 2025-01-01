@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/29 01:57:20 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:21:18 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ class Client
 
 		// Getters
 		
-		int 	getFd(void) const;
-		int 	getAuthorizeLevel(void) const;
+		int	getFd(void) const;
+		int	getAuthorizeLevel(void) const;
 
-		std::string	getNickname(void) const;
-		std::string	getUsername(void) const;
-		std::string	getHost(void) const;
+		std::string const &	getNickname(void) const;
+		std::string	const &	getUsername(void) const;
+		std::string	const & getHost(void) const;
 
 		// Setters
 		

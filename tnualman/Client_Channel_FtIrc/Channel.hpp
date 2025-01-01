@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/31 20:56:25 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:25:05 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ class Channel
 
 		// Getters
 
-		std::string				getName(void) const;
-		// time_t				getTimeCreated(void) const;
-		int						getUserStatus(Client * const client) const;
-		int						getUserCount(void) const; // Simply returns the size of the map from above.
-		std::string				getTopic(void) const;
-		time_t					getTimeTopicSet(void) const;
-		std::string				getTopicSetter(void) const;
+		std::string const &	getName(void) const;
+		// time_t			getTimeCreated(void) const;
+		int					getUserStatus(Client * const client) const;
+		int					getUserCount(void) const; // Simply returns the size of the map from above.
+		std::string	const &	getTopic(void) const;
+		time_t				getTimeTopicSet(void) const;
+		std::string	const &	getTopicSetter(void) const;
 
 		// Setters
 
@@ -92,10 +92,10 @@ class Channel
 		 * Returns status or -1 if user/client is not found.
 		 */
 		int		setUserStatus(Client * const client, int const status);
-		void 	setTopic(std::string const name, Client const * const client);
+		void	setTopic(std::string const name, Client const * const client);
 
 		// Adder
-		int	addUserToChannel(Client * const client, int const status);
+		int		addUserToChannel(Client * const client, int const status);
 
 };
 

@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/29 02:59:57 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:21:12 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ int Client::getAuthorizeLevel(void) const
 	return (_authorizeLevel);
 }
 
-std::string Client::getNickname(void) const
+std::string const & Client::getNickname(void) const
 {
 	return (_nickname);
 }
 
-std::string Client::getUsername(void) const
+std::string const & Client::getUsername(void) const
 {
 	return (_username);
 }
 
-std::string	Client::getHost(void) const
+std::string	const & Client::getHost(void) const
 {
 	return (_host);
 }
