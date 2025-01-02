@@ -3,7 +3,7 @@
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
 
-#include "exception/CstdException.cpp"
+#include "exception/CstdException.hpp"
 #include "exception/IrcInvalidPacketException.hpp"
 #include "exception/IrcDisconnectedException.hpp"
 
@@ -14,6 +14,7 @@
 
 // CPP Header
 #include <string>
+#include <iostream>
 
 static inline void	sb_check_recv_error(ssize_t recv_len)
 {
@@ -73,7 +74,8 @@ bool	irc_recv(int fd, std::string& msg)
 
 	// Construct buffer into String and replace \r\n with \0
 	term_pos[0] = '\0';
-	msg.assign(buff, actual_len);
+
+	msg.assign(buff);
 
 	// Get Actual length of IRC's Message (take \0 pos that replace \r\n)
 	actual_len = msg.length();

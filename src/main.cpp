@@ -143,7 +143,7 @@ int	main(const int argc, const char *argv[])
 
 						if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
 						{
-							std::cout << msg << std::endl;
+							std::cout << "Receive: " << msg << std::endl;
 						}
 					}
 					catch(const std::exception& e)
