@@ -197,7 +197,7 @@ int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender,
 	if (param_count < 1 || param_count > 2)
 	{
 		*output = "Invalid parameters for TOPIC command!";
-		// We should define error macros, or exception ...
+		// We should define error macros, enum, or exception ...
 		return (1);
 	}
 
@@ -207,7 +207,7 @@ int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender,
 	if (!channel)
 	{
 		*output = "Channel named " + channel_name + " not found!";
-		// We should define error macros, or exception ...
+		// We should define error macros, enum, or exception
 		return (2);
 	}
 
@@ -219,6 +219,13 @@ int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender,
 	}
 	else
 	{
+		// if (NOT FOUND IN CHANNEL USER LIST || NOT AN OPERATOR OF THE CHANNEL)
+		// {
+		// 	*output = "User " + sender->getNickname() + " cannot set the topic for channel " + channel_name + " !";
+		// 	// Put code to send the message to client, either here on in a network handler function ...
+		// 	// We should define error macros, enum, or exception
+		// 	return (3);
+		// }
 		channel->setTopic(message.getParams().at(1), sender);
 		*output = "Channel: " + channel_name + "; Topic: " + channel->getTopic() + "; Setter: " + channel->getTopicSetter();
 		// Put code to send the message to client, either here on in a network handler function ...
