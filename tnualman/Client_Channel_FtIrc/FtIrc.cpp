@@ -14,12 +14,14 @@
 
 FtIrc::FtIrc(void)
 {
-    std::time(&_timeServerStarted);
+	_commandVec = {"KICK", "INVITE", "MODE", "TOPIC"};
+	std::time(&_timeServerStarted);
 }
 
 FtIrc::FtIrc(std::string const password): _serverPassword(password)
 {
-    std::time(&_timeServerStarted);
+	_commandVec = {"KICK", "INVITE", "MODE", "TOPIC"};
+	std::time(&_timeServerStarted);
 }
 
 FtIrc::~FtIrc(void) {}
@@ -153,4 +155,73 @@ int	FtIrc::addChannel(Channel * const channel)
 	_channelMapByName.insert({channel->getName(), channel});
 
 	return (0);
+}
+
+int	FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string * const output)
+{
+	int	cmd_idx = -1;
+	for (int i = 0; i < _commandVec.size(); i++)
+	{	
+		if (message.getCommand().compare(_commandVec.at(i)) == 0)
+		{
+			cmd_idx = i;
+			break ;
+		}
+	}	
+	switch (cmd_idx)
+	{
+		case (0):
+			// KICK
+			break ;
+		case (1):
+			// INVITE
+			break ;
+		case (2):
+			// MODE
+			break ;
+		case (3):
+			// TOPIC
+			// return (icrCommandTOPIC(message, sender));
+			break;
+		default:
+			// Command does not exist!
+			return (-1);
+	}
+	return (0);
+}
+
+int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender, std::string * const output)
+{
+	int param_count = message.getParams().size();
+
+	if (param_count < 1 || param_count > 2)
+	{
+		*output = "Invalid parameters for TOPIC command!";
+		// We should define error macros, or exception ...
+		return (1);
+	}
+
+	std::string	channel_name = message.getParams().at(0);
+	Channel* channel = getChannelByName(channel_name);
+	
+	if (!channel)
+	{
+		*output = "Channel named " + channel_name + " not found!";
+		// We should define error macros, or exception ...
+		return (2);
+	}
+
+	if (param_count == 1)
+	{
+		*output = "Channel: " + channel_name + "; Topic: " + channel->getTopic();
+		// Put code to send the message to client, either here on in a network handler function ...
+		return (0);
+	}
+	else
+	{
+		channel->setTopic(message.getParams().at(1), sender);
+		*output = "Channel: " + channel_name + "; Topic: " + channel->getTopic() + "; Setter: " + channel->getTopicSetter();
+		// Put code to send the message to client, either here on in a network handler function ...
+		return (0);
+	}
 }

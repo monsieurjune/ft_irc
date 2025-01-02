@@ -26,6 +26,7 @@
 
 # include "Client.hpp"
 # include "Channel.hpp"
+# include "Message.hpp"
 
 class FtIrc
 {
@@ -39,6 +40,8 @@ class FtIrc
 
 		std::string						_serverPassword;
 		time_t							_timeServerStarted;
+
+		std::vector<std::string>		_commandVec;
 
 		FtIrc(void);
 
@@ -62,8 +65,16 @@ class FtIrc
 		void	changeServerPassword(std::string password);
 
 		// Add user/client
-		int	addClient(Client * const client);
-		int	addChannel(Channel * const channel);
+		int		addClient(Client * const client);
+		int		addChannel(Channel * const channel);
+
+		// IRC Message handler
+
+		int	ircMessageHandler(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandKICK(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandMODE(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandTOPIC(Message const & message, Client const * const sender, std::string * const output);
 
 };
 
