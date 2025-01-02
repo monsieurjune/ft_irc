@@ -10,6 +10,7 @@ class IrcDisconnectedException : public std::exception
 
 	public:
 		IrcDisconnectedException(const char *msg);
+		virtual ~IrcDisconnectedException() throw();
 		virtual const char* what() const throw();
 };
 

@@ -1,9 +1,11 @@
 #include "exception/IrcInvalidPacketException.hpp"
 
-IrcInvalidPacketException::IrcInvalidPacketException(const char *msg)
+IrcInvalidPacketException::IrcInvalidPacketException(const char *msg) : exception()
 {
 	_msg = std::string(msg);
 }
+
+IrcInvalidPacketException::~IrcInvalidPacketException() throw() {}
 
 const char *IrcInvalidPacketException::what() const throw()
 {

@@ -10,6 +10,7 @@ class IrcInvalidPacketException : public std::exception
 	
 	public:
 		IrcInvalidPacketException(const char *msg);
+		virtual ~IrcInvalidPacketException() throw();
 		virtual const char* what() const throw();
 };
 

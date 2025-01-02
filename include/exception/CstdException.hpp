@@ -10,6 +10,7 @@ class CstdException : public std::exception
 
 	public:
 		CstdException(int code);
+		virtual ~CstdException() throw();
 		virtual const char* what() const throw();
 };
 
