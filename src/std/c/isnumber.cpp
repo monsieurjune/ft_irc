@@ -1,9 +1,9 @@
-#include "utils/ft_utils.hpp"
+#include "std/ft_cstd.hpp"
 
-namespace ft_utils
+namespace ft_std
 {
 
-bool	is_number(const char *num)
+bool	isnumber(const char *num)
 {
 	size_t	i = 0;
 

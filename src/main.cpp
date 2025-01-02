@@ -1,5 +1,6 @@
 #include "network/ft_irc.hpp"
 #include "network/network.hpp"
+#include "std/ft_cstd.hpp"
 #include "utils/ft_utils.hpp"
 
 #include <unistd.h>
@@ -28,7 +29,7 @@ static inline void	sb_add_pollfd(std::vector<struct pollfd>& pollfd_vector, int 
 {
 	struct pollfd	new_pollfd;
 
-	ft_utils::memset(&new_pollfd, 0, sizeof(new_pollfd));
+	ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
 
 	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 	{
@@ -135,20 +136,19 @@ int	main(const int argc, const char *argv[])
 				else
 				{
 					// It mean that client send irc msg
-					long recv_len = recv(pollfd_vector[i].fd, recv_buff, 512, 0);
 
-					if (recv_len <= 0)
+					try
 					{
-						std::cout << "Someone unexpectedly disconnected with code: " << recv_len << std::endl;
-						sb_delete_pollfd(pollfd_vector, pollfd_vector[i].fd);
+						std::string	msg;
+
+						if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
+						{
+							std::cout << "Receive: " << msg << std::endl;
+						}
 					}
-					else
+					catch(const std::exception& e)
 					{
-						recv_buff[recv_len] = 0;
-
-						// herukgkurf
-
-						std::cout << "Receive: " << recv_buff << std::endl;
+						std::cerr << e.what() << std::endl;
 					}
 				}
 			}
