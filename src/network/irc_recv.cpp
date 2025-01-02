@@ -82,9 +82,9 @@ bool	irc_recv(int fd, std::string& msg)
 
 	// Clear IRC MSG from socket's buffer
 	// Assume that it must has anything to read here
-	if (recv(fd, buff, IRC_MAXSIZE, 0) <= 0)
+	if (recv(fd, buff, actual_len + 2, 0) <= 0)
 	{
-		sb_check_recv_error(recv_len);
+		sb_check_recv_error(actual_len);
 		return false;
 	}
 

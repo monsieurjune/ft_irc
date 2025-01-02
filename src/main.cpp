@@ -136,20 +136,19 @@ int	main(const int argc, const char *argv[])
 				else
 				{
 					// It mean that client send irc msg
-					long recv_len = recv(pollfd_vector[i].fd, recv_buff, 512, 0);
 
-					if (recv_len <= 0)
+					try
 					{
-						std::cout << "Someone unexpectedly disconnected with code: " << recv_len << std::endl;
-						sb_delete_pollfd(pollfd_vector, pollfd_vector[i].fd);
+						std::string	msg;
+
+						if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
+						{
+							std::cout << msg << std::endl;
+						}
 					}
-					else
+					catch(const std::exception& e)
 					{
-						recv_buff[recv_len] = 0;
-
-						// herukgkurf
-
-						std::cout << "Receive: " << recv_buff << std::endl;
+						std::cerr << e.what() << std::endl;
 					}
 				}
 			}
