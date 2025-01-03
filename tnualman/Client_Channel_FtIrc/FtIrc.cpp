@@ -160,28 +160,24 @@ int	FtIrc::addChannel(Channel * const channel)
 int	FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string & output)
 {
 	int	cmd_idx = -1;
-	for (int i = 0; i < _commandVec.size(); i++)
-	{	
-		if (message.getCommand().compare(_commandVec.at(i)) == 0)
-		{
-			cmd_idx = i;
+	while (++cmd_idx < _commandVec.size())
+		if (message.getCommand().compare(_commandVec.at(cmd_idx)) == 0)
 			break ;
-		}
-	}	
+
 	switch (cmd_idx)
 	{
-		case (0):
+		case (0): // KICK
 			// KICK
 			break ;
-		case (1):
+		case (1): // INVITE
 			// INVITE
 			break ;
-		case (2):
+		case (2): // MODE
 			// MODE
 			break ;
-		case (3):
+		case (3): // TOPIC
 			// TOPIC
-			// return (icrCommandTOPIC(message, sender));
+			// return (icrCommandTOPIC(message, sender, output));
 			break;
 		default:
 			// Command does not exist!
