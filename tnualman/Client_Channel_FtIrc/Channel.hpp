@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 18:22:25 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:30:02 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ class Channel
 		// Channel & operator=(Channel const & rhs);
 
 		// Getters
-
 		std::string const &	getName(void) const;
 		time_t				getTimeCreated(void) const;
 		t_userFlags			getUserFlags(Client * const client) const;
@@ -108,12 +107,11 @@ class Channel
 
 		// Setters
 		void				setName(std::string const name);
-		
 		t_userFlags			setUserFlags(Client * const client, Channel::t_userFlags const & flags);
 		void				setTopic(std::string const name, Client const * const client);
 
 		// Adder
-		int		addUserToChannel(Client * const client, int const status);
+		int					addUserToChannel(Client * const client, int const status);
 };
 
 #endif

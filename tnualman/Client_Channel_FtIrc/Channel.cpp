@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 18:25:54 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:29:15 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 Channel::Channel(void)
 {
-	// std::time(&_timeCreated); // Not yet used...
+	std::time(&_timeCreated);
 	std::time(&_timeTopicSet);
 }
 
 Channel::Channel(std::string const name): _name(name)
 {
-	// std::time(&_timeCreated); // Not yet used...
+	std::time(&_timeCreated);
 	std::time(&_timeTopicSet);
 }
 
@@ -72,8 +72,6 @@ void Channel::setName(std::string const name)
 
 Channel::t_userFlags Channel::setUserFlags(Client * const client, Channel::t_userFlags const & flags)
 {
-	/** Same logic as getUserStatus() .
-	 */
 	try
 	{
 		// TODO: VERIFY THIS LOGIC, READ THE DOCS FOR std::bitmap !!
