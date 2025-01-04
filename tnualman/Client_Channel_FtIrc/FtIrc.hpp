@@ -51,16 +51,14 @@ class FtIrc
 		~FtIrc(void);
 
 		// Getters
-
 		Client*		getClientByFd(int const fd) const;
-		Client*		getClientByUsername(std::string const name) const;
+		Client*		getClientByNickname(std::string const name) const;
 		Channel*	getChannelByName(std::string const name) const;
 		std::string	getServerPassword(void) const;
 
 		// Changers
-
 		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
-		int		changeUsername(std::string const name, std::string newname);
+		int		changeNickname(std::string const name, std::string newname);
 		int		changeChannelName(std::string const name, std::string newname);
 		void	changeServerPassword(std::string password);
 
@@ -69,7 +67,6 @@ class FtIrc
 		int		addChannel(Channel * const channel);
 
 		// IRC Message handler
-
 		int	ircMessageHandler(Message const & message, Client const * const sender, std::string & output);
 		int	ircCommandKICK(Message const & message, Client const * const sender, std::string * const output);
 		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string * const output);

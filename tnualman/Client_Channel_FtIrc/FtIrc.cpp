@@ -38,7 +38,7 @@ Client* FtIrc::getClientByFd(int const fd) const
 		return (NULL);
 	}	
 }
-Client* FtIrc::getClientByUsername(std::string const name) const
+Client* FtIrc::getClientByNickname(std::string const name) const
 {
     try
 	{
@@ -73,7 +73,7 @@ std::string	FtIrc::getServerPassword(void) const
  * returns -1 if client is not found;
  * returns -2 if the newname alrady exists in the _clientMapByNickname, or if it's the same as the old name.
  */
-int FtIrc::changeUsername(std::string const name, std::string newname)
+int FtIrc::changeNickname(std::string const name, std::string newname)
 {
 	std::map<std::string, Client*> map = _clientMapByNickname;
 	std::map<std::string, Client*>::iterator it = map.find(name);
@@ -137,7 +137,7 @@ int	FtIrc::addClient(Client * const client)
 	// Other necessary network and irc operations here
 
 	_clientMapByFd.insert({client->getFd(), client});
-	_clientMapByNickname.insert({client->getUsername(), client});
+	_clientMapByNickname.insert({client->getNickname(), client});
 
 	return (0);
 }
@@ -177,7 +177,7 @@ int	FtIrc::ircMessageHandler(Message const & message, Client const * const sende
 			break ;
 		case (3): // TOPIC
 			// TOPIC
-			// return (icrCommandTOPIC(message, sender, output));
+			return (FtIrc::ircCommandTOPIC(message, sender, output));
 			break;
 		default:
 			// Command does not exist!

@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 18:29:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:51:59 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ Channel::t_userFlags Channel::getUserFlags(Client * const client) const
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (t_userFlags(0b0001)));
+		return (t_userFlags(0b0001));
 	}	
 }
 
