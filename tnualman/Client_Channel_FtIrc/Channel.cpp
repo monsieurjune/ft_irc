@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 20:00:16 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 20:15:37 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int Channel::addUserToChannel(Client * const client, int const status)
 
 	if (_userMap.find(client) == end(_userMap))
 	{
-		std::cerr << "Client named " << client->getUsername() << ", socket " << client->getFd()
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " already exists on channel " << _name << " !" << std::endl;
 		return (-1);
 	}
