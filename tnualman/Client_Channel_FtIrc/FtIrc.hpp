@@ -68,9 +68,9 @@ class FtIrc
 
 		// IRC Message handler
 		int	ircMessageHandler(Message const & message, Client const * const sender, std::string & output);
-		int	ircCommandKICK(Message const & message, Client const * const sender, std::string * const output);
-		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string * const output);
-		int	ircCommandMODE(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandKICK(Message const & message, Client const * const sender, std::string & output);
+		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string & output);
+		int	ircCommandMODE(Message const & message, Client const * const sender, std::string & output);
 		int	ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output);
 
 };
