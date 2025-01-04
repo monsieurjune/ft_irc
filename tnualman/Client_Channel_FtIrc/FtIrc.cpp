@@ -73,7 +73,7 @@ std::string	FtIrc::getServerPassword(void) const
  * returns -1 if client is not found;
  * returns -2 if the newname alrady exists in the _clientMapByNickname, or if it's the same as the old name.
  */
-int FtIrc::changeNickname(std::string const name, std::string newname)
+int FtIrc::changeNickname(std::string const name, std::string const newname)
 {
 	std::map<std::string, Client*> map = _clientMapByNickname;
 	std::map<std::string, Client*>::iterator it = map.find(name);
@@ -97,7 +97,7 @@ int FtIrc::changeNickname(std::string const name, std::string newname)
 	return (0);
 }
 
-int FtIrc::changeChannelName(std::string const name, std::string newname)
+int FtIrc::changeChannelName(std::string const name, std::string const newname)
 {
 	std::map<std::string, Channel*> map = _channelMapByName;
 	std::map<std::string, Channel*>::iterator it = map.find(name);

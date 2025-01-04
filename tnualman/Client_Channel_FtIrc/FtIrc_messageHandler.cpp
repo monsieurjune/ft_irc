@@ -6,13 +6,13 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 20:00:16 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/05 01:30:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
-int	FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string & output)
+int FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string & output)
 {
 	int	cmd_idx = -1;
 	while (++cmd_idx < _commandVec.size())
@@ -41,12 +41,12 @@ int	FtIrc::ircMessageHandler(Message const & message, Client const * const sende
 	return (0);
 }
 
-int	FtIrc::ircCommandMODE(Message const & message, Client const * const sender, std::string & output)
+int FtIrc::ircCommandMODE(Message const & message, Client const * const sender, std::string & output)
 {
-    return (0);
+	return (0);
 }
 
-int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output)
+int FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output)
 {
 	int param_count = message.getParams().size();
 

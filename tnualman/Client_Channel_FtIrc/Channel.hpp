@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 18:30:02 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/05 01:30:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ class Channel
 	public:
 		
 		typedef std::bitset<4> t_userFlags;
-		typedef std::bitset<4> t_channelFlags;
 
 	private:
 
@@ -61,13 +60,9 @@ class Channel
 		 */
 		std::string	_password;
 
-		/** Channel's mode flags
-		 * Bit 0:
-		 * Bit 1:
-		 * Bit 2:
-		 * Bit 3:
+		/** Channel's mode flags, represented as a string, the way IRC does it.
 		 */
-		t_channelFlags _channelFlags;
+		std::string _modestring;
 		
 		/** Channel topic.
 		 * If this is an empty string, no channel topic is set.
@@ -98,8 +93,8 @@ class Channel
 
 		// Getters
 		std::string const &	getName(void) const;
-		time_t				getTimeCreated(void) const;
-		t_userFlags			getUserFlags(Client * const client) const;
+		time_t				getTimeCreated(void) const; 
+		t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
 		int					getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string	const &	getTopic(void) const;
 		time_t				getTimeTopicSet(void) const;
@@ -107,11 +102,16 @@ class Channel
 
 		// Setters
 		void				setName(std::string const name);
-		t_userFlags			setUserFlags(Client * const client, Channel::t_userFlags const & flags);
+		t_userFlags			setUserFlags(Client * const client, t_userFlags const & flags);
 		void				setTopic(std::string const name, Client const * const client);
+		void				addMode(std::string const mode);
+		void				removeMode(std::string const mode);
 
 		// Adder
-		int					addUserToChannel(Client * const client, int const status);
+		int					addUserToChannel(Client * const client, t_userFlags const & flags);
+		
+		// Deleter
+		int					deleteUserFromChannel(Client * const client);
 };
 
 #endif

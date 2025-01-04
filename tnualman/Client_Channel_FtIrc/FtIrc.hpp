@@ -58,13 +58,17 @@ class FtIrc
 
 		// Changers
 		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
-		int		changeNickname(std::string const name, std::string newname);
-		int		changeChannelName(std::string const name, std::string newname);
+		int		changeNickname(std::string const name, std::string const newname);
+		int		changeChannelName(std::string const name, std::string const newname);
 		void	changeServerPassword(std::string password);
 
-		// Add user/client
+		// Adders
 		int		addClient(Client * const client);
 		int		addChannel(Channel * const channel);
+
+		// Deleters
+		int		deleteClient(Client * const client);
+		int		deleteChannel(Channel * const channel);
 
 		// IRC Message handler
 		int	ircMessageHandler(Message const & message, Client const * const sender, std::string & output);
