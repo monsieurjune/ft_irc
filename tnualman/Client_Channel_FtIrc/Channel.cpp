@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 18:51:59 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 20:00:16 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ Channel::Channel(void)
 {
 	std::time(&_timeCreated);
 	std::time(&_timeTopicSet);
+	_userCountLimit = -1;
 }
 
 Channel::Channel(std::string const name): _name(name)
 {
 	std::time(&_timeCreated);
 	std::time(&_timeTopicSet);
+	_userCountLimit = -1;
 }
 
 Channel::~Channel(void) {}
