@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/04 20:15:37 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/05 00:04:48 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	std::time(&_timeTopicSet);
 }
 
-int Channel::addUserToChannel(Client * const client, int const status)
+int Channel::addUserToChannel(Client * const client, Channel::t_userFlags const & flags)
 {
 
 	if (_userMap.find(client) == end(_userMap))
@@ -113,7 +113,7 @@ int Channel::addUserToChannel(Client * const client, int const status)
 		return (-1);
 	}
 
-	_userMap.insert({client, status});
+	_userMap.insert({client, flags});
 
 	return (0);
 }
