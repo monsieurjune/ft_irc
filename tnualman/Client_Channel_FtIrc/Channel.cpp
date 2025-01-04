@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/03 20:13:56 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:25:54 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ std::string const & Channel::getName(void) const
 
 Channel::t_userFlags Channel::getUserFlags(Client * const client) const
 {
-	/** I define any negative status value to represent user not being found.
-	 * This means any existing user must have the status be a positive value.
-	 * (int sign bit logic)
-	 * I believe this is better than using zero as user not found, because
-	 * that would require all users to always have at least one flag be positive,
-	 * which likely will not be the case when we get to implement the
-	 * user-membership logic.
-	 */
 	try
 	{
 		return (_userMap.at(client));
@@ -49,7 +41,7 @@ Channel::t_userFlags Channel::getUserFlags(Client * const client) const
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (-1);
+		return (t_userFlags(0b0001)));
 	}	
 }
 
@@ -78,7 +70,7 @@ void Channel::setName(std::string const name)
 	_name = name;
 }
 
-Channel::t_userFlags Channel::setUserStatus(Client * const client, Channel::t_userFlags const & flags)
+Channel::t_userFlags Channel::setUserFlags(Client * const client, Channel::t_userFlags const & flags)
 {
 	/** Same logic as getUserStatus() .
 	 */
@@ -91,7 +83,7 @@ Channel::t_userFlags Channel::setUserStatus(Client * const client, Channel::t_us
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (-1);
+		return (t_userFlags(0b0001));
 	}	
 }
 

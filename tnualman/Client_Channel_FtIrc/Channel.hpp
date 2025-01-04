@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/03 20:16:02 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:22:25 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,33 @@ class Channel
 		time_t _timeCreated;
 
 		/** User map. associated int value is for user-channel membership flags/statuses.
+		 * Bit 0: Indicates that user/client does not exist/is not found; will never to set to true.
+		 * Bit 1: The user is an operator of the channel.
+		 * Bit 2: (reserved)
+		 * Bit 3: (reserved)
 		 */
 		std::map<Client*, t_userFlags> _userMap;
 
+		/** User count limit; no limit if value is negative.
+		*/
+		int _userCountLimit;
+		
+		/** Channel's password.
+		 */
+		std::string	_password;
+
+		/** Channel's mode flags
+		 * Bit 0:
+		 * Bit 1:
+		 * Bit 2:
+		 * Bit 3:
+		 */
+		t_channelFlags _channelFlags;
+		
 		/** Channel topic.
 		 * If this is an empty string, no channel topic is set.
 		 */
 		std::string _topic;
-
-		long		_user_limit;
 
 		/** Time topic was set.
 		 * If no topic was ever set, this will be equal to Channel::created
@@ -65,14 +83,6 @@ class Channel
 		 * If this member is an empty string, no topic was ever set.
 		 */
 		std::string _topicSetter;
-
-		/** Channel's password.
-		 */
-		std::string	_password;
-
-		/** Channel's mode flags
-		 */
-		t_channelFlags _channelFlags;
 
 		Channel(void);
 
@@ -97,13 +107,10 @@ class Channel
 		std::string	const &	getTopicSetter(void) const;
 
 		// Setters
-		void			setName(std::string const name);
+		void				setName(std::string const name);
 		
-		/** status MUST be positive, because I define negative as user/client not found.
-		 * Returns status or -1 if user/client is not found.
-		 */
-		t_userFlags		setUserStatus(Client * const client, Channel::t_userFlags const & flags);
-		void			setTopic(std::string const name, Client const * const client);
+		t_userFlags			setUserFlags(Client * const client, Channel::t_userFlags const & flags);
+		void				setTopic(std::string const name, Client const * const client);
 
 		// Adder
 		int		addUserToChannel(Client * const client, int const status);
