@@ -16,7 +16,7 @@ class FtIrcMemory
 {
 	private:
 		std::map<int, Client*>			_clientMapByFd;
-		std::map<std::string, Client*>	_clientMapByUsername;
+		std::map<std::string, Client*>	_clientMapByNickname;
 		std::map<std::string, Channel*>	_channelMapByName;
 
 		std::vector<struct pollfd>		_pollfdVec;

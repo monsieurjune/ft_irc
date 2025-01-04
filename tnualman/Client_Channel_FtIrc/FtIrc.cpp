@@ -42,7 +42,7 @@ Client* FtIrc::getClientByUsername(std::string const name) const
 {
     try
 	{
-		return (_clientMapByUsername.at(name));
+		return (_clientMapByNickname.at(name));
 	}
 	catch (std::exception const & e)
 	{
@@ -71,11 +71,11 @@ std::string	FtIrc::getServerPassword(void) const
 
 /** Returns 0 if client is found and the name is successfully changed;
  * returns -1 if client is not found;
- * returns -2 if the newname alrady exists in the _clientMapByUsername, or if it's the same as the old name.
+ * returns -2 if the newname alrady exists in the _clientMapByNickname, or if it's the same as the old name.
  */
 int FtIrc::changeUsername(std::string const name, std::string newname)
 {
-	std::map<std::string, Client*> map = _clientMapByUsername;
+	std::map<std::string, Client*> map = _clientMapByNickname;
 	std::map<std::string, Client*>::iterator it = map.find(name);
 	
 	if (it == end(map))
@@ -137,7 +137,7 @@ int	FtIrc::addClient(Client * const client)
 	// Other necessary network and irc operations here
 
 	_clientMapByFd.insert({client->getFd(), client});
-	_clientMapByUsername.insert({client->getUsername(), client});
+	_clientMapByNickname.insert({client->getUsername(), client});
 
 	return (0);
 }
@@ -157,31 +157,27 @@ int	FtIrc::addChannel(Channel * const channel)
 	return (0);
 }
 
-int	FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string * const output)
+int	FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string & output)
 {
 	int	cmd_idx = -1;
-	for (int i = 0; i < _commandVec.size(); i++)
-	{	
-		if (message.getCommand().compare(_commandVec.at(i)) == 0)
-		{
-			cmd_idx = i;
+	while (++cmd_idx < _commandVec.size())
+		if (message.getCommand().compare(_commandVec.at(cmd_idx)) == 0)
 			break ;
-		}
-	}	
+
 	switch (cmd_idx)
 	{
-		case (0):
+		case (0): // KICK
 			// KICK
 			break ;
-		case (1):
+		case (1): // INVITE
 			// INVITE
 			break ;
-		case (2):
+		case (2): // MODE
 			// MODE
 			break ;
-		case (3):
+		case (3): // TOPIC
 			// TOPIC
-			// return (icrCommandTOPIC(message, sender));
+			// return (icrCommandTOPIC(message, sender, output));
 			break;
 		default:
 			// Command does not exist!
@@ -190,13 +186,13 @@ int	FtIrc::ircMessageHandler(Message const & message, Client const * const sende
 	return (0);
 }
 
-int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender, std::string * const output)
+int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output)
 {
 	int param_count = message.getParams().size();
 
 	if (param_count < 1 || param_count > 2)
 	{
-		*output = "Invalid parameters for TOPIC command!";
+		output = "Invalid number of parameters for TOPIC command!";
 		// We should define error macros, enum, or exception ...
 		return (1);
 	}
@@ -206,29 +202,29 @@ int	FtIrc::ircCommandTOPIC(Message const & message, Client const * const sender,
 	
 	if (!channel)
 	{
-		*output = "Channel named " + channel_name + " not found!";
+		output = "Channel named " + channel_name + " not found!";
 		// We should define error macros, enum, or exception
 		return (2);
 	}
 
 	if (param_count == 1)
 	{
-		*output = "Channel: " + channel_name + "; Topic: " + channel->getTopic();
+		output = "Channel: " + channel_name + "; Topic: " + channel->getTopic();
 		// Put code to send the message to client, either here on in a network handler function ...
 		return (0);
 	}
-	else
-	{
-		// if (NOT FOUND IN CHANNEL USER LIST || NOT AN OPERATOR OF THE CHANNEL)
-		// {
-		// 	*output = "User " + sender->getNickname() + " cannot set the topic for channel " + channel_name + " !";
-		// 	// Put code to send the message to client, either here on in a network handler function ...
-		// 	// We should define error macros, enum, or exception
-		// 	return (3);
-		// }
-		channel->setTopic(message.getParams().at(1), sender);
-		*output = "Channel: " + channel_name + "; Topic: " + channel->getTopic() + "; Setter: " + channel->getTopicSetter();
-		// Put code to send the message to client, either here on in a network handler function ...
-		return (0);
-	}
+	
+	// if (NOT FOUND IN CHANNEL USER LIST || NOT AN OPERATOR OF THE CHANNEL)
+	// {
+	// 	*output = "User " + sender->getNickname() + " cannot set the topic for channel " + channel_name + " !";
+	// 	// Put code to send the message to client, either here on in a network handler function ...
+	// 	// We should define error macros, enum, or exception
+	// 	return (3);
+	// }
+	
+	channel->setTopic(message.getParams().at(1), sender);
+	output = "Channel: " + channel_name + "; Topic: " + channel->getTopic() + "; Setter: " + channel->getTopicSetter();
+	// Put code to send the message to client, either here on in a network handler function ...
+	
+	return (0);
 }

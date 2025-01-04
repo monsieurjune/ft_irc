@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/01 18:25:11 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/03 20:13:56 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ std::string const & Channel::getName(void) const
 	return (_name);
 }
 
-int Channel::getUserStatus(Client * const client) const
+Channel::t_userFlags Channel::getUserFlags(Client * const client) const
 {
 	/** I define any negative status value to represent user not being found.
 	 * This means any existing user must have the status be a positive value.
@@ -47,7 +47,7 @@ int Channel::getUserStatus(Client * const client) const
 	}
 	catch (std::exception const & e)
 	{
-		std::cerr << "Client named " << client->getUsername() << ", socket " << client->getFd()
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
@@ -78,17 +78,18 @@ void Channel::setName(std::string const name)
 	_name = name;
 }
 
-int Channel::setUserStatus(Client * const client, int const status)
+Channel::t_userFlags Channel::setUserStatus(Client * const client, Channel::t_userFlags const & flags)
 {
 	/** Same logic as getUserStatus() .
 	 */
 	try
 	{
-		return (_userMap.at(client) = status);
+		// TODO: VERIFY THIS LOGIC, READ THE DOCS FOR std::bitmap !!
+		return (_userMap.at(client) = flags);
 	}
 	catch (std::exception const & e)
 	{
-		std::cerr << "Client named " << client->getUsername() << ", socket " << client->getFd()
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
@@ -100,8 +101,6 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	
 	if (client)
 	{
-		/** I don't know whether this should be nickname or username.
-		 */
 		_topicSetter = client->getNickname();
 	}
 	else

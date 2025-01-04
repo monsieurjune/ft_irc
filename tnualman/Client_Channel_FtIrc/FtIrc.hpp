@@ -33,7 +33,7 @@ class FtIrc
 	private:
 		
 		std::map<int, Client*>			_clientMapByFd;
-		std::map<std::string, Client*>	_clientMapByUsername;
+		std::map<std::string, Client*>	_clientMapByNickname;
 		std::map<std::string, Channel*>	_channelMapByName;
 
 		std::vector<struct pollfd>		_pollfdVec;
@@ -70,11 +70,11 @@ class FtIrc
 
 		// IRC Message handler
 
-		int	ircMessageHandler(Message const & message, Client const * const sender, std::string * const output);
+		int	ircMessageHandler(Message const & message, Client const * const sender, std::string & output);
 		int	ircCommandKICK(Message const & message, Client const * const sender, std::string * const output);
 		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string * const output);
 		int	ircCommandMODE(Message const & message, Client const * const sender, std::string * const output);
-		int	ircCommandTOPIC(Message const & message, Client const * const sender, std::string * const output);
+		int	ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output);
 
 };
 
