@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 01:30:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/06 00:05:07 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,10 @@
 # include <ctime>
 
 # include "Client.hpp"
+# include "e_numerics.hpp"
 
 class Channel
 {
-	public:
-		
-		typedef std::bitset<4> t_userFlags;
-
 	private:
 
 		/** Shamelessly copied from inspIRCd ! :p (including doxy style comments :p)
@@ -44,13 +41,9 @@ class Channel
 		 */
 		time_t _timeCreated;
 
-		/** User map. associated int value is for user-channel membership flags/statuses.
-		 * Bit 0: Indicates that user/client does not exist/is not found; will never to set to true.
-		 * Bit 1: The user is an operator of the channel.
-		 * Bit 2: (reserved)
-		 * Bit 3: (reserved)
+		/** User map. associated string is user membership modestring.
 		 */
-		std::map<Client*, t_userFlags> _userMap;
+		std::map<Client*, std::string> _userMap;
 
 		/** User count limit; no limit if value is negative.
 		*/
@@ -94,7 +87,7 @@ class Channel
 		// Getters
 		std::string const &	getName(void) const;
 		time_t				getTimeCreated(void) const; 
-		t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
+		std::string const &	getUserMembership(Client * const client) const; // Returns "!" is user is not found in channel.
 		int					getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string	const &	getTopic(void) const;
 		time_t				getTimeTopicSet(void) const;
@@ -102,13 +95,14 @@ class Channel
 
 		// Setters
 		void				setName(std::string const name);
-		t_userFlags			setUserFlags(Client * const client, t_userFlags const & flags);
+		char				addMembershipMode(Client * const client, char mode); // Returns NULL is user is not found in channel.
+		char				removeMembershipMode(Client * const client, char mode); // Returns NULL is user is not found in channel.
 		void				setTopic(std::string const name, Client const * const client);
-		void				addMode(std::string const mode);
-		void				removeMode(std::string const mode);
+		void				addMode(char mode);
+		void				removeMode(char mode);
 
 		// Adder
-		int					addUserToChannel(Client * const client, t_userFlags const & flags);
+		int					addUserToChannel(Client * const client, std::string const & modestr);
 		
 		// Deleter
 		int					deleteUserFromChannel(Client * const client);

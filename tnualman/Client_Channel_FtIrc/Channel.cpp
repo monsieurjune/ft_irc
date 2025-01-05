@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 00:04:48 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/06 00:05:15 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ std::string const & Channel::getName(void) const
 	return (_name);
 }
 
-Channel::t_userFlags Channel::getUserFlags(Client * const client) const
+std::string const & Channel::getUserMembership(Client * const client) const
 {
 	try
 	{
@@ -43,7 +43,7 @@ Channel::t_userFlags Channel::getUserFlags(Client * const client) const
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (t_userFlags(0b0001));
+		return ("!");
 	}	
 }
 
@@ -72,19 +72,42 @@ void Channel::setName(std::string const name)
 	_name = name;
 }
 
-Channel::t_userFlags Channel::setUserFlags(Client * const client, Channel::t_userFlags const & flags)
+char Channel::addMembershipMode(Client * const client, char mode)
 {
 	try
 	{
-		// TODO: VERIFY THIS LOGIC, READ THE DOCS FOR std::bitmap !!
-		return (_userMap.at(client) = flags);
+		std::string & modestr = _userMap.at(client); // throws if user is not found
+		if (modestr.find(mode) != std::string::npos)
+		{
+			modestr.append(1, mode);
+		}
+		return (mode);
 	}
 	catch (std::exception const & e)
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (t_userFlags(0b0001));
+		return (NULL);
 	}	
+}
+
+char Channel::removeMembershipMode(Client * const client, char mode)
+{
+	try
+	{
+		std::string & modestr = _userMap.at(client); // throws if user is not found
+		if (modestr.find(mode) != std::string::npos)
+		{
+			modestr.append(1, mode);
+		}
+		return (mode);
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (NULL);
+	}
 }
 
 void Channel::setTopic(std::string const topic, Client const * const client)
@@ -103,17 +126,17 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	std::time(&_timeTopicSet);
 }
 
-int Channel::addUserToChannel(Client * const client, Channel::t_userFlags const & flags)
+int Channel::addUserToChannel(Client * const client, std::string const & modestr)
 {
 
 	if (_userMap.find(client) == end(_userMap))
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " already exists on channel " << _name << " !" << std::endl;
-		return (-1);
+		return (1);
 	}
 
-	_userMap.insert({client, flags});
+	_userMap.insert({client, modestr});
 
 	return (0);
 }

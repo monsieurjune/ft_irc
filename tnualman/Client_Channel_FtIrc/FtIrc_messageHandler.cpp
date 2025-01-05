@@ -6,11 +6,13 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 01:30:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:43:19 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
+
+// TODO: USE std::map and function pointers to select executions instead of swatch/case !
 
 int FtIrc::ircMessageHandler(Message const & message, Client const * const sender, std::string & output)
 {
