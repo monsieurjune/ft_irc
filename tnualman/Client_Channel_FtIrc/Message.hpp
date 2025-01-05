@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/28 23:10:13 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/03 21:53:57 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Message
 		bool								isValid(void) const;
 
 		// Setters
-		// char *							setRawMessage(void) const;
+		// char *							setRawMessage(void)t;
 };
 
 #endif
