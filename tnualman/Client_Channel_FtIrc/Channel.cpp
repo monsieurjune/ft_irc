@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/06 00:05:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/06 00:15:53 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,21 @@ char Channel::addMembershipMode(Client * const client, char mode)
 
 char Channel::removeMembershipMode(Client * const client, char mode)
 {
-	try
-	{
-		std::string & modestr = _userMap.at(client); // throws if user is not found
-		if (modestr.find(mode) != std::string::npos)
-		{
-			modestr.append(1, mode);
-		}
-		return (mode);
-	}
-	catch (std::exception const & e)
-	{
-		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-			<< " not found on channel " << _name << " !" << std::endl;
-		return (NULL);
-	}
+	// try
+	// {
+	// 	std::string & modestr = _userMap.at(client); // throws if user is not found
+	// 	if (modestr.find(mode) != std::string::npos)
+	// 	{
+	// 		modestr.append(1, mode);
+	// 	}
+	// 	return (mode);
+	// }
+	// catch (std::exception const & e)
+	// {
+	// 	std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+	// 		<< " not found on channel " << _name << " !" << std::endl;
+	// 	return (NULL);
+	// }
 }
 
 void Channel::setTopic(std::string const topic, Client const * const client)
