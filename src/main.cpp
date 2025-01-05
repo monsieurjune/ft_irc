@@ -1,4 +1,3 @@
-#include "network/ft_irc.hpp"
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
 #include "utils/ft_utils.hpp"
@@ -80,8 +79,6 @@ int	main(const int argc, const char *argv[])
 	int							listen_socketfd;
 	int							poll_count					= 0;
 	int							poll_check_count			= 0;
-	char						recv_buff[IRC_MAXSIZE + 1];
-	// struct sockaddr_storage
 
 	listen_socketfd = sb_argv_parser(argc, argv, password);
 	if (listen_socketfd == -1)

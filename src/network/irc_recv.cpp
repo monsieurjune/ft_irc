@@ -1,5 +1,4 @@
 // Proiject Header
-#include "network/ft_irc.hpp"
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
 
