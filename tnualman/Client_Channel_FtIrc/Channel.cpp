@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/07 20:36:24 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/08 02:15:13 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ std::string const & Channel::getName(void) const
 	return (_name);
 }
 
-std::set<char> const & Channel::getUserMembership(Client * const client) const
+std::set<char> const & Channel::getMembershipMode(Client * const client) const
 {
 	try
 	{
@@ -88,7 +88,6 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	std::time(&_timeTopicSet);
 }
 
-
 char Channel::addMembershipMode(Client * const client, char c)
 {
 	try
@@ -104,6 +103,7 @@ char Channel::addMembershipMode(Client * const client, char c)
 		return (NULL);
 	}	
 }
+
 int Channel::addUserToChannel(Client * const client, std::string modestr)
 {
 

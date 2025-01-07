@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/07 20:35:28 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/08 02:14:06 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ class Channel
 		// Getters
 		std::string const &		getName(void) const;
 		time_t					getTimeCreated(void) const; 
-		std::set<char> const &	getUserMembership(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
+		std::set<char> const &	getMembershipMode(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
+		bool					hasMembershipMode(Client * const client, char c) const;
 		int						getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string	const &		getTopic(void) const;
 		time_t					getTimeTopicSet(void) const;

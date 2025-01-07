@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/01 18:21:12 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/08 02:10:35 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,14 @@ void Client::setUsername(std::string const name)
 void Client::setHost(std::string const str)
 {
 	_host = str;
+}
+
+void Client::addMode(char c)
+{
+	_modes.insert(c);
+}
+
+void Client::removeMode(char c)
+{
+	_modes.insert(c);
 }

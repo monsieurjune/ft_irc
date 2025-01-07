@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/07 20:03:58 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/08 02:12:22 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,12 @@ class Client
 		int	getFd(void) const;
 		int	getAuthorizeLevel(void) const;
 
-		std::string const &	getNickname(void) const;
-		std::string	const &	getUsername(void) const;
-		std::string	const & getHost(void) const;
+		std::string const &		getNickname(void) const;
+		std::string	const &		getUsername(void) const;
+		std::string	const & 	getHost(void) const;
+
+		std::set<char> const &	getModes(void) const;
+		bool					hasMode(char c) const;
 
 		// Setters
 		
