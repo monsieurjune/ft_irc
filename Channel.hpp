@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/07 20:35:28 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/07 20:11:12 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class Channel
 		// Getters
 		std::string const &		getName(void) const;
 		time_t					getTimeCreated(void) const; 
-		std::set<char> const &	getUserMembership(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
+		std::set<char> const &	getUserMembership(Client * const client) const; // Returns "!" is user is not found in channel.
 		int						getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string	const &		getTopic(void) const;
 		time_t					getTimeTopicSet(void) const;
@@ -98,16 +98,16 @@ class Channel
 		void	setTopic(std::string const name, Client const * const client);
 		char	addMembershipMode(Client * const client, char c); // Returns NULL is user is not found in channel.
 		char	removeMembershipMode(Client * const client, char c); // Returns NULL is user is not found in channel.
-		// int	addMembershipMode(Client * const client, std::string s);
-		// int	removeMembershipMode(Client * const client, std::string s);
+		// int	addMembershipMode(Client * const client, std::string s); // Returns NULL is user is not found in channel.
+		// int	removeMembershipMode(Client * const client, std::string s); // Returns NULL is user is not found in channel.
 		
-		void	addMode(char c);
+		void	addCMode(char c);
 		void	removeMode(char c);
 		// void	addMode(std::string s);
 		// void	removeMode(std::string s);
 
 		// Adder
-		int	addUserToChannel(Client * const client, std::string modestr);
+		int	addUserToChannel(Client * const client, std::string const & modestr);
 		
 		// Deleter
 		int	deleteUserFromChannel(Client * const client);
