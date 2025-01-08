@@ -23,7 +23,7 @@ NETWORK_SRC		:= listen_init.cpp \
 					irc_recv.cpp
 NETWORK_SRCS	:= $(addprefix $(NETWORK_SRC_DIR), $(NETWORK_SRC))
 
-# Exception
+# Exception Source
 EXCEPT_SRC_DIR	:= $(SRC_DIR)/exception/
 EXCEPT_SRC		:= CstdException.cpp \
 					IrcDisconnectedException.cpp \
@@ -31,10 +31,10 @@ EXCEPT_SRC		:= CstdException.cpp \
 					IrcUnknownCmdException.cpp
 EXCEPT_SRCS		:= $(addprefix $(EXCEPT_SRC_DIR), $(EXCEPT_SRC))
 
-# STD
+# STD Source
 STD_SRC_DIR		:= $(SRC_DIR)/std
 
-#  CSTD
+#  CSTD Source
 CSTD_SRC_DIR	:= $(STD_SRC_DIR)/c/
 CSTD_SRC		:= memset.cpp \
 					isnumber.cpp \
@@ -42,7 +42,7 @@ CSTD_SRC		:= memset.cpp \
 					strnstr.cpp
 CSTD_SRCS		:= $(addprefix $(CSTD_SRC_DIR), $(CSTD_SRC))
 
-#  CPPSTD
+#  CPPSTD Source
 CPPSTD_SRC_DIR	:= $(STD_SRC_DIR)/cpp/
 CPPSTD_SRC		:= stoi.cpp \
 					itoa.cpp

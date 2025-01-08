@@ -11,12 +11,12 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <bitset>
+// #include <bitset>
 
 class Channel
 {
-	public:
-		typedef std::bitset<4> t_userFlags;
+	// public:
+	// 	typedef std::bitset<4> t_userFlags;
 
 	private:
 		/** The channel's name.
@@ -33,7 +33,7 @@ class Channel
 		 * Bit 2: (reserved)
 		 * Bit 3: (reserved)
 		 */
-		std::map<Client*, t_userFlags> _userMap;
+		// std::map<Client*, t_userFlags> _userMap;
 
 		/** User count limit; no limit if value is negative.
 		*/
@@ -69,7 +69,7 @@ class Channel
 		// Getters
 		std::string const&	getName(void) const;
 		time_t				getTimeCreated(void) const; 
-		t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
+		// t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
 		int					getUserCount(void) const; // Simply returns the size of the map from above.
 		std::string	const&	getTopic(void) const;
 		time_t				getTimeTopicSet(void) const;
@@ -77,13 +77,13 @@ class Channel
 
 		// Setters
 		void				setName(std::string const name);
-		t_userFlags			setUserFlags(Client * const client, t_userFlags const & flags);
+		// t_userFlags			setUserFlags(Client * const client, t_userFlags const & flags);
 		void				setTopic(std::string const name, Client const * const client);
 		void				addMode(std::string const mode);
 		void				removeMode(std::string const mode);
 
 		// Adder
-		int					addUserToChannel(Client * const client, t_userFlags const & flags);
+		// int					addUserToChannel(Client * const client, t_userFlags const & flags);
 
 		// Deleter
 		int					deleteUserFromChannel(Client * const client);
