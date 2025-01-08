@@ -19,8 +19,6 @@ class Client
 		std::string	_realname;
 		std::string	_host;
 
-		Client(void);
-
 	public:
 		Client(int const fd);
 		~Client(void);
@@ -30,6 +28,7 @@ class Client
 		int				getAuthorizeLevel(void) const;
 		std::string&	getNickname(void) const;
 		std::string&	getUsername(void) const;
+		std::string&	getRealname(void) const;
 		std::string&	getHost(void) const;
 
 		// Setters

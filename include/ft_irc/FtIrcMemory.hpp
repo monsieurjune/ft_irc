@@ -3,6 +3,8 @@
 
 // Project Header
 #include "Client.hpp"
+#include "Channel.hpp"
+#include "Message.hpp"
 
 // C Header
 #include <poll.h>
@@ -14,10 +16,6 @@
 #include <map>
 #include <string>
 #include <vector>
-
-// TODO: Remove forward declaration
-class Channel;
-class Message;
 
 class FtIrcMemory
 {
@@ -50,8 +48,6 @@ class FtIrcMemory
 		std::string	ircCommandMODE(Message const & message, Client const * const sender);
 		std::string	ircCommandTOPIC(Message const & message, Client const * const sender);
 
-		FtIrcMemory(void);
-	
 	public:
 		FtIrcMemory(std::string const server_password);
 		~FtIrcMemory(void);
