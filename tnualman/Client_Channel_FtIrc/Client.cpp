@@ -6,17 +6,11 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/08 02:10:35 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:08:08 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-
-Client::Client(void)
-{
-	// Does this happened at construction time?
-	std::time(&_timeConnected);
-}
 
 Client::Client(int const fd): _fd(fd)
 {
@@ -55,6 +49,16 @@ std::string	const & Client::getHost(void) const
 	return (_host);
 }
 
+std::set<char> const & Client::getModes(void) const
+{
+	return (_modes);
+}
+
+bool Client::hasMode(char c) const
+{
+	return ((_modes.find(c) != _modes.end()) ? true : false);
+}
+
 void Client::setAuthorizeLevel(int const level)
 {
 	_authorizeLevel = level;
@@ -80,5 +84,21 @@ void Client::addMode(char c)
 
 void Client::removeMode(char c)
 {
-	_modes.insert(c);
+	_modes.erase(c);
+}
+
+void Client::addMode(std::string s)
+{
+	for (std::string::iterator it = s.begin(); it != s.end(); it++)
+	{
+		_modes.insert(*it);
+	}
+}
+
+void Client::removeMode(std::string s)
+{
+	for (std::string::iterator it = s.begin(); it != s.end(); it++)
+	{
+		_modes.erase(*it);
+	}
 }
