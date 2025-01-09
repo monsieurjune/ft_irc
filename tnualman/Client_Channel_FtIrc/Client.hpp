@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/08 02:12:22 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:38:02 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ class Client
 		std::string		_host;
 
 		std::set<char>	_modes;
-
-		Client(void);
 
 	public:
 		
@@ -69,8 +67,8 @@ class Client
 
 		void	addMode(char c);
 		void	removeMode(char c);
-		// void	addMode(std::string s);
-		// void	removeMode(std::string s);
+		void	addMode(std::string s);
+		void	removeMode(std::string s);
 
 };
 

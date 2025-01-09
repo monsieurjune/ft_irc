@@ -6,18 +6,11 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/08 02:15:13 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:37:51 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-
-Channel::Channel(void)
-{
-	std::time(&_timeCreated);
-	std::time(&_timeTopicSet);
-	_userCountLimit = -1;
-}
 
 Channel::Channel(std::string const name): _name(name)
 {
@@ -31,20 +24,6 @@ Channel::~Channel(void) {}
 std::string const & Channel::getName(void) const
 {
 	return (_name);
-}
-
-std::set<char> const & Channel::getMembershipMode(Client * const client) const
-{
-	try
-	{
-		return (_userMap.at(client));
-	}
-	catch (std::exception const & e)
-	{
-		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-			<< " not found on channel " << _name << " !" << std::endl;
-		return (std::set<char>{'!'});
-	}	
 }
 
 int Channel::getUserCount(void) const
@@ -88,22 +67,6 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	std::time(&_timeTopicSet);
 }
 
-char Channel::addMembershipMode(Client * const client, char c)
-{
-	try
-	{
-		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
-		mode_set.insert(c);
-		return (c);
-	}
-	catch (std::exception const & e)
-	{
-		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-			<< " not found on channel " << _name << " !" << std::endl;
-		return (NULL);
-	}	
-}
-
 int Channel::addUserToChannel(Client * const client, std::string modestr)
 {
 
@@ -124,6 +87,37 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 	
 	return (0);
 }
+
+std::set<char> const & Channel::getMembershipMode(Client * const client) const
+{
+	try
+	{
+		return (_userMap.at(client));
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (std::set<char>{'!'});
+	}	
+}
+
+char Channel::addMembershipMode(Client * const client, char c)
+{
+	try
+	{
+		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
+		mode_set.insert(c);
+		return (c);
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (NULL);
+	}	
+}
+
 char Channel::removeMembershipMode(Client * const client, char c)
 {
 	try
@@ -137,5 +131,43 @@ char Channel::removeMembershipMode(Client * const client, char c)
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (NULL);
+	}	
+}
+
+int	Channel::addMembershipMode(Client * const client, std::string s)
+{
+	try
+	{
+		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
+		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		{
+			mode_set.insert(*it);
+		}
+		return (0);
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (-1);
+	}	
+}
+
+int	Channel::removeMembershipMode(Client * const client, std::string s)
+{
+	try
+	{
+		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
+		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		{
+			mode_set.erase(*it);
+		}
+		return (0);
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (-1);
 	}	
 }
