@@ -20,7 +20,7 @@
 class FtIrcMemory
 {
 	private:
-		typedef std::string (*_IrcFunc)(Message const &, Client const * const);
+		typedef std::string (*IrcFunc)(Message const &, Client const * const);
 
 		// Map-for-Client-Access Attribute
 		std::map<int, Client*>			_clientMapByFd;
@@ -36,17 +36,17 @@ class FtIrcMemory
 		time_t							_timeServerStarted;
 
 		// Map-of-IRC-CMD Attribute
-		std::map<std::string, _IrcFunc>	_cmdMap;
+		std::map<std::string, IrcFunc>	_cmdMap;
 
 		// Create/Delete-Channel Method
 		int	addChannel(Channel * const channel);
 		int	deleteChannel(Channel * const channel);
 
 		// IRC-CMD Method
-		std::string	ircCommandKICK(Message const & message, Client const * const sender);
-		std::string	ircCommandINVITE(Message const & message, Client const * const sender);
-		std::string	ircCommandMODE(Message const & message, Client const * const sender);
-		std::string	ircCommandTOPIC(Message const & message, Client const * const sender);
+		static std::string	ircCommandKICK(Message const & message, Client const * const sender);
+		static std::string	ircCommandINVITE(Message const & message, Client const * const sender);
+		static std::string	ircCommandMODE(Message const & message, Client const * const sender);
+		static std::string	ircCommandTOPIC(Message const & message, Client const * const sender);
 
 	public:
 		FtIrcMemory(std::string const server_password);
@@ -54,7 +54,7 @@ class FtIrcMemory
 
 		// Getters
 		Client*		getClientByFd(int const fd) const;
-		Client*		getClientByUsername(std::string const name) const;
+		Client*		getClientByNickname(std::string const name) const;
 		Channel*	getChannelByName(std::string const name) const;
 		std::string	getServerPassword(void) const;
 
@@ -64,8 +64,8 @@ class FtIrcMemory
 		void	setServerPassword(std::string const password);
 
 		// Connect/Disconect
-		void	addClient(int const fd);
-		void	deleteClient(int const fd);
+		void							addClient(int const fd);
+		std::vector<pollfd>::iterator	deleteClient(int const fd);
 
 		// IRC Message Handler
 		std::string	ircMessageHandler(Message const & message, Client const * const sender);

@@ -70,7 +70,7 @@ class Channel
 		std::string const&	getName(void) const;
 		time_t				getTimeCreated(void) const; 
 		// t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
-		int					getUserCount(void) const; // Simply returns the size of the map from above.
+		int					getUserCount(void) const;
 		std::string	const&	getTopic(void) const;
 		time_t				getTimeTopicSet(void) const;
 		std::string	const&	getTopicSetter(void) const;

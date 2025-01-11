@@ -9,7 +9,7 @@
 class Message
 {
 	private:
-		std::string					_prefix;
+		std::string					_source;
 		std::string					_command;
 		std::vector<std::string>	_params;
 		bool						_is_valid;

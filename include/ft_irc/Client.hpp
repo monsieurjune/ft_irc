@@ -24,12 +24,12 @@ class Client
 		~Client(void);
 
 		// Getters
-		int				getFd(void) const;
-		int				getAuthorizeLevel(void) const;
-		std::string&	getNickname(void) const;
-		std::string&	getUsername(void) const;
-		std::string&	getRealname(void) const;
-		std::string&	getHost(void) const;
+		int					getFd(void) const;
+		int					getAuthorizeLevel(void) const;
+		std::string const&	getNickname(void) const;
+		std::string const&	getUsername(void) const;
+		std::string const&	getRealname(void) const;
+		std::string const&	getHost(void) const;
 
 		// Setters
 		void	setAuthorizeLevel(int const level);
