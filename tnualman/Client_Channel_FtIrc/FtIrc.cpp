@@ -12,15 +12,15 @@
 
 #include "FtIrc.hpp"
 
-FtIrc::FtIrc(void)
-{
-	_commandVec = {"KICK", "INVITE", "MODE", "TOPIC"};
-	std::time(&_timeServerStarted);
-}
-
+// Hard-coded with fixed array for now, because function pointer's syntax in C++ is harder than I expected...
+// Borrowed the idea from the module cpp01/ex05
 FtIrc::FtIrc(std::string const password): _serverPassword(password)
 {
-	_commandVec = {"KICK", "INVITE", "MODE", "TOPIC"};
+	_commandHandler[0] = &FtIrc::ircCommandKICK;
+	_commandHandler[1] = &FtIrc::ircCommandINVITE;
+	_commandHandler[2] = &FtIrc::ircCommandMODE;
+	_commandHandler[3] = &FtIrc::ircCommandTOPIC;
+	_availableCommands = {"KICK", "INVITE", "MODE", "TOPIC"};
 	std::time(&_timeServerStarted);
 }
 

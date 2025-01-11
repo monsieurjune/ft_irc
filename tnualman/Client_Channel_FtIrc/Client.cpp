@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/09 13:08:08 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 16:58:38 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ std::set<char> const & Client::getModes(void) const
 
 bool Client::hasMode(char c) const
 {
-	return ((_modes.find(c) != _modes.end()) ? true : false);
+	return (_modes.find(c) != _modes.end());
 }
 
 void Client::setAuthorizeLevel(int const level)

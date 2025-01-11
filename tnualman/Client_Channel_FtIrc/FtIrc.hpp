@@ -43,9 +43,9 @@ class FtIrc
 		std::string						_serverPassword;
 		time_t							_timeServerStarted;
 
-		std::vector<std::string>		_commandVec;
-
-		FtIrc(void);
+		// Hard-coded with fixed array for now, because function pointer's syntax in C++ is harder than I expected...
+		int								(FtIrc::*_commandHandler[4])(Message const &, Client * const, std::string &);
+		std::vector<std::string>		_availableCommands;
 
 	public:
 		
@@ -73,11 +73,11 @@ class FtIrc
 		int		deleteChannel(Channel * const channel);
 
 		// IRC Message handler
-		int	ircMessageHandler(Message const & message, Client const * const sender, std::string & output);
-		int	ircCommandKICK(Message const & message, Client const * const sender, std::string & output);
-		int	ircCommandINVITE(Message const & message, Client const * const sender, std::string & output);
-		int	ircCommandMODE(Message const & message, Client const * const sender, std::string & output);
-		int	ircCommandTOPIC(Message const & message, Client const * const sender, std::string & output);
+		int	ircMessageHandler(Message const & message, Client * const sender, std::string & output);
+		int	ircCommandKICK(Message const & message, Client * const sender, std::string & output);
+		int	ircCommandINVITE(Message const & message, Client * const sender, std::string & output);
+		int	ircCommandMODE(Message const & message, Client * const sender, std::string & output);
+		int	ircCommandTOPIC(Message const & message, Client * const sender, std::string & output);
 
 };
 

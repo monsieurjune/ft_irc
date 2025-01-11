@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 15:49:20 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:08:43 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ time_t Channel::getTimeTopicSet(void) const
 std::string const & Channel::getTopicSetter(void) const
 {
 	return (_topicSetter);
+}
+
+std::set<char> const & Channel::getModes(void) const
+{
+	return (_modes);
+}
+
+bool Channel::hasMode(char c) const
+{
+	return (_modes.find(c) != _modes.end());
 }
 
 void Channel::setName(std::string const name)
