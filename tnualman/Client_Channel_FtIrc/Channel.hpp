@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 17:09:52 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 23:24:08 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ class Channel
 		std::string const &		getName(void) const;
 		time_t					getTimeCreated(void) const; 
 		int						getUserCount(void) const; // Simply returns the size of the map from above.
+		int						getUserCountLimit(void) const;
 		bool					hasUser(Client * const client) const;
 		std::string	const &		getTopic(void) const;
 		time_t					getTimeTopicSet(void) const;
@@ -96,6 +97,7 @@ class Channel
 
 		// Setters
 		void	setName(std::string const name);
+		void	setUserCountLimit(int const limit);
 		void	setTopic(std::string const name, Client const * const client);
 		
 		void	addMode(char const c);
