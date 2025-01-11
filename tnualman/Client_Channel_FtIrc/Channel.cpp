@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/09 14:23:14 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:49:20 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ time_t Channel::getTimeCreated(void) const
 int Channel::getUserCount(void) const
 {
 	return (_userMap.size());
+}
+
+bool Channel::hasUser(Client * const client) const
+{
+	return (_userMap.find(client) != end(_userMap));
 }
 
 std::string const & Channel::getTopic(void) const
@@ -72,10 +77,42 @@ void Channel::setTopic(std::string const topic, Client const * const client)
 	std::time(&_timeTopicSet);
 }
 
+void Channel::addMode(char const c)
+{
+	_modes.insert(c);
+}
+
+void Channel::removeMode(char const c)
+{
+	_modes.erase(c);
+}
+
+void Channel::addMode(std::string s)
+{
+	if (!s.empty())
+	{
+		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		{
+			_modes.insert(*it);
+		}
+	}
+}
+
+void Channel::removeMode(std::string s)
+{
+	if (!s.empty())
+	{
+		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		{
+			_modes.erase(*it);
+		}
+	}
+}
+
 int Channel::addUserToChannel(Client * const client, std::string modestr)
 {
 
-	if (_userMap.find(client) == end(_userMap))
+	if (_userMap.find(client) != end(_userMap))
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " already exists on channel " << _name << " !" << std::endl;
@@ -84,16 +121,33 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 
 	std::set<char> mode_set;
 
-	for (std::string::iterator it = modestr.begin(); it != modestr.end(); it++)
+	if (!modestr.empty())
 	{
-		mode_set.insert(*it);
+		for (std::string::iterator it = modestr.begin(); it != modestr.end(); it++)
+		{
+			mode_set.insert(*it);
+		}
 	}
 	_userMap.insert({client, mode_set});
 	
 	return (0);
 }
 
-std::set<char> const & Channel::getMembershipMode(Client * const client) const
+int	Channel::deleteUserFromChannel(Client * const client)
+{
+	if (_userMap.find(client) == end(_userMap))
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " does not exist on channel " << _name << " !" << std::endl;
+		return (1);
+	}
+	
+	_userMap.erase(client);
+
+	return (0);
+}
+
+std::set<char> const & Channel::getMembershipModes(Client * const client) const
 {
 	try
 	{
@@ -107,7 +161,21 @@ std::set<char> const & Channel::getMembershipMode(Client * const client) const
 	}	
 }
 
-char Channel::addMembershipMode(Client * const client, char c)
+bool Channel::hasMembershipMode(Client * const client, char const c) const
+{
+	try
+	{
+		return (_userMap.at(client).find(c) != end(_userMap.at(client)));
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (false);
+	}	
+}
+
+char Channel::addMembershipMode(Client * const client, char const c)
 {
 	try
 	{
@@ -123,7 +191,7 @@ char Channel::addMembershipMode(Client * const client, char c)
 	}	
 }
 
-char Channel::removeMembershipMode(Client * const client, char c)
+char Channel::removeMembershipMode(Client * const client, char const c)
 {
 	try
 	{
@@ -144,9 +212,12 @@ int	Channel::addMembershipMode(Client * const client, std::string s)
 	try
 	{
 		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
-		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		if (!s.empty())
 		{
-			mode_set.insert(*it);
+			for (std::string::iterator it = s.begin(); it != s.end(); it++)
+			{
+				mode_set.insert(*it);
+			}
 		}
 		return (0);
 	}
@@ -155,7 +226,7 @@ int	Channel::addMembershipMode(Client * const client, std::string s)
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
-	}	
+	}
 }
 
 int	Channel::removeMembershipMode(Client * const client, std::string s)
@@ -163,16 +234,19 @@ int	Channel::removeMembershipMode(Client * const client, std::string s)
 	try
 	{
 		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
-		for (std::string::iterator it = s.begin(); it != s.end(); it++)
+		if (!s.empty())
 		{
-			mode_set.erase(*it);
+			for (std::string::iterator it = s.begin(); it != s.end(); it++)
+			{
+				mode_set.erase(*it);
+			}
+			return (0);
 		}
-		return (0);
 	}
 	catch (std::exception const & e)
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
-	}	
+	}
 }
