@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 01:30:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:09:52 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,14 @@
 # include <string>
 # include <vector>
 # include <map>
-# include <bitset>
+# include <set>
 # include <ctime>
 
 # include "Client.hpp"
+# include "e_numerics.hpp"
 
 class Channel
 {
-	public:
-		
-		typedef std::bitset<4> t_userFlags;
-
 	private:
 
 		/** Shamelessly copied from inspIRCd ! :p (including doxy style comments :p)
@@ -44,13 +41,9 @@ class Channel
 		 */
 		time_t _timeCreated;
 
-		/** User map. associated int value is for user-channel membership flags/statuses.
-		 * Bit 0: Indicates that user/client does not exist/is not found; will never to set to true.
-		 * Bit 1: The user is an operator of the channel.
-		 * Bit 2: (reserved)
-		 * Bit 3: (reserved)
+		/** User map. associated ser of chars is user membership modes.
 		 */
-		std::map<Client*, t_userFlags> _userMap;
+		std::map<Client*, std::set<char>> _userMap;
 
 		/** User count limit; no limit if value is negative.
 		*/
@@ -60,9 +53,9 @@ class Channel
 		 */
 		std::string	_password;
 
-		/** Channel's mode flags, represented as a string, the way IRC does it.
+		/** Channel's mode flags, represented as a set of chars, for making it work with char and string function arguments.
 		 */
-		std::string _modestring;
+		std::set<char> _modes;
 		
 		/** Channel topic.
 		 * If this is an empty string, no channel topic is set.
@@ -79,8 +72,6 @@ class Channel
 		 */
 		std::string _topicSetter;
 
-		Channel(void);
-
 	public:
 
 		Channel(std::string const name);
@@ -92,26 +83,40 @@ class Channel
 		// Channel & operator=(Channel const & rhs);
 
 		// Getters
-		std::string const &	getName(void) const;
-		time_t				getTimeCreated(void) const; 
-		t_userFlags			getUserFlags(Client * const client) const; // Can also be used to check if user is in the channel; check the bit 0.
-		int					getUserCount(void) const; // Simply returns the size of the map from above.
-		std::string	const &	getTopic(void) const;
-		time_t				getTimeTopicSet(void) const;
-		std::string	const &	getTopicSetter(void) const;
+		std::string const &		getName(void) const;
+		time_t					getTimeCreated(void) const; 
+		int						getUserCount(void) const; // Simply returns the size of the map from above.
+		bool					hasUser(Client * const client) const;
+		std::string	const &		getTopic(void) const;
+		time_t					getTimeTopicSet(void) const;
+		std::string	const &		getTopicSetter(void) const;
+		
+		std::set<char> const &	getModes(void) const;
+		bool					hasMode(char const c) const;
 
 		// Setters
-		void				setName(std::string const name);
-		t_userFlags			setUserFlags(Client * const client, t_userFlags const & flags);
-		void				setTopic(std::string const name, Client const * const client);
-		void				addMode(std::string const mode);
-		void				removeMode(std::string const mode);
+		void	setName(std::string const name);
+		void	setTopic(std::string const name, Client const * const client);
+		
+		void	addMode(char const c);
+		void	removeMode(char const c);
+		void	addMode(std::string s);
+		void	removeMode(std::string s);
 
 		// Adder
-		int					addUserToChannel(Client * const client, t_userFlags const & flags);
+		int		addUserToChannel(Client * const client, std::string modestr);
 		
 		// Deleter
-		int					deleteUserFromChannel(Client * const client);
+		int		deleteUserFromChannel(Client * const client);
+
+		// Membership modes
+		std::set<char> const &	getMembershipModes(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
+		bool					hasMembershipMode(Client * const client, char const c) const;
+		char					addMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
+		char					removeMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
+		int						addMembershipMode(Client * const client, std::string s);
+		int						removeMembershipMode(Client * const client, std::string s);
+
 };
 
 #endif

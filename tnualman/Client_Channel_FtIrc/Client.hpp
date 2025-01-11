@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/01 18:21:18 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:38:02 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 
 # include <string>
 # include <ctime>
+# include <set>
+
+# include "e_numerics.hpp"
 
 class Client
 {
 	private:
 		
-		int		_fd;
-		int		_authorizeLevel;
-		time_t	_timeConnected; // Does this happen at construction time?
+		int				_fd;
+		int				_authorizeLevel;
+		time_t			_timeConnected; // Does this happen at construction time?
 
-		std::string	_nickname;
-		std::string	_username;
-		std::string	_host;
+		std::string		_nickname;
+		std::string		_username;
+		std::string		_host;
 
-		Client(void);
+		std::set<char>	_modes;
 
 	public:
 		
@@ -47,9 +50,12 @@ class Client
 		int	getFd(void) const;
 		int	getAuthorizeLevel(void) const;
 
-		std::string const &	getNickname(void) const;
-		std::string	const &	getUsername(void) const;
-		std::string	const & getHost(void) const;
+		std::string const &		getNickname(void) const;
+		std::string	const &		getUsername(void) const;
+		std::string	const & 	getHost(void) const;
+
+		std::set<char> const &	getModes(void) const;
+		bool					hasMode(char c) const;
 
 		// Setters
 		
@@ -58,6 +64,11 @@ class Client
 		void	setNickname(std::string const name);
 		void	setUsername(std::string const name);
 		void	setHost(std::string const str);
+
+		void	addMode(char c);
+		void	removeMode(char c);
+		void	addMode(std::string s);
+		void	removeMode(std::string s);
 
 };
 
