@@ -78,13 +78,13 @@ int FtIrc::changeNickname(std::string const name, std::string const newname)
 	std::map<std::string, Client*> map = _clientMapByNickname;
 	std::map<std::string, Client*>::iterator it = map.find(name);
 	
-	if (it == end(map))
+	if (it == map.end())
 	{
 		std::cerr << "Client with nickname " << name << " not found!" << std::endl;
 		return (-1);
 	}
 	
-	if (name == newname || map.find(newname) != end(map))
+	if (name == newname || map.find(newname) != map.end())
 	{
 		std::cerr << "Client with nickname " << newname << " already exists!" << std::endl;
 		return (-2);
@@ -102,13 +102,13 @@ int FtIrc::changeChannelName(std::string const name, std::string const newname)
 	std::map<std::string, Channel*> map = _channelMapByName;
 	std::map<std::string, Channel*>::iterator it = map.find(name);
 	
-	if (it == end(map))
+	if (it == map.end())
 	{
 		std::cerr << "Channel named " << name << " not found!" << std::endl;
 		return (-1);
 	}
 	
-	if (name == newname || map.find(newname) != end(map))
+	if (name == newname || map.find(newname) != map.end())
 	{
 		std::cerr << "Channel named " << newname << " already exists!" << std::endl;
 		return (-2);
@@ -126,33 +126,129 @@ void FtIrc::changeServerPassword(std::string password)
 	_serverPassword = password;
 }
 
-int	FtIrc::addClient(Client * const client)
+int	FtIrc::addClient(int const fd, std::string const nickname,
+						std::string const username, std::string const host, std::string modestr)
 {
-	if (_clientMapByFd.find(client->getFd()) != end(_clientMapByFd))
+	if (_clientMapByFd.find(fd) != _clientMapByFd.end())
 	{
 		std::cerr << "Client with same socket already exists!" << std::endl;
 		return (-1);
 	}
 	
-	// Other necessary network and irc operations here
+	if (_clientMapByNickname.find(nickname) != _clientMapByNickname.end())
+	{
+		std::cerr << "Client with same nickname already exists!" << std::endl;
+		return (-1);
+	}
 
-	_clientMapByFd.insert({client->getFd(), client});
-	_clientMapByNickname.insert({client->getNickname(), client});
+	Client client(fd, nickname, username, host, modestr);
+	
+	// Other necessary network and irc operations here
+	
+	_clientSet.insert(client);
+	_clientMapByFd.insert({client.getFd(), &client});
+	_clientMapByNickname.insert({client.getNickname(), &client});
 
 	return (0);
 }
 
-int	FtIrc::addChannel(Channel * const channel)
+int	FtIrc::addChannel(std::string const name)
 {
-	if (_channelMapByName.find(channel->getName()) != end(_channelMapByName))
+	if (_channelMapByName.find(name) != _channelMapByName.end())
 	{
 		std::cerr << "Channel with same name already exists!" << std::endl;
 		return (-1);
 	}
 	
+	Channel channel(name);
+	
 	// Other necessary network and irc operations here
 
-	_channelMapByName.insert({channel->getName(), channel});
+	_channelSet.insert(channel);
+	_channelMapByName.insert({name, &channel});
+
+	return (0);
+}
+
+int	FtIrc::deleteClient(Client * const client)
+{
+	std::set<Client>::iterator it = _clientSet.find(*client);
+	
+	if (it == _clientSet.end())
+	{
+		std::cerr << "Invalid client pointer for client deletion!" << std::endl;
+		return (-1);
+	}
+	
+	_clientMapByFd.erase(it->getFd());
+	_clientMapByNickname.erase(it->getNickname());
+	_clientSet.erase(it);
+
+	return (0);
+}
+
+int FtIrc::deleteClient(int const fd)
+{
+	std::map<int, Client*>::iterator it = _clientMapByFd.find(fd);
+	
+	if (it == _clientMapByFd.end())
+	{
+		std::cerr << "Client with socket " << fd << " not found!" << std::endl;
+		return (-1);
+	}
+	
+	_clientMapByNickname.erase(it->second->getNickname());
+	_clientSet.erase(*(it->second));
+	_clientMapByFd.erase(fd);
+
+	return (0);
+}
+
+int	FtIrc::deleteClient(std::string const nickname)
+{
+	std::map<std::string, Client*>::iterator it = _clientMapByNickname.find(nickname);
+	
+	if (it == _clientMapByNickname.end())
+	{
+		std::cerr << "Client with nickname " << nickname << " not found!" << std::endl;
+		return (-1);
+	}
+	
+	_clientSet.erase(*(it->second));
+	_clientMapByFd.erase(it->second->getFd());
+	_clientMapByNickname.erase(nickname);
+
+	return (0);
+}
+
+int FtIrc::deleteChannel(Channel * const channel)
+{
+	std::set<Channel>::iterator it = _channelSet.find(*channel);
+
+	if (it == _channelSet.end())
+	{
+		std::cerr << "Invalid channel pointer for client deletion!" << std::endl;
+		return (-1);
+	}
+	
+	_channelMapByName.erase(it->getName());
+	_channelSet.erase(it);
+
+	return (0);
+}
+
+int	FtIrc::deleteChannel(std::string const name)
+{
+	std::map<std::string, Channel*>::iterator it = _channelMapByName.find(name);
+
+	if (it == _channelMapByName.end())
+	{
+		std::cerr << "Channel named " << name << " not found!" << std::endl;
+		return (-1);
+	}
+	
+	_channelSet.erase(*(it->second));
+	_channelMapByName.erase(name);
 
 	return (0);
 }

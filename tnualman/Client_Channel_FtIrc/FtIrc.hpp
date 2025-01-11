@@ -23,6 +23,7 @@
 # include <map>
 # include <set>
 # include <string>
+# include <iterator>
 # include <iostream>
 
 # include "Client.hpp"
@@ -31,11 +32,13 @@
 # include "e_numerics.hpp"
 
 class FtIrc
-{
+{			
 	private:
 		
+		std::set<Client>				_clientSet;	
 		std::map<int, Client*>			_clientMapByFd;
 		std::map<std::string, Client*>	_clientMapByNickname;
+		std::set<Channel>				_channelSet;
 		std::map<std::string, Channel*>	_channelMapByName;
 
 		std::vector<struct pollfd>		_pollfdVec;
@@ -65,12 +68,16 @@ class FtIrc
 		void	changeServerPassword(std::string password);
 
 		// Adders
-		int		addClient(Client * const client);
-		int		addChannel(Channel * const channel);
+		int		addClient(int const fd, std::string const nickname,
+					std::string const username, std::string const host, std::string modestr);
+		int		addChannel(std::string const name);
 
 		// Deleters
 		int		deleteClient(Client * const client);
+		int		deleteClient(int const fd);
+		int		deleteClient(std::string const nickname);
 		int		deleteChannel(Channel * const channel);
+		int		deleteChannel(std::string const name);
 
 		// IRC Message handler
 		int	ircMessageHandler(Message const & message, Client * const sender, std::string & output);
