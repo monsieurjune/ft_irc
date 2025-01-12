@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 23:24:08 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:03:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ class Channel
 		// Getters
 		std::string const &		getName(void) const;
 		time_t					getTimeCreated(void) const; 
-		int						getUserCount(void) const; // Simply returns the size of the map from above.
+		int						getUserCount(void) const;
 		int						getUserCountLimit(void) const;
 		bool					hasUser(Client * const client) const;
 		std::string	const &		getTopic(void) const;
@@ -113,7 +113,7 @@ class Channel
 
 		// Membership modes
 		std::set<char> const &	getMembershipModes(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
-		bool					hasMembershipMode(Client * const client, char const c) const;
+		bool					hasMembershipMode(Client * const client, char const c) const; // Returns false if user is not found.
 		char					addMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
 		char					removeMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
 		int						addMembershipMode(Client * const client, std::string s);

@@ -80,12 +80,14 @@ class FtIrc
 		int		deleteChannel(std::string const name);
 
 		// IRC Message handler
-		int	ircMessageHandler(Message const & message, Client * const sender, std::string & output);
-		int	ircCommandKICK(Message const & message, Client * const sender, std::string & output);
-		int	ircCommandINVITE(Message const & message, Client * const sender, std::string & output);
-		int	ircCommandMODE(Message const & message, Client * const sender, std::string & output);
-		int	ircCommandTOPIC(Message const & message, Client * const sender, std::string & output);
+		int	ircMessageHandler(Message const & message, Client * const sender, std::string & reply);
+		int	ircCommandKICK(Message const & message, Client * const sender, std::string & reply);
+		int	ircCommandINVITE(Message const & message, Client * const sender, std::string & reply);
+		int	ircCommandMODE(Message const & message, Client * const sender, std::string & reply);
+		int	ircCommandTOPIC(Message const & message, Client * const sender, std::string & reply);
 
+		int	ircCommandMODE_channel(Message const & message, Client * const sender, std::string & reply);
+		int	ircCommandMODE_user(Message const & message, Client * const sender, std::string & reply);
 };
 
 #endif

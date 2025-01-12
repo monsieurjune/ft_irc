@@ -6,13 +6,12 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 17:08:08 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:58:26 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
-// I replaced the switch/case, as Tun requested, with function pointers, defined/setup at construction time.
 int FtIrc::ircMessageHandler(Message const & message, Client * const sender, std::string & output)
 {
 	int	cmd_idx = -1;
@@ -24,11 +23,35 @@ int FtIrc::ircMessageHandler(Message const & message, Client * const sender, std
 	return (-1);
 }
 
-// This function will probably needs sub-functions to handle modes that come with arguments!
 int FtIrc::ircCommandMODE(Message const & message, Client * const sender, std::string & output)
 {
-	// This function will probably needs sub-functions to handle modes that come with arguments!
-	return (0);
+	std::vector<std::string> const & params = message.getParams();
+
+	if (params.size() == 0)
+	{
+		output = "No parameters given for MODE command!";
+		// Find the correct return code from e_numerics.hpp .
+		return (-2);
+	}
+
+	try
+	{
+		if (params.at(0).at(0) == '#')
+		{
+			return (ircCommandMODE_channel(message, sender, output));
+		}
+		else
+		{
+			return (ircCommandMODE_user(message, sender, output));
+		}
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Message parsing error: empty string for <target>!" << std::endl;
+		output = "No parameters given for MODE command!";
+		// Find the correct return code from e_numerics.hpp .
+		return (-2);
+	}
 }
 
 int FtIrc::ircCommandTOPIC(Message const & message, Client * const sender, std::string & output)
