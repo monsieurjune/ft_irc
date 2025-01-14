@@ -16,6 +16,8 @@
 // Borrowed the idea from the module cpp01/ex05
 FtIrc::FtIrc(std::string const password): _serverPassword(password)
 {
+	// Added _serverName
+	_serverName = "ft_irc";
 	_commandHandler[0] = &FtIrc::ircCommandKICK;
 	_commandHandler[1] = &FtIrc::ircCommandINVITE;
 	_commandHandler[2] = &FtIrc::ircCommandMODE;
@@ -64,7 +66,7 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 	}	
 }
 
-std::string	FtIrc::getServerPassword(void) const
+std::string	const & FtIrc::getServerPassword(void) const
 {
     return (_serverPassword);
 }
