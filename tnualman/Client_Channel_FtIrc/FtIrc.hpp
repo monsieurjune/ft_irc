@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __FT_IRC_HPP__
-# define __FT_IRC_HPP__
+#ifndef __FTIRC_HPP__
+# define __FTIRC_HPP__
 
 # ifndef IRC_MAXSIZE
 #  define IRC_MAXSIZE 512
@@ -86,8 +86,8 @@ class FtIrc
 
 		// IRC Message handler
 		int					ircMessageHandler(Message const & message, Client * const sender);
-		void 				ircReplyToClient(Client * const sender); // Called inside the above function only! Will this be a const function?
-		void				ircAddReplyMessage(int const code, std::string const & target, std::string const & detail);
+		int 				ircReplyToClient(Client * const sender); // Called inside the above function only! Will this be a const function?
+		int					ircAddReplyMessage(int const code, Client * const sender, std::string const & details);
 
 		int					ircCommandKICK(Message const & message, Client * const sender);
 		int					ircCommandINVITE(Message const & message, Client * const sender);

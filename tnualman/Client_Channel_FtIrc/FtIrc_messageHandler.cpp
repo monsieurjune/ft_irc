@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/14 20:11:11 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/15 01:41:09 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int FtIrc::ircMessageHandler(Message const & message, Client * const sender)
 	// Put more code here in case of "command not found!".
 	// if (return_code == -1)
 	
+	
 	ircReplyToClient(sender);
 
 	return (return_code);
@@ -41,72 +42,64 @@ int FtIrc::ircMessageHandler(Message const & message, Client * const sender)
  * It sends all the reply messages collected into std::vector<std::string> _replies 
  * by the function FtIrc::ircAddReplyMessage.
  * 
- * TODO for Tun and Grammy: Add code that actually send the replies to the cliient.
+ * TODO for Tun and Grammy: Add code that actually send the replies to the client.
  * 
  * @param sender 
  */
-void FtIrc::ircReplyToClient(Client * const sender)
+int FtIrc::ircReplyToClient(Client * const sender)
 {
 	/**
 	 * @brief This function is to be called only inside the function FtIrc::ircMessageHandler!
 	 * It sends all the reply messages collected into std::vector<std::string> _replies 
 	 * by the function FtIrc::ircAddReplyMessage.
 	 * 
-	 * TODO for Tun and Grammy: Add code that actually send the replies to the cliient.
+	 * TODO for Tun and Grammy: Add code that actually send the replies to the client.
 	 * 
 	 * @param sender 
 	 */
+
+	try
+	{
+		Message firstMsg(_replies.at(0));
+		
+		return (std::atoi(firstMsg.getCommand().c_str()));
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Nothing to reply to client!" << std::endl;
+		return (-1);
+	}
 }
 
-void FtIrc::ircAddReplyMessage(int const code, std::string const & target, std::string const & detail)
+/**
+ * @brief This fucntion is to be called inside IRC command handler functions,
+ * 	to generate each complete IRC reply message and put them inside std::vector<std::string> _replies,
+ * 	to be sent successively to the client with the function FtIrc::ircReplyToClient.
+ * 
+ * @param code is the IRC reply code.
+ * @param sender is the sender of the IRC command message to the server,
+ * 	passing through from the function FtIrc::ircMessageHandler.
+ * @param details is the string containing parameters of the reply,
+ * 	to be constructed in different places by the different reply formats and logics of each handler function and ease of its case.
+ * @return the same IRC reply code (int)
+ * 
+ * Note: The types of 'details' and the implementation logic keep changing between std::string and std::stringstream
+ * 	to accomodate int/long to std::string conversion, and also for an obscure c++98 inability to use an std::stringstream
+ * 	as an argument for the function; I really don't understand this part! 
+ */
+
+int	FtIrc::ircAddReplyMessage(int const code, Client * const sender, std::string const & details)
 {
 	std::stringstream ss;
 	
-	ss << ":" << _serverName << " " << code << " " << target << " :" << detail;
+	ss << ":" << _serverName << " " << code << " " << sender->getNickname();
+
+	if (!details.empty())
+	{
+		ss << " " << details;
+	}
 	
 	_replies.push_back(ss.str());
-}
 
-int FtIrc::ircCommandTOPIC(Message const & message, Client * const sender)
-{
-	int param_count = message.getParams().size();
-
-	if (param_count < 1 || param_count > 2)
-	{
-		_replies.push_back("Invalid number of parameters for TOPIC command!");
-		// TODO: replace return value with correct enum from e_numerics.
-		return (1);
-	}
-
-	std::string	channel_name = message.getParams().at(0);
-	Channel* channel = getChannelByName(channel_name);
-	
-	if (!channel)
-	{
-		_replies.push_back("Channel named " + channel_name + " not found!");
-		// TODO: replace return value with correct enum from e_numerics.
-		return (2);
-	}
-
-	// No changing topic in this case; only reply to client the topic string. 
-	if (param_count == 1)
-	{
-		_replies.push_back("Channel: " + channel_name + "; Topic: " + channel->getTopic());
-		// TODO: replace return value with correct enum from e_numerics.
-		return (0);
-	}
-
-	// if (NOT FOUND IN CHANNEL USER LIST || NOT AN OPERATOR OF THE TOPIC-PROTECTED CHANNEL)
-	if (!channel->hasUser(sender) || (channel->hasMode('t') && !channel->hasMembershipMode(sender, 'o')))
-	{
-		_replies.push_back("User " + sender->getNickname() + " cannot set the topic for channel " + channel_name + " !");
-		// TODO: replace return value with correct enum from e_numerics.
-		return (3);
-	}
-	
-	channel->setTopic(message.getParams().at(1), sender);
-	_replies.push_back("Channel: " + channel_name + "; Topic: " + channel->getTopic() + "; Setter: " + channel->getTopicSetter());
-	
-	// TODO: replace return value with correct enum from e_numerics.
-	return (0);
+	return (code);
 }
