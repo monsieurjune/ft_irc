@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 17:08:43 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 22:10:36 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,14 @@ int Channel::getUserCount(void) const
 	return (_userMap.size());
 }
 
+int Channel::getUserCountLimit(void) const
+{
+	return (_userCountLimit);
+}
+
 bool Channel::hasUser(Client * const client) const
 {
-	return (_userMap.find(client) != end(_userMap));
+	return (_userMap.find(client) != _userMap.end());
 }
 
 std::string const & Channel::getTopic(void) const
@@ -69,6 +74,11 @@ bool Channel::hasMode(char c) const
 void Channel::setName(std::string const name)
 {
 	_name = name;
+}
+
+void Channel::setUserCountLimit(int const limit)
+{
+	_userCountLimit = limit;
 }
 
 void Channel::setTopic(std::string const topic, Client const * const client)
@@ -122,13 +132,19 @@ void Channel::removeMode(std::string s)
 int Channel::addUserToChannel(Client * const client, std::string modestr)
 {
 
-	if (_userMap.find(client) != end(_userMap))
+	if (_userMap.find(client) != _userMap.end())
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " already exists on channel " << _name << " !" << std::endl;
 		return (1);
 	}
 
+	if (hasMode('l') && getUserCount() >= getUserCountLimit())
+	{
+		std::cerr << "Channel's user count limit reached!" << std::endl;
+		return (2);
+	}
+	
 	std::set<char> mode_set;
 
 	if (!modestr.empty())
@@ -145,7 +161,7 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 
 int	Channel::deleteUserFromChannel(Client * const client)
 {
-	if (_userMap.find(client) == end(_userMap))
+	if (_userMap.find(client) == _userMap.end())
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " does not exist on channel " << _name << " !" << std::endl;
@@ -175,7 +191,7 @@ bool Channel::hasMembershipMode(Client * const client, char const c) const
 {
 	try
 	{
-		return (_userMap.at(client).find(c) != end(_userMap.at(client)));
+		return (_userMap.at(client).find(c) != _userMap.at(client).end());
 	}
 	catch (std::exception const & e)
 	{

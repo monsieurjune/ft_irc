@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/09 13:38:02 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:21:25 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Client
 		
 		Client(int const fd);
 		Client(int const fd, std::string const nickname,
-				std::string const username, std::string const host);
+				std::string const username, std::string const host, std::string modestr);
 		~Client(void);
 
 		// Orthodox Canonical Form fluff :p

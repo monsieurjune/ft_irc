@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/25 15:57:01 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:02:50 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int Message::parse(std::string const raw)
 {
 	if (raw.empty()) // Empty message
 	{
-		_is_valid = false;
+		_isValid = false;
 		return (1);
 	}
 	// if (_raw.find("\r\n") == std::string::npos) // Message has no \r\n
@@ -62,10 +62,11 @@ int Message::parse(std::string const raw)
 	{
 		if (raw_splitted.size() == 1)
 		{
-			_is_valid = false;
+			_isValid = false;
 			return (1);
 		}
 		_source = raw_splitted.at(0).substr(1, std::string::npos); // Trim lreading ':'
+		// Parse _source here if it needs to be done.
 		_command = raw_splitted.at(1);
 		param_idx = 2;
 	}
@@ -85,12 +86,12 @@ int Message::parse(std::string const raw)
 		else // IS the trailing param
 		{
 			int temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
-			std::string temp = raw.substr(temp_pos + 1, std::string::npos);
+			std::string const temp = raw.substr(temp_pos + 1, std::string::npos);
 			_params.push_back(temp);
 			break ;
 		}
 	}
-	_is_valid = true;
+	_isValid = true;
 	return (0);
 }
 
@@ -116,5 +117,5 @@ std::vector<std::string> Message::getParams(void) const
 
 bool Message::isValid(void) const
 {
-	return (_is_valid);
+	return (_isValid);
 }
