@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/15 01:41:09 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/15 02:01:26 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int FtIrc::ircMessageHandler(Message const & message, Client * const sender)
 	// Put more code here in case of "command not found!".
 	// if (return_code == -1)
 	
-	
-	ircReplyToClient(sender);
+	sendRepliesToClient(sender);
 
 	return (return_code);
 }
@@ -46,7 +45,7 @@ int FtIrc::ircMessageHandler(Message const & message, Client * const sender)
  * 
  * @param sender 
  */
-int FtIrc::ircReplyToClient(Client * const sender)
+int FtIrc::sendRepliesToClient(Client * const sender)
 {
 	/**
 	 * @brief This function is to be called only inside the function FtIrc::ircMessageHandler!
@@ -64,10 +63,9 @@ int FtIrc::ircReplyToClient(Client * const sender)
 		
 		return (std::atoi(firstMsg.getCommand().c_str()));
 	}
-	catch(const std::exception& e)
+	catch(const std::exception& e) // No reply is sent to client.
 	{
-		std::cerr << "Nothing to reply to client!" << std::endl;
-		return (-1);
+		return (0);
 	}
 }
 
@@ -88,7 +86,7 @@ int FtIrc::ircReplyToClient(Client * const sender)
  * 	as an argument for the function; I really don't understand this part! 
  */
 
-int	FtIrc::ircAddReplyMessage(int const code, Client * const sender, std::string const & details)
+int	FtIrc::addReplyMessage(int const code, Client * const sender, std::string const & details)
 {
 	std::stringstream ss;
 	

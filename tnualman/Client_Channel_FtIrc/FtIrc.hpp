@@ -86,8 +86,8 @@ class FtIrc
 
 		// IRC Message handler
 		int					ircMessageHandler(Message const & message, Client * const sender);
-		int 				ircReplyToClient(Client * const sender); // Called inside the above function only! Will this be a const function?
-		int					ircAddReplyMessage(int const code, Client * const sender, std::string const & details);
+		int 				sendRepliesToClient(Client * const sender); // Called inside the above function only! Will this be a const function?
+		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
 		int					ircCommandKICK(Message const & message, Client * const sender);
 		int					ircCommandINVITE(Message const & message, Client * const sender);
