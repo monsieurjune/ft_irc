@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FtIrc_ircCommandMODE.cpp                           :+:      :+:    :+:   */
+/*   FtIrc::ircMODE.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/15 01:41:09 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/17 23:22:23 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
-int FtIrc::ircCommandMODE(Message const & message, Client * const sender)
+int FtIrc::ircMODE(Message const & message, Client * const sender)
 {
 	std::vector<std::string> const & params = message.getParams();
 
@@ -27,11 +27,11 @@ int FtIrc::ircCommandMODE(Message const & message, Client * const sender)
 	{
 		if (params.at(0).at(0) == '#')
 		{
-			return (ircCommandMODE_channel(message, sender));
+			return (ircMODE_channel(message, sender));
 		}
 		else
 		{
-			return (ircCommandMODE_user(message, sender));
+			return (ircMODE_user(message, sender));
 		}
 	}
 	catch(const std::exception& e)
@@ -43,7 +43,7 @@ int FtIrc::ircCommandMODE(Message const & message, Client * const sender)
 	}
 }
 
-int FtIrc::ircCommandMODE_channel(Message const & message, Client * const sender)
+int FtIrc::ircMODE_channel(Message const & message, Client * const sender)
 {
 	std::vector<std::string> const & params = message.getParams();
 	std::string const target = params.at(0).substr(1, std::string::npos);

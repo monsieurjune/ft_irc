@@ -57,7 +57,7 @@ class FtIrc
 
 	public:
 		
-		FtIrc(std::string const server_password);
+		FtIrc(std::string const name, std::string const password);
 		~FtIrc(void);
 
 		// Getters
@@ -83,19 +83,24 @@ class FtIrc
 		int					deleteClient(std::string const nickname);
 		int					deleteChannel(Channel * const channel);
 		int					deleteChannel(std::string const name);
+		// int				deleteUserFromChannel(std::string const name); // TODO FUNCTION!
 
-		// IRC Message handler
 		int					ircMessageHandler(Message const & message, Client * const sender);
-		int 				sendRepliesToClient(Client * const sender); // Called inside the above function only! Will this be a const function?
+	
+	private:
+	
+		// IRC Message handler
+		
+		int 				sendRepliesToClient(Client * const sender);
 		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
-		int					ircCommandKICK(Message const & message, Client * const sender);
-		int					ircCommandINVITE(Message const & message, Client * const sender);
-		int					ircCommandMODE(Message const & message, Client * const sender);
-		int					ircCommandTOPIC(Message const & message, Client * const sender);
+		int					ircKICK(Message const & message, Client * const sender);
+		int					ircINVITE(Message const & message, Client * const sender);
+		int					ircMODE(Message const & message, Client * const sender);
+		int					ircTOPIC(Message const & message, Client * const sender);
 
-		int					ircCommandMODE_channel(Message const & message, Client * const sender);
-		int					ircCommandMODE_user(Message const & message, Client * const sender);
+		int					ircMODE_channel(Message const & message, Client * const sender);
+		int					ircMODE_user(Message const & message, Client * const sender);
 };
 
 #endif

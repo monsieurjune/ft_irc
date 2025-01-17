@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FtIrc_ircCommandTOPIC.cpp                          :+:      :+:    :+:   */
+/*   FtIrc_ircTOPIC.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/15 01:59:52 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/17 22:22:43 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
-int FtIrc::ircCommandTOPIC(Message const & message, Client * const sender)
+int FtIrc::ircTOPIC(Message const & message, Client * const sender)
 {
 	int param_count = message.getParams().size();
 	std::stringstream details;

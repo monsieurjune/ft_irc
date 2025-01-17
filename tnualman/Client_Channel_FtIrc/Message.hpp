@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/12 21:02:00 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/17 23:12:15 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 # define __MESSAGE_HPP__
 
 # include <string>
+# include <sstream>
 # include <vector>
 # include <map>
 
 class Message
 {
 	private:
-		// std::string							_raw; // Memory usage is at premium... :p
-		// std::map<std::string, std::string>	_tags; // Not to be implemented (?)
-		std::string							_source; // a.k.a. prefix
-		// std::string							_sourceNickname;
-		// std::string							_sourceUsername;
-		// std::string							_sourceHost;
-		std::string							_command;
-		std::vector<std::string>			_params;
-		bool								_isValid;
+		std::string					_raw;
+		std::string					_source; // a.k.a. prefix
+		// std::string				_sourceNickname;
+		// std::string				_sourceUsername;
+		// std::string				_sourceHost;
+		std::string					_command;
+		std::vector<std::string>	_params;
+		bool						_isValid;
 
 		Message(void);
 	
@@ -46,18 +46,22 @@ class Message
 		int	parse(std::string const raw);  
 
 		// Getters
-		// std::string 						getRawMessage(void) const;
-		// std::map<std::string, std::string>	getTags(void) const; // Not to be implemented (?)
-		std::string							getSource(void) const;
-		// std::string							getSourceNickname(void) const;
-		// std::string							getSourceUsername(void) const;
-		// std::string							getSourceHost(void) const;
-		std::string							getCommand(void) const;
-		std::vector<std::string>			getParams(void) const;
-		bool								isValid(void) const;
+		std::string 				getRawMessage(void) const;
+		std::string					getSource(void) const;
+		// std::string				getSourceNickname(void) const;
+		// std::string				getSourceUsername(void) const;
+		// std::string				getSourceHost(void) const;
+		std::string					getCommand(void) const;
+		std::vector<std::string>	getParams(void) const;
+		bool						isValid(void) const;
 
 		// Setters
-		// char *							setRawMessage(void)t;
+		void						setSource(std::string src);
+		void						setCommand(std::string cmd);
+		void						setCommand(int cmd);
+		void						resetParams(void);
+		void						pushParam(std::string param);
+		std::string const &			setRawMessage(void);
 };
 
 #endif
