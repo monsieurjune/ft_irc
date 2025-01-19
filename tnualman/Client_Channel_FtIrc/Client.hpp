@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/17 23:22:23 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/20 02:31:36 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ class Client
 {
 	private:
 		
-		int				_fd;
-		int				_authorizeLevel;
-		time_t			_timeConnected; // Does this happen at construction time?
+		int					_fd;
+		int					_authorizeLevel;
+		time_t				_timeConnected; // Does this happen at construction time?
 
-		std::string		_nickname;
-		std::string		_username;
-		std::string		_host;
+		std::string			_nickname;
+		std::string			_username;
+		std::string			_host;
 
-		std::set<char>	_modes;
+		std::set<char>		_modes;
 		
-		// std::set<Channel*>	_channels;
+		std::set<Channel*>	_channels;
 
 	public:
 		

@@ -83,7 +83,7 @@ class FtIrc
 		int					deleteClient(std::string const nickname);
 		int					deleteChannel(Channel * const channel);
 		int					deleteChannel(std::string const name);
-		// int				deleteUserFromChannel(std::string const name); // TODO FUNCTION!
+		int					deleteUserFromChannel(std::string const channelName); // TODO FUNCTION!
 
 		int					ircMessageHandler(Message const & message, Client * const sender);
 	

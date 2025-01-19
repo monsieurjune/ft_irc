@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 21:23:35 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/20 02:31:36 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 class Message
 {
 	private:
-		std::string					_raw;
+		// std::string					_raw;
 		std::string					_source; // a.k.a. prefix
 		// std::string				_sourceNickname;
 		// std::string				_sourceUsername;
