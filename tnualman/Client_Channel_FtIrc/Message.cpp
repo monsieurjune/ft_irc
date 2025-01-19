@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 21:38:02 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 22:01:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Message::Message(void) {}
 
 Message::Message(std::string const raw)
 {
-	_raw = raw;
+	// _raw = raw;
 	parse(raw);
 }
 
@@ -96,10 +96,10 @@ int Message::parse(std::string const raw)
 	return (0);
 }
 
-std::string Message::getRawMessage(void) const
-{
-	return (_raw);
-}
+// std::string Message::getRawMessage(void) const
+// {
+// 	return (_raw);
+// }
 
 std::string Message::getSource(void) const
 {
@@ -172,6 +172,6 @@ std::string const & Message::assembleMessage(void)
 	}
 
 	_isValid = true;
-	_raw = raw;
+	// _raw = raw;
 	return (raw);
 }
