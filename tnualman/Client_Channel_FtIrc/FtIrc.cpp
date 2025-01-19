@@ -14,12 +14,14 @@
 
 // Hard-coded with fixed array for now, because function pointer's syntax in C++ is harder than I expected...
 // Borrowed the idea from the module cpp01/ex05
-FtIrc::FtIrc(std::string const password): _serverPassword(password)
+FtIrc::FtIrc(std::string const name, std::string const password)
 {
-	_commandHandler[0] = &FtIrc::ircCommandKICK;
-	_commandHandler[1] = &FtIrc::ircCommandINVITE;
-	_commandHandler[2] = &FtIrc::ircCommandMODE;
-	_commandHandler[3] = &FtIrc::ircCommandTOPIC;
+	_serverName = name;
+	_serverPassword = password;
+	_commandHandler[0] = &FtIrc::ircKICK;
+	_commandHandler[1] = &FtIrc::ircINVITE;
+	_commandHandler[2] = &FtIrc::ircMODE;
+	_commandHandler[3] = &FtIrc::ircTOPIC;
 	_availableCommands = {"KICK", "INVITE", "MODE", "TOPIC"};
 	std::time(&_timeServerStarted);
 }
@@ -64,7 +66,7 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 	}	
 }
 
-std::string	FtIrc::getServerPassword(void) const
+std::string	const & FtIrc::getServerPassword(void) const
 {
     return (_serverPassword);
 }

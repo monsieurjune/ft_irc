@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 20:21:25 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/17 23:22:23 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ class Client
 		std::string		_host;
 
 		std::set<char>	_modes;
+		
+		// std::set<Channel*>	_channels;
 
 	public:
 		
@@ -47,8 +49,8 @@ class Client
 
 		// Getters
 		
-		int	getFd(void) const;
-		int	getAuthorizeLevel(void) const;
+		int						getFd(void) const;
+		int						getAuthorizeLevel(void) const;
 
 		std::string const &		getNickname(void) const;
 		std::string	const &		getUsername(void) const;

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __FT_IRC_HPP__
-# define __FT_IRC_HPP__
+#ifndef __FTIRC_HPP__
+# define __FTIRC_HPP__
 
 # ifndef IRC_MAXSIZE
 #  define IRC_MAXSIZE 512
@@ -25,6 +25,7 @@
 # include <string>
 # include <iterator>
 # include <iostream>
+# include <sstream>
 
 # include "Client.hpp"
 # include "Channel.hpp"
@@ -35,6 +36,10 @@ class FtIrc
 {			
 	private:
 		
+		std::string						_serverName; // Added as the <source> for the reply messages.
+		std::string						_serverPassword;
+		time_t							_timeServerStarted;
+
 		std::set<Client>				_clientSet;	
 		std::map<int, Client*>			_clientMapByFd;
 		std::map<std::string, Client*>	_clientMapByNickname;
@@ -43,51 +48,59 @@ class FtIrc
 
 		std::vector<struct pollfd>		_pollfdVec;
 
-		std::string						_serverPassword;
-		time_t							_timeServerStarted;
-
 		// Hard-coded with fixed array for now, because function pointer's syntax in C++ is harder than I expected...
-		int								(FtIrc::*_commandHandler[4])(Message const &, Client * const, std::string &);
+		int								(FtIrc::*_commandHandler[4])(Message const &, Client * const);
 		std::vector<std::string>		_availableCommands;
+
+		// Added this to store/handle reply messages for each processed IRC command.
+		std::vector<std::string>		_replies;
 
 	public:
 		
-		FtIrc(std::string const server_password);
+		FtIrc(std::string const name, std::string const password);
 		~FtIrc(void);
 
 		// Getters
-		Client*		getClientByFd(int const fd) const;
-		Client*		getClientByNickname(std::string const name) const;
-		Channel*	getChannelByName(std::string const name) const;
-		std::string	getServerPassword(void) const;
+		Client*				getClientByFd(int const fd) const;
+		Client*				getClientByNickname(std::string const name) const;
+		Channel*			getChannelByName(std::string const name) const;
+		std::string const &	getServerPassword(void) const;
 
 		// Changers
 		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
-		int		changeNickname(std::string const name, std::string const newname);
-		int		changeChannelName(std::string const name, std::string const newname);
-		void	changeServerPassword(std::string password);
+		int					changeNickname(std::string const name, std::string const newname);
+		int					changeChannelName(std::string const name, std::string const newname);
+		void				changeServerPassword(std::string password);
 
 		// Adders
-		int		addClient(int const fd, std::string const nickname,
-					std::string const username, std::string const host, std::string modestr);
-		int		addChannel(std::string const name);
+		int					addClient(int const fd, std::string const nickname,
+								std::string const username, std::string const host, std::string modestr);
+		int					addChannel(std::string const name);
 
 		// Deleters
-		int		deleteClient(Client * const client);
-		int		deleteClient(int const fd);
-		int		deleteClient(std::string const nickname);
-		int		deleteChannel(Channel * const channel);
-		int		deleteChannel(std::string const name);
+		int					deleteClient(Client * const client);
+		int					deleteClient(int const fd);
+		int					deleteClient(std::string const nickname);
+		int					deleteChannel(Channel * const channel);
+		int					deleteChannel(std::string const name);
+		// int				deleteUserFromChannel(std::string const name); // TODO FUNCTION!
 
+		int					ircMessageHandler(Message const & message, Client * const sender);
+	
+	private:
+	
 		// IRC Message handler
-		int	ircMessageHandler(Message const & message, Client * const sender, std::string & reply);
-		int	ircCommandKICK(Message const & message, Client * const sender, std::string & reply);
-		int	ircCommandINVITE(Message const & message, Client * const sender, std::string & reply);
-		int	ircCommandMODE(Message const & message, Client * const sender, std::string & reply);
-		int	ircCommandTOPIC(Message const & message, Client * const sender, std::string & reply);
+		
+		int 				sendRepliesToClient(Client * const sender);
+		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
-		int	ircCommandMODE_channel(Message const & message, Client * const sender, std::string & reply);
-		int	ircCommandMODE_user(Message const & message, Client * const sender, std::string & reply);
+		int					ircKICK(Message const & message, Client * const sender);
+		int					ircINVITE(Message const & message, Client * const sender);
+		int					ircMODE(Message const & message, Client * const sender);
+		int					ircTOPIC(Message const & message, Client * const sender);
+
+		int					ircMODE_channel(Message const & message, Client * const sender);
+		int					ircMODE_user(Message const & message, Client * const sender);
 };
 
 #endif
