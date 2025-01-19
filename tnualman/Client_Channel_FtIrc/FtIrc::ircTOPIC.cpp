@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FtIrc_ircTOPIC.cpp                                 :+:      :+:    :+:   */
+/*   FtIrc::ircTOPIC.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/17 22:22:43 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:28:46 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,7 @@ int FtIrc::ircTOPIC(Message const & message, Client * const sender)
 	}
 
 	if (channel->hasMode('t') && !channel->hasMembershipMode(sender, 'o'))
-	{details << channel_name + " :" + channel->getTopic();
-			addReplyMessage(RPL_TOPIC, sender, details.str());
-			details.clear();
-			details << channel_name << " " << channel->getTopicSetter() << " " << channel->getTimeTopicSet();
-			addReplyMessage(RPL_TOPICWHOTIME, sender, details.str());
-			return (RPL_TOPIC);
+	{
 		details << channel_name << " :You're not on channel operator";
 		return (addReplyMessage(ERR_CHANOPRIVSNEEDED, sender, details.str()));
 	}
