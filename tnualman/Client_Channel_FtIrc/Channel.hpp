@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/12 21:03:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 19:11:18 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ class Channel
 		// Membership modes
 		std::set<char> const &	getMembershipModes(Client * const client) const; // Returns a set with only '!' is user is not found in channel.
 		bool					hasMembershipMode(Client * const client, char const c) const; // Returns false if user is not found.
-		char					addMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
-		char					removeMembershipMode(Client * const client, char const c); // Returns NULL is user is not found in channel.
+		int						addMembershipMode(Client * const client, char const c); // Returns -1 is user is not found.
+		int						removeMembershipMode(Client * const client, char const c); // Returns -1 is user is not found.
 		int						addMembershipMode(Client * const client, std::string s);
 		int						removeMembershipMode(Client * const client, std::string s);
 
