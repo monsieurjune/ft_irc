@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 19:09:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:23:36 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void Message::pushParam(std::string param)
 	_params.push_back(param);
 }
 
-std::string const & Message::setRawMessage(void)
+std::string const & Message::assembleMessage(void)
 {
 	std::string raw;
 

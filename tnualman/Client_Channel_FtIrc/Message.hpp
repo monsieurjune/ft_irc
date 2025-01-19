@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/17 23:12:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:23:35 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class Message
 		void						setCommand(int cmd);
 		void						resetParams(void);
 		void						pushParam(std::string param);
-		std::string const &			setRawMessage(void);
+		std::string const &			assembleMessage(void);
 };
 
 #endif
