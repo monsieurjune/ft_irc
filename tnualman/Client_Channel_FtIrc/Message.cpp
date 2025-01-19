@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 21:23:36 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:36:01 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,4 +170,7 @@ std::string const & Message::assembleMessage(void)
 		}
 		raw += _params.at(i);
 	}
+
+	_raw = raw;
+	return (raw);
 }
