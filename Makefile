@@ -1,7 +1,7 @@
 # Project Name & Properties
 NAME	:= ./ircserv
 SHELL	:= /usr/bin/env sh
-RM		:= rm
+RM		:= rm -f
 RMDIR	:= rm -r
 MKDIR	:= mkdir -p
 
@@ -23,7 +23,7 @@ NETWORK_SRC		:= listen_init.cpp \
 					irc_recv.cpp
 NETWORK_SRCS	:= $(addprefix $(NETWORK_SRC_DIR), $(NETWORK_SRC))
 
-# Exception
+# Exception Source
 EXCEPT_SRC_DIR	:= $(SRC_DIR)/exception/
 EXCEPT_SRC		:= CstdException.cpp \
 					IrcDisconnectedException.cpp \
@@ -31,10 +31,26 @@ EXCEPT_SRC		:= CstdException.cpp \
 					IrcUnknownCmdException.cpp
 EXCEPT_SRCS		:= $(addprefix $(EXCEPT_SRC_DIR), $(EXCEPT_SRC))
 
-# STD
+# FtIRC Source
+FTIRC_SRC_DIR	:= $(SRC_DIR)/ft_irc/
+FTIRC_SRC		:= Channel.cpp \
+					Client.cpp \
+					FtIrcMemory.cpp \
+					Message.cpp
+FTIRC_SRCS		:= $(addprefix $(FTIRC_SRC_DIR), $(FTIRC_SRC))
+
+# IRC Command Source
+IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
+IRC_CMD_SRC		:= ircCommandINVITE.cpp \
+					ircCommandKICK.cpp \
+					ircCommandTOPIC.cpp \
+					ircCommandMODE.cpp
+IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
+
+# STD Source
 STD_SRC_DIR		:= $(SRC_DIR)/std
 
-#  CSTD
+#  CSTD Source
 CSTD_SRC_DIR	:= $(STD_SRC_DIR)/c/
 CSTD_SRC		:= memset.cpp \
 					isnumber.cpp \
@@ -42,7 +58,7 @@ CSTD_SRC		:= memset.cpp \
 					strnstr.cpp
 CSTD_SRCS		:= $(addprefix $(CSTD_SRC_DIR), $(CSTD_SRC))
 
-#  CPPSTD
+#  CPPSTD Source
 CPPSTD_SRC_DIR	:= $(STD_SRC_DIR)/cpp/
 CPPSTD_SRC		:= stoi.cpp \
 					itoa.cpp
@@ -61,7 +77,13 @@ MAIN_DIR	:= $(SRC_DIR)/
 MAIN_SRCS	:= $(addprefix $(MAIN_DIR), $(MAIN_SRC))
 
 # Objects & Dependencies File
-SRCS	:= $(MAIN_SRCS) $(EXCEPT_SRCS) $(STD_SRCS) $(NETWORK_SRCS) $(UTILS_SRCS)
+SRCS	:= $(MAIN_SRCS) \
+			$(EXCEPT_SRCS) \
+			$(FTIRC_SRCS) \
+			$(IRC_CMD_SRCS) \
+			$(STD_SRCS) \
+			$(NETWORK_SRCS) \
+			$(UTILS_SRCS)
 OBJS	:= $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEPS	:= $(OBJS:.o=.d)
 
