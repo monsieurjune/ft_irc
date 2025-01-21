@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 22:01:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:09:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ Message::Message(void) {}
 
 Message::Message(std::string const raw)
 {
-	// _raw = raw;
 	parse(raw);
 }
 
@@ -96,22 +95,17 @@ int Message::parse(std::string const raw)
 	return (0);
 }
 
-// std::string Message::getRawMessage(void) const
-// {
-// 	return (_raw);
-// }
-
-std::string Message::getSource(void) const
+std::string const & Message::getSource(void) const
 {
 	return (_source);
 }
 
-std::string Message::getCommand(void) const
+std::string const & Message::getCommand(void) const
 {
 	return (_command);
 }
 
-std::vector<std::string> Message::getParams(void) const
+std::vector<std::string> const & Message::getParams(void) const
 {
 	return (_params);
 }
@@ -119,6 +113,31 @@ std::vector<std::string> Message::getParams(void) const
 bool Message::isValid(void) const
 {
 	return (_isValid);
+}
+
+std::string const & Message::getMessage(void)
+{
+	std::string msg;
+
+	if (!_source.empty())
+	{
+		msg += ":" + _source + " ";
+	}
+	
+	msg += _command;
+	
+	for (int i = 0; i < _params.size(); i++)
+	{
+		msg += " ";
+		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
+		{
+			msg += ":";
+		}
+		msg += _params.at(i);
+	}
+
+	_isValid = true;
+	return (msg);
 }
 
 void Message::setSource(std::string src)
@@ -148,30 +167,4 @@ void Message::resetParams(void)
 void Message::pushParam(std::string param)
 {
 	_params.push_back(param);
-}
-
-std::string const & Message::assembleMessage(void)
-{
-	std::string raw;
-
-	if (!_source.empty())
-	{
-		raw += ":" + _source + " ";
-	}
-	
-	raw += _command;
-	
-	for (int i = 0; i < _params.size(); i++)
-	{
-		raw += " ";
-		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
-		{
-			raw += ":";
-		}
-		raw += _params.at(i);
-	}
-
-	_isValid = true;
-	// _raw = raw;
-	return (raw);
 }
