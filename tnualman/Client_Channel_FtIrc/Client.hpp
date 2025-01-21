@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 21:41:37 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/21 22:31:53 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Client
 {
 	private:
 	// Attributes
-		int						_fd;
+		int	const				_fd;
 		time_t					_timeConnected;
 		int						_authenLevel;
 		
@@ -43,8 +43,6 @@ class Client
 	public:
 	// De/Constructors
 		Client(int const fd);
-		// Client(int const fd, std::string const nickname,
-		// 		std::string const username, std::string const host, std::string modestr);
 		~Client(void);
 
 	// Getters
@@ -62,7 +60,6 @@ class Client
 		bool						isInChannel(Channel * const channel);
 
 	// Setters
-		// void						setFd(int fd); // I'm pretty sure this is not how it works... :p
 		void						setAuthenLevel(int const level);
 		void						setNickname(std::string const name);
 		void						setUsername(std::string const name);
