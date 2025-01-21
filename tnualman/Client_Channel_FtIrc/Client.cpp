@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/11 20:24:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/21 21:42:09 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ Client::Client(int const fd): _fd(fd)
 	std::time(&_timeConnected);
 }
 
-Client::Client(int const fd, std::string const nickname,
-				std::string const username, std::string const host, std::string modestr)
-				: _fd(fd), _nickname(nickname), _username(username), _host(host) 
-{
-	for (std::string::iterator it = modestr.begin(); it != modestr.end(); it++)
-	{
-		_modes.insert(*it);
-	}
-	// Does this happened at construction time?
-	std::time(&_timeConnected);
-}
+// Client::Client(int const fd, std::string const nickname,
+// 				std::string const username, std::string const host, std::string modestr)
+// 				: _fd(fd), _nickname(nickname), _username(username), _host(host) 
+// {
+// 	for (std::string::iterator it = modestr.begin(); it != modestr.end(); it++)
+// 	{
+// 		_modes.insert(*it);
+// 	}
+// 	// Does this happened at construction time?
+// 	std::time(&_timeConnected);
+// }
 
 Client::~Client(void) {}
 
@@ -37,9 +37,9 @@ int Client::getFd(void) const
 	return (_fd);
 }
 
-int Client::getAuthorizeLevel(void) const
+int Client::getAuthenLevel(void) const
 {
-	return (_authorizeLevel);
+	return (_authenLevel);
 }
 
 std::string const & Client::getNickname(void) const
@@ -67,9 +67,9 @@ bool Client::hasMode(char c) const
 	return (_modes.find(c) != _modes.end());
 }
 
-void Client::setAuthorizeLevel(int const level)
+void Client::setAuthenLevel(int const level)
 {
-	_authorizeLevel = level;
+	_authenLevel = level;
 }
 void Client::setNickname(std::string const name)
 {
@@ -93,20 +93,4 @@ void Client::addMode(char c)
 void Client::removeMode(char c)
 {
 	_modes.erase(c);
-}
-
-void Client::addMode(std::string s)
-{
-	for (std::string::iterator it = s.begin(); it != s.end(); it++)
-	{
-		_modes.insert(*it);
-	}
-}
-
-void Client::removeMode(std::string s)
-{
-	for (std::string::iterator it = s.begin(); it != s.end(); it++)
-	{
-		_modes.erase(*it);
-	}
 }
