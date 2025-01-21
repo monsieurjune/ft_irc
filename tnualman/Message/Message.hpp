@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 22:07:32 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/28 23:10:13 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,44 @@
 # define __MESSAGE_HPP__
 
 # include <string>
-# include <sstream>
 # include <vector>
 # include <map>
 
 class Message
 {
 	private:
-	// Attributes
-		std::string					_source; // a.k.a. prefix
-		std::string					_command;
-		std::vector<std::string>	_params;
-		bool						_isValid;
+		// std::string							_raw; // Memory usage is at premium... :p
+		// std::map<std::string, std::string>	_tags; // Not to be implemented (?)
+		std::string							_source; // a.k.a. prefix 
+		std::string							_command;
+		std::vector<std::string>			_params;
+		bool								_is_valid;
+
+		Message(void);
 	
 	public:
-	// De/Constructor
-		Message(void);
-		Message(std::string const msg);
+		Message(std::string const raw);
+		
 		~Message(void);
 		
-	private:
-	// Parser
+		// Orthodox Canonical Form fluff :p
+		// Message(Message const & origin);
+		// Message & operator=(Message const & rhs);
+
+		// Returns status value, implemented separately from the constructor for the sake of modularity,
+		// in case we add something to the constructor later.
 		int	parse(std::string const raw);  
 
-	public:
-	// Getters
-		std::string	const &					getSource(void) const;
-		std::string	const &					getCommand(void) const;
-		std::vector<std::string> const &	getParams(void) const;
+		// Getters
+		// std::string 						getRawMessage(void) const;
+		// std::map<std::string, std::string>	getTags(void) const; // Not to be implemented (?)
+		std::string							getSource(void) const;
+		std::string							getCommand(void) const;
+		std::vector<std::string>			getParams(void) const;
 		bool								isValid(void) const;
-		std::string const &					getMessage(void);
 
-	// Setters
-		void								setSource(std::string src);
-		void								setCommand(std::string cmd);
-		void								setCommand(int cmd);
-		void								resetParams(void);
-		void								pushParam(std::string param);
-	
+		// Setters
+		// char *							setRawMessage(void) const;
 };
 
 #endif

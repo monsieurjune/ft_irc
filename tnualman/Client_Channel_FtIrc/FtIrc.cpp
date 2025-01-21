@@ -254,3 +254,19 @@ int	FtIrc::deleteChannel(std::string const name)
 
 	return (0);
 }
+
+int	FtIrc::deleteUserFromChannel(std::string const name)
+{
+	std::map<std::string, Channel*>::iterator it = _channelMapByName.find(name);
+
+	if (it == _channelMapByName.end())
+	{
+		std::cerr << "Channel named " << name << " not found!" << std::endl;
+		return (-1);
+	}
+	
+	_channelSet.erase(*(it->second));
+	_channelMapByName.erase(name);
+
+	return (0);
+}

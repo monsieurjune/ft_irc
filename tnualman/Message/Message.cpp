@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 18:09:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:57:01 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int Message::parse(std::string const raw)
 {
 	if (raw.empty()) // Empty message
 	{
-		_isValid = false;
+		_is_valid = false;
 		return (1);
 	}
 	// if (_raw.find("\r\n") == std::string::npos) // Message has no \r\n
@@ -62,11 +62,10 @@ int Message::parse(std::string const raw)
 	{
 		if (raw_splitted.size() == 1)
 		{
-			_isValid = false;
+			_is_valid = false;
 			return (1);
 		}
 		_source = raw_splitted.at(0).substr(1, std::string::npos); // Trim lreading ':'
-		// Parse _source here if it needs to be done.
 		_command = raw_splitted.at(1);
 		param_idx = 2;
 	}
@@ -86,85 +85,36 @@ int Message::parse(std::string const raw)
 		else // IS the trailing param
 		{
 			int temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
-			std::string const temp = raw.substr(temp_pos + 1, std::string::npos);
+			std::string temp = raw.substr(temp_pos + 1, std::string::npos);
 			_params.push_back(temp);
 			break ;
 		}
 	}
-	_isValid = true;
+	_is_valid = true;
 	return (0);
 }
 
-std::string const & Message::getSource(void) const
+// std::string Message::getRawMessage(void) const
+// {
+// 	return (_raw);
+// }
+
+std::string Message::getSource(void) const
 {
 	return (_source);
 }
 
-std::string const & Message::getCommand(void) const
+std::string Message::getCommand(void) const
 {
 	return (_command);
 }
 
-std::vector<std::string> const & Message::getParams(void) const
+std::vector<std::string> Message::getParams(void) const
 {
 	return (_params);
 }
 
 bool Message::isValid(void) const
 {
-	return (_isValid);
-}
-
-std::string const & Message::getMessage(void)
-{
-	std::string msg;
-
-	if (!_source.empty())
-	{
-		msg += ":" + _source + " ";
-	}
-	
-	msg += _command;
-	
-	for (int i = 0; i < _params.size(); i++)
-	{
-		msg += " ";
-		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
-		{
-			msg += ":";
-		}
-		msg += _params.at(i);
-	}
-
-	_isValid = true;
-	return (msg);
-}
-
-void Message::setSource(std::string src)
-{
-	_source = src;
-}
-
-void Message::setCommand(std::string cmd)
-{
-	_command = cmd;
-}
-
-void Message::setCommand(int cmd)
-{
-	std::stringstream ss;
-
-	ss << cmd;
-	_command = ss.str();
-}
-
-void Message::resetParams(void)
-{
-	_params.clear();
-	_params.resize(0);
-}
-
-void Message::pushParam(std::string param)
-{
-	_params.push_back(param);
+	return (_is_valid);
 }
