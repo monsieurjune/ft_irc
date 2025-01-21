@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/22 02:53:11 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/22 04:02:08 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,28 @@
 #include <string>
 #include <set>
 #include <queue>
+
+// Authenication Flag
+
+#ifndef PASS_FLAG
+#define PASS_FLAG 0x01
+#endif
+
+#ifndef USER_FLAG
+#define USER_FLAG 0x02
+#endif
+
+#ifndef NICK_FLAG
+#define NICK_FLAG 0x04
+#endif
+
+#ifndef LOGIN_FLAG
+#define LOGIN_FLAG 0x08
+#endif
+
+#ifndef DEBUG_FLAG
+#define DEBUG_FLAG 0x0F
+#endif
 
 // Forward Decalration to avoid CIRCULAR include
 class Channel;
@@ -66,7 +88,7 @@ class Client
 		 * 
 		 * - 0x08 (LOGIN FALG): Verify that this Client is passed all authenication
 		 * 
-		 * - 0x16 (DEBUG FLAGE): Use for ignore authenication for debugging purpose
+		 * - 0x0F (DEBUG FLAG): Use for overide authenication for debugging purpose
 		 * 
 		 * @note This Attribute can be ignored if DEBUG flag is setted
 		 */
@@ -146,8 +168,6 @@ class Client
 		 * @brief Default Destructor
 		 */
 		~Client();
-
-		// GETTER
 
 		/**
 		 * @brief Get This Client's socket fd
@@ -232,6 +252,20 @@ class Client
 
 		/**
 		 * @brief Set This Client's authenication level
+		 * 
+		 * Multiple flags can be combined using the bitwise OR (`|`) operator.
+		 * 
+		 * Possible values are:
+		 * 
+		 * - 0x01 (PASS FLAG): Verify Password Authenication
+		 * 
+		 * - 0x02 (USER FLAG): Verify Username Authenication
+		 * 
+		 * - 0x04 (NICK FLAG): Verify Nickname Authenication
+		 * 
+		 * - 0x08 (LOGIN FALG): Verify that this Client is passed all authenication
+		 * 
+		 * - 0x0F (DEBUG FLAG): Use for overide authenication for debugging purpose
 		 * 
 		 * @param level Authenication Level
 		 * 
