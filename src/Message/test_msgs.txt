@@ -1,8 +1,0 @@
-:irc.example.com CAP LS * :multi-prefix extended-join sasl
-CAP REQ :sasl
-:irc.example.com CAP * LIST :
-CAP * LS :multi-prefix sasl
-CAP REQ :sasl message-tags foo
-:dan!d@localhost PRIVMSG #chan :Hey!
-:dan!d@localhost PRIVMSG #chan Hey!
-:dan!d@localhost PRIVMSG #chan ::-)
