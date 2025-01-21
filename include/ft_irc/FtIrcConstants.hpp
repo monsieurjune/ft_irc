@@ -1,17 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   e_numerics.hpp                                     :+:      :+:    :+:   */
+/*   FtIrcConstants.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/05 23:06:33 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 23:08:07 by tnualman         ###   ########.fr       */
+/*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/21 17:21:52 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __E_NUMERICS_HPP__
-# define __E_NUMERICS_HPP__
+#ifndef __FT_IRC_CONSTANTS_HPP__
+#define __FT_IRC_CONSTANTS_HPP__
+
+#ifndef IRC_MAXUSER
+#define IRC_MAXUSER 1024
+#endif
 
 enum e_numerics
 {
