@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/22 19:31:25 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:34:59 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,16 @@ void Client::removeMode(char c)
 	_modes.erase(c);
 }
 
-void Client::addToChannel(Channel * const channel)
+void Client::editChannelSet(Channel * const channel, bool add)
 {
-	_channels.insert(channel);
-}
-
-void Client::removeFromChannel(Channel * const channel)
-{
-	_channels.erase(channel);
+	if (add)
+	{
+		_channels.insert(channel);
+	}
+	else
+	{
+		_channels.erase(channel);
+	}
 }
 
 size_t Client::countReply(void)

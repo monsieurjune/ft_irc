@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/22 21:16:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:34:59 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,8 @@ class Client
 		void						addMode(char c);
 		void						removeMode(char c);
 
-	// Add/Remove Channel
-		void 						addToChannel(Channel * const channel);
-		void						removeFromChannel(Channel * const channel);
+	// Edit channel set
+		void						editChannelSet(Channel * const channel, bool add);
 
 	// Reply
 		size_t						countReply(void);

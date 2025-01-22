@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/22 19:29:22 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:33:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,27 +324,37 @@ class Client
 		 */
 		void	removeMode(char const c);
 
-		/**
-		 * @brief Add This Channel to Set of Channel of This Client
-		 * 
-		 * @param channel Channel that This Client is recently joined
-		 * 
-		 * @warning This Client must be under This Channel's Membership already
-		 * 
-		 * @note Call it under Channel's add-client method
-		 */
-		void	addToChannel(Channel * const channel);
+		// /**
+		//  * @brief Add This Channel to Set of Channel of This Client
+		//  * 
+		//  * @param channel Channel that This Client is recently joined
+		//  * 
+		//  * @warning This Client must be under This Channel's Membership already
+		//  * 
+		//  * @note Call it under Channel's add-client method
+		//  */
+		// void	addToChannel(Channel * const channel);
+
+		// /**
+		//  * @brief Remove This Channel to Set of Channel of This Client
+		//  * 
+		//  * @param channel Channel that This Client want to remove
+		//  * 
+		//  * @warning This Client must be under This Channel's Membership already
+		//  * 
+		//  * @note Call it under Channel's remove-client method
+		//  */
+		// void	removeFromChannel(Channel * const channel);
 
 		/**
-		 * @brief Remove This Channel to Set of Channel of This Client
+		 * @brief Edit the list (std::set) of channels the client/user is in. 
 		 * 
-		 * @param channel Channel that This Client want to remove
+		 * @param channel The pointer to Channel that will be added/removed.
+		 * @param add Whether to add or remove (if false) the channel.
 		 * 
-		 * @warning This Client must be under This Channel's Membership already
-		 * 
-		 * @note Call it under Channel's remove-client method
+		 * @warning Only call this with the Channel's functions to add/remove the user from channel!
 		 */
-		void	removeFromChannel(Channel * const channel);
+		void	editChannelSet(Channel * const channel, bool add);
 
 		/**
 		 * @brief Get Amount of Message in Queue
