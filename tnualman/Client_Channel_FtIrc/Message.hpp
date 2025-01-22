@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 22:07:32 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:16:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ class Message
 		Message(void);
 		Message(std::string const msg);
 		~Message(void);
+
+	// Copy-assignment
+		Message(Message const & origin);
+		Message & operator=(Message const & rhs); 
 		
 	private:
 	// Parser

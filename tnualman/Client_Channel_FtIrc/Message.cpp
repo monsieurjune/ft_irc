@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 18:09:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:16:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,21 @@ std::vector<std::string> split(std::string const & s, std::string const & delimi
 }
 
 Message::Message(void) {}
+
+Message::Message(Message const & origin)
+{
+	*this = origin;
+}
+
+Message & Message::operator=(Message const & rhs)
+{
+	_source = rhs._source;
+	_command = rhs._command;
+	_params = rhs._params;
+	_isValid = rhs._isValid;
+
+	return (*this);
+} 
 
 Message::Message(std::string const raw)
 {

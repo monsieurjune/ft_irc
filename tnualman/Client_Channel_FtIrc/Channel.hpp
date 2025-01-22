@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/21 18:40:55 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:00:51 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class Channel
 
 		/** User map. associated ser of chars is user membership modes.
 		 */
-		std::map<Client*, std::set<char>> _userMap;
+		std::map<Client*, std::set<char> > _userMap;
 
 		/** User count limit; no limit if value is negative.
 		*/

@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/22 17:20:36 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:16:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class Client
 	// Reply
 		size_t						countReply(void);
 		void						enqueueReply(std::string const msg);
-		std::string					dequeueReply(void);
+		std::string	const &			dequeueReply(void);
 	
 };
 

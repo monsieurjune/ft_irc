@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 19:10:42 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:00:20 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 			mode_set.insert(*it);
 		}
 	}
-	_userMap.insert({client, mode_set});
+	_userMap[client] = mode_set;
 	
 	return (0);
 }
@@ -183,7 +183,9 @@ std::set<char> const & Channel::getMembershipModes(Client * const client) const
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (std::set<char>{'!'});
+		std::set<char> ret;
+		ret.insert('!');
+		return (ret);
 	}	
 }
 
