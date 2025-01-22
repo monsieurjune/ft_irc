@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/22 21:00:51 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/22 23:27:55 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Channel
 		/** Time that the object was i(Might not be used)nstantiated (used for TS calculation etc)
 		 * (Might not be used)
 		 */
-		time_t _timeCreated;
+		time_t const _timeCreated;
 
 		/** User map. associated ser of chars is user membership modes.
 		 */
