@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/22 21:33:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/23 22:13:26 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,35 +197,35 @@ class Client
 		/**
 		 * @brief Get This Client's Nickname
 		 * 
-		 * @return This Client's Nickname as rvalue
+		 * @return This Client's Nickname as lvalue
 		 */
 		std::string const&	getNickname()	const;
 
 		/**
 		 * @brief Get This Client's Username
 		 * 
-		 * @return This Client's Username as rvalue
+		 * @return This Client's Username as lvalue
 		 */
 		std::string const&	getUsername()	const;
 
 		/**
 		 * @brief Get This Client's Realname
 		 * 
-		 * @return This Client's Realname as rvalue
+		 * @return This Client's Realname as lvalue
 		 */
 		std::string const&	getRealname()	const;
 
 		/**
 		 * @brief Get This Client's Host Information
 		 * 
-		 * @return This Client's Host Information as rvalue
+		 * @return This Client's Host Information as lvalue
 		 */
 		std::string const&	getHost()	const;
 
 		/**
 		 * @brief Get Set of Channels that This Client is membered
 		 * 
-		 * @return Set of Channels Pointer as rvalue
+		 * @return Set of Channels Pointer as lvalue
 		 */
 		std::set<Channel*> const&	getChannels()	const;
 
@@ -324,28 +324,6 @@ class Client
 		 */
 		void	removeMode(char const c);
 
-		// /**
-		//  * @brief Add This Channel to Set of Channel of This Client
-		//  * 
-		//  * @param channel Channel that This Client is recently joined
-		//  * 
-		//  * @warning This Client must be under This Channel's Membership already
-		//  * 
-		//  * @note Call it under Channel's add-client method
-		//  */
-		// void	addToChannel(Channel * const channel);
-
-		// /**
-		//  * @brief Remove This Channel to Set of Channel of This Client
-		//  * 
-		//  * @param channel Channel that This Client want to remove
-		//  * 
-		//  * @warning This Client must be under This Channel's Membership already
-		//  * 
-		//  * @note Call it under Channel's remove-client method
-		//  */
-		// void	removeFromChannel(Channel * const channel);
-
 		/**
 		 * @brief Edit the list (std::set) of channels the client/user is in. 
 		 * 
@@ -373,11 +351,11 @@ class Client
 		/**
 		 * @brief Dequeue This Message
 		 * 
-		 * @return IRC Response Message in lvalue
+		 * @return IRC Response Message in rvalue
 		 * 
 		 * @warning Only Use it in function that send msg out
 		 */
-		std::string const& dequeueReply();
+		std::string dequeueReply();
 };
 
 #endif

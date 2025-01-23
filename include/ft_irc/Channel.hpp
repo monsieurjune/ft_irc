@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/22 05:53:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/23 22:13:41 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ class Channel
 		/**
 		 * @brief Get Channel's Name
 		 * 
-		 * @return Channel's Name in rvalue
+		 * @return Channel's Name in lvalue
 		 */
 		std::string const&	getName()	const;
 
@@ -129,7 +129,7 @@ class Channel
 		/**
 		 * @brief Get This Channel Topic's Name
 		 * 
-		 * @return Topic Name in rvalue
+		 * @return Topic Name in lvalue
 		 */
 		std::string const&	getTopic()	const;
 
@@ -143,7 +143,7 @@ class Channel
 		/**
 		 * @brief Get Most Recent Topic Setter's Nickname
 		 * 
-		 * @return Nickname of Most Recent Topic Setter in rvalue
+		 * @return Nickname of Most Recent Topic Setter in lvalue
 		 */
 		std::string const&	getTopicSetter()	const;
 
@@ -152,7 +152,7 @@ class Channel
 		 * 
 		 * @note not to be confused with client's membership modes
 		 * 
-		 * @return Channel Mode Set in rvalue
+		 * @return Channel Mode Set in lvalue
 		 */
 		std::set<char> const&	getModes()	const;
 };
