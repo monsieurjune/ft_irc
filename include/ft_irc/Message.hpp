@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 21:58:31 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/24 04:39:00 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/24 04:45:18 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ class Message
 		bool	_isValid;
 
 		/**
+		 * @brief Parser of Raw IRC Message
+		 * 
+		 * @param raw Raw IRC Message
+		 * 
+		 * @return
 		 * 
 		 */
 		int	parse(std::string const raw);
