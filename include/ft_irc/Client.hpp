@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/23 22:13:26 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/25 04:43:43 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 #include <string>
 #include <set>
 #include <queue>
+
+// Debug Mode
+#ifndef DEBUG_MODE
+#define DEBUG_MODE 1
+#endif
 
 // Authenication Flag
 
