@@ -35,17 +35,17 @@ EXCEPT_SRCS		:= $(addprefix $(EXCEPT_SRC_DIR), $(EXCEPT_SRC))
 FTIRC_SRC_DIR	:= $(SRC_DIR)/ft_irc/
 FTIRC_SRC		:= Channel.cpp \
 					Client.cpp \
-					FtIrcMemory.cpp \
+					FtIrc.cpp \
 					Message.cpp
 FTIRC_SRCS		:= $(addprefix $(FTIRC_SRC_DIR), $(FTIRC_SRC))
 
 # IRC Command Source
-IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
-IRC_CMD_SRC		:= ircCommandINVITE.cpp \
-					ircCommandKICK.cpp \
-					ircCommandTOPIC.cpp \
-					ircCommandMODE.cpp
-IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
+# IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
+# IRC_CMD_SRC		:= ircCommandINVITE.cpp \
+# 					ircCommandKICK.cpp \
+# 					ircCommandTOPIC.cpp \
+# 					ircCommandMODE.cpp
+# IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # STD Source
 STD_SRC_DIR		:= $(SRC_DIR)/std
@@ -80,10 +80,10 @@ MAIN_SRCS	:= $(addprefix $(MAIN_DIR), $(MAIN_SRC))
 SRCS	:= $(MAIN_SRCS) \
 			$(EXCEPT_SRCS) \
 			$(FTIRC_SRCS) \
-			$(IRC_CMD_SRCS) \
 			$(STD_SRCS) \
 			$(NETWORK_SRCS) \
-			$(UTILS_SRCS)
+			$(UTILS_SRCS) \
+			# $(IRC_CMD_SRCS)
 OBJS	:= $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEPS	:= $(OBJS:.o=.d)
 

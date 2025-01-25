@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/22 05:53:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 05:31:49 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@
 // Forward Decalration to avoid CIRCULAR include
 class Client;
 
+/**
+ * @class Channel
+ * @brief A Class For Encapsulate IRC Channel
+ * 
+ * This Class is Use for Encapsulate IRC Channel and Its assosiated properties.
+ */
 class Channel
 {
 	private:
@@ -32,7 +38,7 @@ class Channel
 		 * 
 		 * @note It must be set at Constructor, and mustn't change
 		 */
-		std::string	_name;
+		const std::string	_name;
 
 		/**
 		 * @brief Channel's Password
@@ -101,9 +107,18 @@ class Channel
 		/**
 		 * @brief Get Channel's Name
 		 * 
-		 * @return Channel's Name in rvalue
+		 * @return Channel's Name in lvalue
 		 */
 		std::string const&	getName()	const;
+
+		/**
+		 * @brief Get Channel's Password
+		 * 
+		 * @return Channel's Password
+		 * 
+		 * @note This Field is ignored if password mode is unsetted
+		 */
+		std::string const&	getPassword()	const;
 
 		/**
 		 * @brief Get Time when this channel is created
@@ -129,7 +144,7 @@ class Channel
 		/**
 		 * @brief Get This Channel Topic's Name
 		 * 
-		 * @return Topic Name in rvalue
+		 * @return Topic Name in lvalue
 		 */
 		std::string const&	getTopic()	const;
 
@@ -143,7 +158,7 @@ class Channel
 		/**
 		 * @brief Get Most Recent Topic Setter's Nickname
 		 * 
-		 * @return Nickname of Most Recent Topic Setter in rvalue
+		 * @return Nickname of Most Recent Topic Setter in lvalue
 		 */
 		std::string const&	getTopicSetter()	const;
 
@@ -152,9 +167,185 @@ class Channel
 		 * 
 		 * @note not to be confused with client's membership modes
 		 * 
-		 * @return Channel Mode Set in rvalue
+		 * @return Channel Mode Set in lvalue
 		 */
 		std::set<char> const&	getModes()	const;
+
+		/**
+		 * @brief Check if This Channel contain certain Client
+		 * 
+		 * @param client Client That want to Check
+		 * 
+		 * @return True if This Client is member of This Channel, False otherwise
+		 */
+		bool	hasThisClient(Client * const client)	const;
+
+		/**
+		 * @brief Check if This Channel contain certain mode
+		 * 
+		 * @param c character mode
+		 * 
+		 * @return True if This Channel contain this mode, False otherwise
+		 */
+		bool	hasThisMode(char const c)	const;
+
+		/**
+		 * @brief Set Channel's Password
+		 * 
+		 * @param password New Channel's Password
+		 * 
+		 * @note This Field is ignored if password mode is unsetted
+		 */
+		void	setPassword(std::string const password);
+
+		/**
+		 * @brief Set User Limit in This Channel
+		 * 
+		 * @param limit New maximum number of user
+		 * 
+		 * @note It would be completely ignored, if limit mode is unsetted
+		 */
+		void	setUserCountLimit(size_t const limit);
+
+		/**
+		 * @brief Set This Channel's Topic
+		 * 
+		 * @param topic Topic Name
+		 * @param setter Client that want to set topic
+		 * 
+		 * @warning This Method isn't check validation of setter
+		 */
+		void	setTopic(std::string const topic, Client * const setter);
+
+		/**
+		 * @brief Add Channel Mode
+		 * 
+		 * @param c Character Mode
+		 */
+		void	addMode(char const c);
+
+		/**
+		 * @brief Add Channel Mode
+		 * 
+		 * @param s String of Charracter Mode
+		 */
+		void	addMode(std::string const s);
+
+		/**
+		 * @brief Remove Channel Mode
+		 * 
+		 * @param c Character Mode
+		 */
+		void	removeMode(char const c);
+
+		/**
+		 * @brief Remove Channel Mode
+		 * 
+		 * @param s String of Charracter Mode
+		 */
+		void	removeMode(std::string const s);
+
+		/**
+		 * @brief Add Client to This Channel
+		 * 
+		 * @param client Client that want to add
+		 * @param mode_str Membership Modes that want to set to this Client
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - 1: client is already joined
+		 * 
+		 * - 2: exceed user count limit (if limit mod is setted)
+		 * 
+		 * @note Should be used under JOIN
+		 */
+		int	addUserToChannel(Client * const client, std::string const mode_str);
+
+		/**
+		 * @brief Delete Client from This Channel
+		 * 
+		 * @param client Client that want to remove
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - 1: client doesn't existed here
+		 * 
+		 * @note Should be used under PART, QUIT and hardcore disconnect
+		 */
+		int	deleteUserFromChannel(Client * const client);
+
+		/**
+		 * @brief Get certain Client's Membership Modes in This Channel
+		 * 
+		 * @param client Client that want to know about its membership
+		 * 
+		 * @return Set of Character Membership Mode of This Client in rvalue
+		 */
+		std::set<char> const&	getThisClientMembershipModes(Client * const client)	const;
+
+		/**
+		 * @brief Check if certain Client has particular mode in This Channel
+		 * 
+		 * @param client Client that want to check
+		 * @param c Character Mode that want to know if it existed
+		 * 
+		 * @return True if This Client contain mode in This Chanel, False otherwise
+		 */
+		bool	hasThisClientMembershipMode(Client * const client, char const c)	const;
+
+		/**
+		 * @brief Add certain Channel Membership Mode to This Client in This Channel
+		 * 
+		 * @param client Client that want to add membership mode
+		 * @param c Character Membership Mode
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - -1: This Client isn't existed in This Channel
+		 */
+		int	addThisClientMembershipMode(Client * const client, char const c);
+
+		/**
+		 * @brief Add certain Channel Membership Mode to This Client in This Channel
+		 * 
+		 * @param client Client that want to add membership mode
+		 * @param s String of Character Membership Mode
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - -1: This Client isn't existed in This Channel
+		 */
+		int	addThisClientMembershipMode(Client * const client, std::string const s);
+
+		/**
+		 * @brief Remove certain Channel Membership Mode to This Client in This Channel
+		 * 
+		 * @param client Client that want to remove membership mode
+		 * @param c Character Membership Mode
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - -1: This Client isn't existed in This Channel
+		 */
+		int	removeThisClientMembershipMode(Client * const client, char const c);
+
+		/**
+		 * @brief Remove certain Channel Membership Mode to This Client in This Channel
+		 * 
+		 * @param client Client that want to remove membership mode
+		 * @param s String of Character Membership Mode
+		 * 
+		 * @return
+		 * - 0: success
+		 * 
+		 * - -1: This Client isn't existed in This Channel
+		 */
+		int	removeThisClientMembershipMode(Client * const client, std::string const s);
 };
 
 #endif

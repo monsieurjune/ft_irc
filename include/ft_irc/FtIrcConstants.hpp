@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/21 17:21:52 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/24 04:59:09 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 
 #ifndef IRC_MAXUSER
 #define IRC_MAXUSER 1024
+#endif
+
+#ifndef IRC_MSG_MAXSIZE
+#define IRC_MSG_MAXSIZE 512
+#endif
+
+#ifndef IRC_TERMINATE_BYTES
+#define IRC_TERMINATE_BYTES "\r\n"
 #endif
 
 enum e_numerics
