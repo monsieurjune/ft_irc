@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 06:12:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 06:52:57 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 #include <string>
 #include <map>
 #include <set>
+
+// TODO: i think you should have enum or macro of each mode charactor
+
+#ifndef ERROR_MODE
+#define ERROR_MODE '!'
+#endif
 
 // Forward Decalration to avoid CIRCULAR include
 class Client;
@@ -174,7 +180,7 @@ class Channel
 		/**
 		 * @brief Check if This Channel contain certain Client
 		 * 
-		 * @param client Client That want to Check
+		 * @param client Client That want to Check (no NULL)
 		 * 
 		 * @return True if This Client is member of This Channel, False otherwise
 		 */
@@ -211,11 +217,11 @@ class Channel
 		 * @brief Set This Channel's Topic
 		 * 
 		 * @param topic Topic Name
-		 * @param setter Client that want to set topic
+		 * @param setter Client Pointer that want to set topic (no NULL)
 		 * 
 		 * @warning This Method isn't check validation of setter
 		 */
-		void	setTopic(std::string const topic, Client * const setter);
+		void	setTopic(std::string const topic, Client const * const setter);
 
 		/**
 		 * @brief Add Channel Mode
@@ -281,7 +287,10 @@ class Channel
 		 * 
 		 * @param client Client that want to know about its membership
 		 * 
-		 * @return Set of Character Membership Mode of This Client in rvalue
+		 * @return
+		 * - Set of Character Membership Mode of This Client in rvalue
+		 * 
+		 * - In Error, return ERROR_MODE as Set
 		 */
 		std::set<char> const&	getThisClientMembershipModes(Client * const client)	const;
 
