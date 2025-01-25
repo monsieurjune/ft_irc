@@ -29,6 +29,18 @@
 #include <set>
 #include <string>
 
+/**
+ * @class FtIrc
+ * @brief A Class that use for 
+ * 
+ * - handling IRC CMD
+ * 
+ * - dynamic allocate Client & CHaannel
+ * 
+ * @warning There must be only 1 class for entire program (no deep copy)
+ * 
+ * @note If you want to parse this class to other function, use pointer or reference
+ */
 class FtIrc
 {
 	private:
@@ -107,7 +119,95 @@ class FtIrc
 		 */
 		std::map<std::string, t_IrcCmd>	_normalCmdMap;
 
+		/**
+		 * 
+		 */
+		void	createChannel(std::string const channel_name, Client * const creator);
+
+		/**
+		 * 
+		 */
+		void	deleteClientFromChannel(std::string const channel_name, Client * const client);
+
 	public:
+		/**
+		 * @brief Construct an FtIrc Object
+		 * 
+		 * @param password IRC Server's Password
+		 * @param servername IRC Server's Name (use for server's prefix)
+		 */
+		FtIrc(std::string const password, std::string const servername);
+
+		/**
+		 * @brief Default Destructor
+		 */
+		~FtIrc();
+
+		/**
+		 * @brief Add new Client Object by its socket fd
+		 * 
+		 * @param fd new socket fd from accept()
+		 */
+		void	addClient(int const fd);
+
+		/**
+		 * @brief Delete This Client Object by its socket fd
+		 * 
+		 * @param fd socket fd that disconnect or call QUIT
+		 */
+		void	deleteClient(int const fd);
+
+		/**
+		 * @brief Get Client by its fd
+		 * 
+		 * @param fd This Client's fd
+		 * 
+		 * @return Client Object as pointer (mustn't call delete on it)
+		 */
+		Client*	getClientByFd(int const fd)	const;
+
+		/**
+		 * @brief Get Client by its nickname
+		 * 
+		 * @param fd This Client's Nickname
+		 * 
+		 * @return Client Object as pointer (mustn't call delete on it)
+		 */
+		Client*	getClientByNickname(std::string const nick)	const;
+
+		/**
+		 * @brief Get Channel by its Name
+		 * 
+		 * @param fd This Channel's Name
+		 * 
+		 * @return Channel Object as pointer (mustn't call delete on it)
+		 */
+		Channel*	getChannelByName(std::string const name)	const;
+
+		/**
+		 * @brief Get PollFd array
+		 * 
+		 * @return pollfd array as pointer to its vector
+		 * 
+		 * @note Only use for calling poll() and nothing else
+		 */
+		struct pollfd*	getPollFd()	const;
+
+		/**
+		 * @brief IRC CMD Main Handler
+		 * 
+		 * It's working as following procedure
+		 * 
+		 * - Parsing CMD to its associate method
+		 * 
+		 * - Get vector of reply Message Objects of associate clients
+		 * 
+		 * - Convert Messages to String before enqueue them to associate clients
+		 * 
+		 * @param msg Message Object that parse from client
+		 * @param client Client Object of Client that send the msg
+		 */
+		void	ircMessageHandler(Message const & msg, Client const * const client);
 };
 
 #endif

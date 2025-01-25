@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/24 03:43:46 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 05:31:49 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@
 // Forward Decalration to avoid CIRCULAR include
 class Client;
 
+/**
+ * @class Channel
+ * @brief A Class For Encapsulate IRC Channel
+ * 
+ * This Class is Use for Encapsulate IRC Channel and Its assosiated properties.
+ */
 class Channel
 {
 	private:
@@ -106,6 +112,15 @@ class Channel
 		std::string const&	getName()	const;
 
 		/**
+		 * @brief Get Channel's Password
+		 * 
+		 * @return Channel's Password
+		 * 
+		 * @note This Field is ignored if password mode is unsetted
+		 */
+		std::string const&	getPassword()	const;
+
+		/**
 		 * @brief Get Time when this channel is created
 		 * 
 		 * @return Time when this channel is created
@@ -173,6 +188,15 @@ class Channel
 		 * @return True if This Channel contain this mode, False otherwise
 		 */
 		bool	hasThisMode(char const c)	const;
+
+		/**
+		 * @brief Set Channel's Password
+		 * 
+		 * @param password New Channel's Password
+		 * 
+		 * @note This Field is ignored if password mode is unsetted
+		 */
+		void	setPassword(std::string const password);
 
 		/**
 		 * @brief Set User Limit in This Channel

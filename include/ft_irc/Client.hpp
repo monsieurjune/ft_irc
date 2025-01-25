@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/25 04:43:43 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 00:24:13 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class Channel;
  * @class Client
  * @brief A Class For Encapsulate IRC Client
  * 
- * This Class is Use for Encapsulate IRC Socket And Its assosiated properties.
+ * This Class is Use for Encapsulate IRC Socket and Its assosiated properties.
  */
 class Client
 {
