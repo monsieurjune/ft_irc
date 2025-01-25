@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 00:24:13 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 06:11:59 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class Client
 		 * @note It should be time when Client is constructed
 		 * @warning This attribute might remove later, if there is no use
 		 */
-		time_t	_timeConnected;
+		std::time_t	const	_timeConnected;
 
 		/**
 		 * @brief Authenicate Level of IRC Client
@@ -188,7 +188,7 @@ class Client
 		 * 
 		 * @return Time when This Client is constructed
 		 */
-		time_t	getTimeConnected()	const;
+		std::time_t	getTimeConnected()	const;
 
 		/**
 		 * @brief Get This Client's Authenication Level

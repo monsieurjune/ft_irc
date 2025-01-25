@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 05:31:49 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 06:12:07 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class Channel
 		 * 
 		 * @note It must be set at Constructor, and mustn't change
 		 */
-		time_t	_timeCreated;
+		std::time_t	const	_timeCreated;
 
 		/**
 		 * @brief Map that contain users and its membership mode
@@ -79,7 +79,7 @@ class Channel
 		/**
 		 * @brief The most recent time when topic is setted
 		 */
-		time_t	_timeTopicSet;
+		std::time_t	_timeTopicSet;
 
 		/**
 		 * @brief The Nickname of most recent user that set topic
@@ -125,7 +125,7 @@ class Channel
 		 * 
 		 * @return Time when this channel is created
 		 */
-		time_t	getTimeCreated()	const;
+		std::time_t	getTimeCreated()	const;
 
 		/**
 		 * @brief Get Amount of Client that joined this Channel
@@ -153,7 +153,7 @@ class Channel
 		 * 
 		 * @return Most Recent Time that topic is setted
 		 */
-		time_t	getTimeTopicSet()	const;
+		std::time_t	getTimeTopicSet()	const;
 
 		/**
 		 * @brief Get Most Recent Topic Setter's Nickname

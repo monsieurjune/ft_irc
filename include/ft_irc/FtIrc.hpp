@@ -99,7 +99,7 @@ class FtIrc
 		 * 
 		 * @warning If it might not be used, it would be remove later
 		 */
-		time_t const	_timeServerStarted;
+		std::time_t const	_timeServerStarted;
 
 		/**
 		 * @brief Map of IRC CMD that doesn't required client to 
