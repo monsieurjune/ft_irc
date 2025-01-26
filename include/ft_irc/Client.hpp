@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 06:11:59 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 07:36:42 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ class Client
 		 * 
 		 * @warning Must unmembership, when deconstructor call
 		 */
-		std::set<Channel*>	_channel;
+		std::set<Channel*>	_channels;
 
 		/**
 		 * @brief Client's Username

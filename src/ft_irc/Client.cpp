@@ -1,0 +1,145 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
+/*   Updated: 2025/01/26 07:41:07 by tponutha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// Project Header
+#include "ft_irc/Client.hpp"
+#include "ft_irc/Channel.hpp"
+
+// C Header
+#include <unistd.h>
+
+Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL)) {}
+
+Client::~Client()
+{
+	close(_fd);
+}
+
+int	Client::getFd(void) const
+{
+	return (_fd);
+}
+
+std::time_t	Client::getTimeConnected(void) const
+{
+	return (_timeConnected);
+}
+
+int	Client::getAuthenLevel(void) const
+{
+	return (_authenLevel);
+}
+
+std::string const&	Client::getNickname(void) const
+{
+	return (_nickname);
+}
+
+std::string const&	Client::getUsername(void) const
+{
+	return (_username);
+}
+
+std::string const&	Client::getRealname(void) const
+{
+	return (_realname);
+}
+
+std::string	const&	Client::getHost(void) const
+{
+	return (_host);
+}
+
+std::set<Channel*> const&	Client::getChannels(void) const
+{
+	return (_channels);
+}
+
+std::set<char> const&	Client::getModes(void) const
+{
+	return (_userMode);
+}
+
+bool	Client::hasMode(char c) const
+{
+	return (_userMode.find(c) != _userMode.end());
+}
+
+bool	Client::isInChannel(Channel * const channel) const
+{
+	return(_channels.find(channel) != _channels.end());
+}
+
+void	Client::setAuthenLevel(int const level)
+{
+	_authenLevel = level;
+}
+
+void	Client::setNickname(std::string const name)
+{
+	_nickname = name;
+}
+
+void	Client::setUsername(std::string const name)
+{
+	_username = name;
+}
+
+void	Client::setRealname(std::string const name)
+{
+	_realname = name;
+}
+
+void	Client::setHost(std::string const host)
+{
+	_host = host;
+}
+
+void	Client::addMode(char c)
+{
+	_userMode.insert(c);
+}
+
+void	Client::removeMode(char c)
+{
+	_userMode.erase(c);
+}
+
+void	Client::editChannelSet(Channel * const channel, bool add)
+{
+	if (add)
+	{
+		_channels.insert(channel);
+	}
+	else
+	{
+		_channels.erase(channel);
+	}
+}
+
+size_t	Client::countReply(void) const
+{
+	return (_replyQueue.size());
+}
+
+void	Client::enqueueReply(std::string const msg)
+{
+	_replyQueue.push(msg);
+}
+
+std::string	Client::dequeueReply(void)
+{
+	std::string	msg = _replyQueue.front();
+	
+	_replyQueue.pop();
+	return (msg);
+}
