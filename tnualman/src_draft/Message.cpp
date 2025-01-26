@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/25 18:14:35 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:03:04 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,16 @@ void Message::resetParams(void)
 {
 	_params.clear();
 	_params.resize(0);
+}
+
+void Message::setParams(std::vector<std::string> const & params)
+{
+	_params = params;
+}
+
+void Message::concatParams(std::vector<std::string> const & params)
+{
+	_params.insert(_params.end(), params.begin(), params.end());
 }
 
 void Message::pushParam(std::string param)

@@ -43,11 +43,13 @@
  */
 class FtIrc
 {
-	private:
+	public:
+	
 		typedef std::pair<Client *, std::queue<Message> >	t_reply;
 		typedef std::vector<t_reply>						t_replyBatch;
-		typedef t_replyBatch (*t_IrcCmd)(Message const &, Client const * const);
-
+		typedef t_replyBatch (*t_IrcCmd)(Message const &, Client * const);
+	
+	private:
 		/**
 		 * @brief Set of Client
 		 * 
@@ -207,7 +209,7 @@ class FtIrc
 		 * @param msg Message Object that parse from client
 		 * @param client Client Object of Client that send the msg
 		 */
-		void	ircMessageHandler(Message const & msg, Client const * const client);
+		void	ircMessageHandler(Message const & msg, Client * const client);
 };
 
 #endif

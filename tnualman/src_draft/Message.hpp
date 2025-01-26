@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/25 18:14:20 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:03:05 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ class Message
 		void								setCommand(std::string cmd);
 		void								setCommand(e_numerics cmd);
 		void								resetParams(void);
+		void								setParams(std::vector<std::string> const & params);
+		void								concatParams(std::vector<std::string> const & params);
 		void								pushParam(std::string param);
 	
 };

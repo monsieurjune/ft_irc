@@ -33,9 +33,15 @@
 # include "e_numerics.hpp"
 
 class FtIrc
-{			
+{
+	public:
+
+		typedef std::pair<Client *, std::queue<Message> >	t_reply;
+		typedef std::vector<t_reply>						t_replyBatch;
+		typedef t_replyBatch (*t_IrcCmd)(Message const &, Client * const);
+
 	private:
-		
+
 		std::string						_serverName; // Added as the <source> for the reply messages.
 		std::string						_serverPassword;
 		time_t							_timeServerStarted;
@@ -85,7 +91,7 @@ class FtIrc
 		int					deleteChannel(std::string const name);
 		int					deleteUserFromChannel(std::string const channelName); // TODO FUNCTION!
 
-		int					ircMessageHandler(Message const & message, Client * const sender);
+		void				ircMessageHandler(Message const & message, Client * const sender);
 	
 	private:
 	
@@ -94,13 +100,13 @@ class FtIrc
 		int 				sendRepliesToClient(Client * const sender);
 		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
-		int					ircKICK(Message const & message, Client * const sender);
-		int					ircINVITE(Message const & message, Client * const sender);
-		int					ircMODE(Message const & message, Client * const sender);
-		int					ircTOPIC(Message const & message, Client * const sender);
+		t_replyBatch		ircKICK(Message const & message, Client * const sender);
+		t_replyBatch		ircINVITE(Message const & message, Client * const sender);
+		t_replyBatch		ircMODE(Message const & message, Client * const sender);
+		t_replyBatch		ircTOPIC(Message const & message, Client * const sender);
 
-		int					ircMODE_channel(Message const & message, Client * const sender);
-		int					ircMODE_user(Message const & message, Client * const sender);
+		t_replyBatch		ircMODE_channel(Message const & message, Client * const sender);
+		t_replyBatch		ircMODE_user(Message const & message, Client * const sender);
 };
 
 #endif
