@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/26 06:58:58 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 07:46:43 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ int	Channel::deleteUserFromChannel(Client * const client)
 }
 
 
-std::set<char> const&	Channel::getThisClientMembershipModes(Client * const client) const
+std::set<char>	Channel::getThisClientMembershipModes(Client * const client) const
 {
 	try
 	{
@@ -293,6 +293,7 @@ int	Channel::removeThisClientMembershipMode(Client * const client, std::string s
 			}
 			return (0);
 		}
+		return (-1);
 	}
 	catch (std::exception const & e)
 	{

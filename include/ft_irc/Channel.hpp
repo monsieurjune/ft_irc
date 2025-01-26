@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 06:52:57 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/26 07:46:39 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,7 @@ class Channel
 		 * 
 		 * - In Error, return ERROR_MODE as Set
 		 */
-		std::set<char> const&	getThisClientMembershipModes(Client * const client)	const;
+		std::set<char>	getThisClientMembershipModes(Client * const client)	const;
 
 		/**
 		 * @brief Check if certain Client has particular mode in This Channel
