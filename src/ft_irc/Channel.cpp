@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/26 07:46:43 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/28 10:40:22 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ int	Channel::addUserToChannel(Client * const client, std::string modestr)
 		}
 	}
 	_userMap[client] = mode_set;
-	client->editChannelSet(this, true);
 	
 	return (0);
 }
@@ -189,7 +188,6 @@ int	Channel::deleteUserFromChannel(Client * const client)
 	}
 	
 	_userMap.erase(client);
-	client->editChannelSet(this, false);
 
 	return (0);
 }

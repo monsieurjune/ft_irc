@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 07:36:42 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:48:03 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@
 #include <string>
 #include <set>
 #include <queue>
-
-// Debug Mode
-#ifndef DEBUG_MODE
-#define DEBUG_MODE 1
-#endif
 
 // Authenication Flag
 
@@ -118,16 +113,6 @@ class Client
 		 * - Don't send anything, if this queue is empty
 		 */
 		std::queue<std::string>	_replyQueue;
-
-		/**
-		 * @brief Set of Channel that this Client is membershiped
-		 * 
-		 * This Set is used for storing Channel Pointer, 
-		 * which this Client is membershiped of.
-		 * 
-		 * @warning Must unmembership, when deconstructor call
-		 */
-		std::set<Channel*>	_channels;
 
 		/**
 		 * @brief Client's Username
@@ -228,13 +213,6 @@ class Client
 		std::string const&	getHost()	const;
 
 		/**
-		 * @brief Get Set of Channels that This Client is membered
-		 * 
-		 * @return Set of Channels Pointer as lvalue
-		 */
-		std::set<Channel*> const&	getChannels()	const;
-
-		/**
 		 * @brief Get This Client's Membership Mode
 		 * 
 		 * @return Set of Charactors that represent membership mode
@@ -247,13 +225,6 @@ class Client
 		 * @return True if contain this mode, false otherwise
 		 */
 		bool	hasMode(char c)	const;
-
-		/**
-		 * @brief Check if This Client is membershiped of certain Channel
-		 * 
-		 * @return True if contain this Channel, false otherwise
-		 */
-		bool	isInChannel(Channel * const channel)	const;
 
 		/**
 		 * @brief Set This Client's authenication level
@@ -328,16 +299,6 @@ class Client
 		 * @param c Membership Charactor
 		 */
 		void	removeMode(char const c);
-
-		/**
-		 * @brief Edit the list (std::set) of channels the client/user is in. 
-		 * 
-		 * @param channel The pointer to Channel that will be added/removed.
-		 * @param add Whether to add or remove (if false) the channel.
-		 * 
-		 * @warning Only call this with the Channel's functions to add/remove the user from channel!
-		 */
-		void	editChannelSet(Channel * const channel, bool add);
 
 		/**
 		 * @brief Get Amount of Message in Queue

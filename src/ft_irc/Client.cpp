@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/26 07:41:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/28 10:38:51 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,6 @@ std::string	const&	Client::getHost(void) const
 	return (_host);
 }
 
-std::set<Channel*> const&	Client::getChannels(void) const
-{
-	return (_channels);
-}
-
 std::set<char> const&	Client::getModes(void) const
 {
 	return (_userMode);
@@ -72,11 +67,6 @@ std::set<char> const&	Client::getModes(void) const
 bool	Client::hasMode(char c) const
 {
 	return (_userMode.find(c) != _userMode.end());
-}
-
-bool	Client::isInChannel(Channel * const channel) const
-{
-	return(_channels.find(channel) != _channels.end());
 }
 
 void	Client::setAuthenLevel(int const level)
@@ -112,18 +102,6 @@ void	Client::addMode(char c)
 void	Client::removeMode(char c)
 {
 	_userMode.erase(c);
-}
-
-void	Client::editChannelSet(Channel * const channel, bool add)
-{
-	if (add)
-	{
-		_channels.insert(channel);
-	}
-	else
-	{
-		_channels.erase(channel);
-	}
 }
 
 size_t	Client::countReply(void) const

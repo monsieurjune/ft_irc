@@ -29,6 +29,11 @@
 #include <set>
 #include <string>
 
+// Debug Mode
+#ifndef DEBUG_MODE
+#define DEBUG_MODE 1
+#endif
+
 /**
  * @class FtIrc
  * @brief A Class that use for 
@@ -51,31 +56,21 @@ class FtIrc
 	
 	private:
 		/**
-		 * @brief Set of Client
+		 * @brief Client Map that use its fd as key to Client Pointer
 		 * 
-		 * @note This is only place to dynamic allocate & store Client
-		 */
-		std::set<Client>	_clientSet;
-
-		/**
-		 * @brief Set of Channel
-		 * 
-		 * @note This is only place to dynamic allocate & store Channel
-		 */
-		std::set<Channel>	_channelSet;
-
-		/**
-		 * @brief Client Map that use its fd as key
+		 * @note This is main place where store heap of Client
 		 */
 		std::map<int, Client*>	_clientMapByFd;
 
 		/**
-		 * @brief Client Map that use its nickname as key
+		 * @brief Client Map that use its nickname as key to Client Pointer
 		 */
 		std::map<std::string, Client*>	_clientMapByNickname;
 
 		/**
-		 * @brief Channel Map that use its name as key
+		 * @brief Channel Map that use its name as key to Channel Pointer
+		 * 
+		 * @note This is main place where store heap of Channel
 		 */
 		std::map<std::string, Channel*>	_channelMapByName;
 
@@ -122,14 +117,49 @@ class FtIrc
 		std::map<std::string, t_IrcCmd>	_normalCmdMap;
 
 		/**
+		 * @brief Create Channel
 		 * 
+		 * This method is where Channel allocation and storage management occrued
+		 * 
+		 * @param channel_name New Channel Name
+		 * @param creator Client that request for creating CHannel
+		 * 
+		 * @warning This method should not work with unvalidate data, despite it has validation
+		 * @note Should be called under JOIN
+		 * 
+		 * @return Integer that indicate success
+		 * 
+		 * - 0: success
+		 * 
+		 * - 1: already has this channel
+		 * 
+		 * - -1: allocation failed
 		 */
-		void	createChannel(std::string const channel_name, Client * const creator);
+		int	createChannel(std::string const channel_name, Client * const creator);
 
 		/**
+		 * @brief Unjoin certain Client from Channel
+		 * 
+		 * There are 2 possible outcome for Channel:
+		 * 
+		 * - member_after_removed > 0: Nothing Happend for Channel
+		 * 
+		 * - member_after_removed = 0: Channel is deleted
+		 * 
+		 * @param channel_name Channel Name that certain client want to unjoin
+		 * @param client Client that want to unjoin
+		 * 
+		 * @warning This method should not work with unvalidate data, despite it has validation
+		 * @note Should be called under PART, KICK, QUIT and unexpected quit case
+		 * 
+		 * @return Integer that indicate success
+		 * 
+		 * - 0: success
+		 * 
+		 * - 1: already has this channel
 		 * 
 		 */
-		void	deleteClientFromChannel(std::string const channel_name, Client * const client);
+		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
 
 	public:
 		/**
@@ -193,7 +223,7 @@ class FtIrc
 		 * 
 		 * @note Only use for calling poll() and nothing else
 		 */
-		struct pollfd*	getPollFd()	const;
+		const struct pollfd*	getPollFd()	const;
 
 		/**
 		 * @brief IRC CMD Main Handler
