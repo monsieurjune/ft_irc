@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 14:11:50 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:23:52 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,27 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(Message const & message, Client * const send
 		return (batch);
 	}
 
-	// if (channel->hasMode('t') && !channel->hasMembershipMode(sender, 'o'))
-	// {
-	// 	details << channel_name << " :You're not on channel operator";
-	// 	return (addReplyMessage(ERR_CHANOPRIVSNEEDED, sender, details.str()));
-	// }
+	if (channel->hasThisMode(MODE_PROTECTTOPIC) && !channel->hasThisClientMembershipMode(sender, MODE_OPERATOR))
+	{
+		reply_msg.setSource(_serverName);
+		reply_msg.setCommand(ERR_CHANOPRIVSNEEDED);
+		reply_msg.pushParam(sender->getNickname());
+		reply_msg.pushParam(channel_name);
+		reply_msg.pushParam("You're not channel operator");
+		reply.first = sender;
+		reply.second.push(reply_msg);
+		batch.push_back(reply);
+		return (batch);
+	}
 	
-	// channel->setTopic(message.getParams().at(1), sender);
+	channel->setTopic(message.getParams().at(1), sender);
 	
 	// // TODO: Write code to broadcast ":<server> TOPIC <topic>" to every user on the channel here!!
 	
 	// details << channel_name + " " + channel->getTopic();
 	// return (addReplyMessage(RPL_TOPIC, sender, details.str()));
+
+
 }
 
 
