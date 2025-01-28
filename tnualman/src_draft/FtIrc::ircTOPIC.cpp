@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/26 21:54:17 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:11:50 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,18 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(Message const & message, Client * const send
 		}
 	}
 
-	// if (!channel->hasUser(sender))
-	// {
-	// 	details << channel_name << " :You're not on that channel";
-	// 	return (addReplyMessage(ERR_NOTONCHANNEL, sender, details.str()));
-	// }
+	if (!channel->hasThisClient(sender))
+	{
+		reply_msg.setSource(_serverName);
+		reply_msg.setCommand(ERR_NOTONCHANNEL);
+		reply_msg.pushParam(sender->getNickname());
+		reply_msg.pushParam(channel_name);
+		reply_msg.pushParam("You're not on that channel");
+		reply.first = sender;
+		reply.second.push(reply_msg);
+		batch.push_back(reply);
+		return (batch);
+	}
 
 	// if (channel->hasMode('t') && !channel->hasMembershipMode(sender, 'o'))
 	// {

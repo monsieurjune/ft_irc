@@ -31,6 +31,7 @@
 # include "Channel.hpp"
 # include "Message.hpp"
 # include "e_numerics.hpp"
+# include "e_modes.hpp"
 
 class FtIrc
 {
