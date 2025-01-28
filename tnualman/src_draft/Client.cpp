@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/25 16:38:27 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:35:20 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int Client::getFd(void) const
 	return (_fd);
 }
 
-time_t const Client::getTimeConnected(void) const
+time_t Client::getTimeConnected(void) const
 {
 	return (_timeConnected);
 }

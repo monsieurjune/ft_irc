@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 15:59:42 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:10:53 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,22 @@ std::string	ltoa(long num)
 	return oss.str();
 }
 
-FtIrc::t_replyBatch FtIrc::ircTOPIC(Message const & message, Client * const sender)
+FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, Client * const sender)
 {
 	int				param_count = message.getParams().size();
 	Message			reply_msg;
 	t_reply			reply;
 	t_replyBatch	batch;
 
-	reply_msg.setSource(_serverName);
+	reply_msg.setSource(obj->getServerName());
 	
 	if (param_count < 1)
 	{
-		reply_msg.setCommand(ERR_NEEDMOREPARAMS);
-		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("TOPIC");
-		reply_msg.pushParam("Not enough parameters");
-		reply.first = sender;
-		reply.second.push(reply_msg);
-		batch.push_back(reply);
-		return (batch);
+		return (obj->err_NeedMoreParams(message, sender));
 	}
 
 	std::string	channel_name = message.getParams().at(0);
-	Channel *	channel = getChannelByName(channel_name);
+	Channel *	channel = obj->getChannelByName(channel_name);
 	
 	if (!channel)
 	{;
@@ -71,21 +64,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(Message const & message, Client * const send
 		}
 		else
 		{
-			reply_msg.setCommand(RPL_TOPIC);
-			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam(channel_name);
-			reply_msg.pushParam(channel->getTopic());
-			reply.first = sender;
-			reply.second.push(reply_msg);
-			reply_msg.resetParams();
-			reply_msg.setCommand(RPL_TOPICWHOTIME);
-			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam(channel_name);
-			reply_msg.pushParam(channel->getTopicSetter());
-			reply_msg.pushParam(ltoa(channel->getTimeTopicSet()));
-			reply.second.push(reply_msg);
-			batch.push_back(reply);
-			return (batch);
+			return (obj->rpl_Topic_WhoTime(message, sender, channel));
 		}
 	}
 

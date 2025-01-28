@@ -68,6 +68,7 @@ class FtIrc
 		~FtIrc(void);
 
 		// Getters
+		std::string const &	getServerName(void) const;
 		Client*				getClientByFd(int const fd) const;
 		Client*				getClientByNickname(std::string const name) const;
 		Channel*			getChannelByName(std::string const name) const;
@@ -90,7 +91,7 @@ class FtIrc
 		int					deleteClient(std::string const nickname);
 		int					deleteChannel(Channel * const channel);
 		int					deleteChannel(std::string const name);
-		int					deleteUserFromChannel(std::string const channelName); // TODO FUNCTION!
+		int					deleteUserFromChannel(std::string const channelName);
 
 		void				ircMessageHandler(Message const & message, Client * const sender);
 	
@@ -101,13 +102,18 @@ class FtIrc
 		int 				sendRepliesToClient(Client * const sender);
 		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
-		t_replyBatch		ircKICK(Message const & message, Client * const sender);
-		t_replyBatch		ircINVITE(Message const & message, Client * const sender);
-		t_replyBatch		ircMODE(Message const & message, Client * const sender);
-		t_replyBatch		ircTOPIC(Message const & message, Client * const sender);
+		static t_replyBatch	ircKICK(FtIrc * const obj, Message const & message, Client * const sender);
+		static t_replyBatch	ircINVITE(FtIrc * const obj, Message const & message, Client * const sender);
+		static t_replyBatch	ircMODE(FtIrc * const obj, Message const & message, Client * const sender);
+		static t_replyBatch	ircTOPIC(FtIrc * const obj, Message const & message, Client * const sender);
 
 		t_replyBatch		ircMODE_channel(Message const & message, Client * const sender);
 		t_replyBatch		ircMODE_user(Message const & message, Client * const sender);
+
+		// Common replies
+		
+		t_replyBatch		err_NeedMoreParams(Message const & message, Client * const sender);
+		t_replyBatch		rpl_Topic_WhoTime(Message const & message, Client * const sender, Channel * const channel);
 };
 
 #endif

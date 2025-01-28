@@ -6,12 +6,21 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/26 21:11:54 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:09:10 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
+std::string	ltoa(long num)
+{
+	std::ostringstream oss;
+
+	oss << num;
+	return oss.str();
+}
+
+// Tun has better version of this.
 void FtIrc::ircMessageHandler(Message const & message, Client * const sender)
 {
 	for (int i = 0; i < _replies.size(); i++)
@@ -36,68 +45,45 @@ void FtIrc::ircMessageHandler(Message const & message, Client * const sender)
 	// return (return_code);
 }
 
-// /**
-//  * @brief This function is to be called only inside the function FtIrc::ircMessageHandler!
-//  * It sends all the reply messages collected into std::vector<std::string> _replies 
-//  * by the function FtIrc::ircAddReplyMessage.
-//  * 
-//  * TODO for Tun and Grammy: Add code that actually send the replies to the client.
-//  * 
-//  * @param sender 
-//  */
-// int FtIrc::sendRepliesToClient(Client * const sender)
-// {
-// 	/**
-// 	 * @brief This function is to be called only inside the function FtIrc::ircMessageHandler!
-// 	 * It sends all the reply messages collected into std::vector<std::string> _replies 
-// 	 * by the function FtIrc::ircAddReplyMessage.
-// 	 * 
-// 	 * TODO for Tun and Grammy: Add code that actually send the replies to the client.
-// 	 * 
-// 	 * @param sender 
-// 	 */
-
-// 	try
-// 	{
-// 		Message firstMsg(_replies.at(0));
-		
-// 		return (std::stoi(firstMsg.getCommand().c_str()));
-// 	}
-// 	catch(const std::exception& e) // No reply is sent to client.
-// 	{
-// 		return (0);
-// 	}
-// }
-
-// /**
-//  * @brief This fucntion is to be called inside IRC command handler functions,
-//  * 	to generate each complete IRC reply message and put them inside std::vector<std::string> _replies,
-//  * 	to be sent successively to the client with the function FtIrc::ircReplyToClient.
-//  * 
-//  * @param code is the IRC reply code.
-//  * @param sender is the sender of the IRC command message to the server,
-//  * 	passing through from the function FtIrc::ircMessageHandler.
-//  * @param details is the string containing parameters of the reply,
-//  * 	to be constructed in different places by the different reply formats and logics of each handler function and ease of its case.
-//  * @return the same IRC reply code (int)
-//  * 
-//  * Note: The types of 'details' and the implementation logic keep changing between std::string and std::stringstream
-//  * 	to accomodate int/long to std::string conversion, and also for an obscure c++98 inability to use an std::stringstream
-//  * 	as an argument for the function; I really don't understand this part! 
-//  */
-
-// int	FtIrc::addReplyMessage(int const code, Client * const sender, std::string const & details)
-// {
-// 	std::stringstream ss;
+FtIrc::t_replyBatch FtIrc::err_NeedMoreParams(Message const & message, Client * const sender)
+{
+	Message			reply_msg;
+	t_reply			reply;
+	t_replyBatch	batch;
 	
-// 	ss << ":" << _serverName << " " << code << " " << sender->getNickname();
-
-// 	if (!details.empty())
-// 	{
-// 		ss << " " << details;
-// 	}
+	reply_msg.setSource(_serverName);
+	reply_msg.setCommand(ERR_NEEDMOREPARAMS);
+	reply_msg.pushParam(sender->getNickname());
+	reply_msg.pushParam(message.getCommand());
+	reply_msg.pushParam("Not enough parameters");
+	reply.first = sender;
+	reply.second.push(reply_msg);
+	batch.push_back(reply);
 	
-// 	_replies.push_back(ss.str());
+	return (batch);
+}
 
-// 	return (code);
-// }
+FtIrc::t_replyBatch FtIrc::rpl_Topic_WhoTime(Message const & message, Client * const client, Channel * const channel)
+{
+	Message			reply_msg;
+	t_reply			reply;
+	t_replyBatch	batch;
+	
+	reply_msg.setSource(_serverName);
+	reply_msg.setCommand(RPL_TOPIC);
+	reply_msg.pushParam(client->getNickname());
+	reply_msg.pushParam(channel->getName());
+	reply_msg.pushParam(channel->getTopic());
+	reply.first = client;
+	reply.second.push(reply_msg);
+	reply_msg.resetParams();
+	reply_msg.setCommand(RPL_TOPICWHOTIME);
+	reply_msg.pushParam(client->getNickname());
+	reply_msg.pushParam(channel->getName());
+	reply_msg.pushParam(channel->getTopicSetter());
+	reply_msg.pushParam(ltoa(channel->getTimeTopicSet()));
+	reply.second.push(reply_msg);
+	batch.push_back(reply);
+	
+	return (batch);
+}

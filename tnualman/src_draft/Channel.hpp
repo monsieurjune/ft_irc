@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 15:40:03 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:13:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ class Channel
 	// Attributes
 		std::string 	_name;
 		std::string		_password;
-		Client * 		_owner;
 		
-		time_t const 	_timeCreated;
+		std::time_t const 	_timeCreated;
 
 		t_userMap		_userMap;
 		size_t			_userCountLimit;
@@ -54,13 +53,12 @@ class Channel
 	// Getters
 		std::string const &		getName(void) const;
 		std::string const &		getPassword(void) const;
-		Client * const			getOwner(void) const;
-		time_t					getTimeCreated(void) const; 
+		std::time_t				getTimeCreated(void) const; 
 		t_userMap const &		getUserMap(void) const;
 		int						getUserCount(void) const;
 		int						getUserCountLimit(void) const;
 		std::string	const &		getTopic(void) const;
-		time_t					getTimeTopicSet(void) const;
+		std::time_t				getTimeTopicSet(void) const;
 		std::string	const &		getTopicSetter(void) const;
 		std::set<char> const &	getModes(void) const;
 
@@ -71,10 +69,9 @@ class Channel
 	// Setters
 		void					setName(std::string const name);
 		void					setPassword(std::string const password);
-		void					setOwner(Client * const owner);
 		void					setUserCountLimit(int const limit);
 		void					setTopic(std::string const name, Client const * const client);
-	
+
 	// Change channel modes
 		void					addMode(char const c);
 		void					addMode(std::string s);

@@ -28,6 +28,11 @@ FtIrc::FtIrc(std::string const name, std::string const password)
 
 FtIrc::~FtIrc(void) {}
 
+std::string const &	FtIrc::getServerName(void) const
+{
+	return (_serverName);
+}
+
 Client* FtIrc::getClientByFd(int const fd) const
 {
     try

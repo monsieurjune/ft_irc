@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/22 23:28:05 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:13:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Client
 
 	// Getters
 		int							getFd(void) const;
-		time_t const				getTimeConnected(void) const;
+		std::time_t					getTimeConnected(void) const;
 		int							getAuthenLevel(void) const;
 		std::string const &			getNickname(void) const;
 		std::string	const &			getUsername(void) const;

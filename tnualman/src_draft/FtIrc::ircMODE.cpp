@@ -6,40 +6,38 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/17 23:22:23 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:13:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "FtIrc.hpp"
 
-int FtIrc::ircMODE(Message const & message, Client * const sender)
+FtIrc::t_replyBatch FtIrc::ircMODE(FtIrc * const obj, Message const & message, Client * const sender)
 {
-	std::vector<std::string> const & params = message.getParams();
+	std::vector<std::string> const &	params = message.getParams();
+	Message								reply_msg;
+	t_reply								reply;
+	t_replyBatch						batch;
 
 	if (params.size() == 0)
 	{
-		_replies.push_back("No parameters given for MODE command!");
-		// Find the correct return code from e_numerics.hpp .
-		return (-2);
+		return (obj->err_NeedMoreParams(message, sender));
 	}
 
 	try
 	{
 		if (params.at(0).at(0) == '#')
 		{
-			return (ircMODE_channel(message, sender));
+			return (obj->ircMODE_channel(message, sender));
 		}
 		else
 		{
-			return (ircMODE_user(message, sender));
+			return (obj->ircMODE_user(message, sender));
 		}
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "Message parsing error: empty string for <target>!" << std::endl;
-		_replies.push_back("No parameters given for MODE command!");
-		// Find the correct return code from e_numerics.hpp .
-		return (-2);
+		return (obj->err_NeedMoreParams(message, sender));
 	}
 }
 
