@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/25 18:03:43 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:42:09 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ Client * const Channel::getOwner(void) const
 time_t Channel::getTimeCreated(void) const
 {
 	return (_timeCreated);
+}
+
+Channel::t_userMap const & Channel::getUserMap(void) const
+{
+	return (_userMap);
 }
 
 int Channel::getUserCount(void) const

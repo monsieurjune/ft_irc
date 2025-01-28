@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/25 18:01:08 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:40:03 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,26 @@
 
 class Channel
 {
+	public:
+
+		typedef std::map<Client*, std::set<char> >	t_userMap;
+	
 	private:
 	// Attributes
-		std::string 						_name;
-		std::string							_password;
-		Client * 							_owner;
+		std::string 	_name;
+		std::string		_password;
+		Client * 		_owner;
 		
-		time_t const 						_timeCreated;
+		time_t const 	_timeCreated;
 
-		std::map<Client*, std::set<char> >	_userMap;
-		size_t								_userCountLimit;
+		t_userMap		_userMap;
+		size_t			_userCountLimit;
 
-		std::set<char> 						_modes;
+		std::set<char> 	_modes;
 		
-		std::string							_topic;
-		time_t								_timeTopicSet;
-		std::string 						_topicSetter;
+		std::string		_topic;
+		time_t			_timeTopicSet;
+		std::string 	_topicSetter;
 
 	public:
 	// De/Constructor
@@ -52,6 +56,7 @@ class Channel
 		std::string const &		getPassword(void) const;
 		Client * const			getOwner(void) const;
 		time_t					getTimeCreated(void) const; 
+		t_userMap const &		getUserMap(void) const;
 		int						getUserCount(void) const;
 		int						getUserCountLimit(void) const;
 		std::string	const &		getTopic(void) const;
