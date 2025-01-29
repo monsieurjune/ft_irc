@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 10:40:22 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:06:25 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ Channel::Channel(std::string const name, Client * const creator) : _name(name), 
 	// I write the setup, but have no clue, so here below
 
 	// Add creator as first operator of channel
-	std::string	operator_mode = "i have no clue about this";
-	addUserToChannel(creator, operator_mode);
+	addUserToChannel(creator, "o"); // modestring is simply a string containing each of the character representing mode.
 
 	// Add certain mode that setted by default (i.e. topic mode)
-	std::string	channel_mode = "i have no clue about this";
+	// 'i' for MODE_INVITEONLY, 't' for MODE_PROTECTTOPIC . Tat believes neither is on by default, so the string should be empty, or just add no mode.
+	std::string	channel_mode = "it";
 	addMode(channel_mode);
 }
 
@@ -158,7 +158,7 @@ int	Channel::addUserToChannel(Client * const client, std::string modestr)
 		return (1);
 	}
 
-	if (hasThisMode('l') && getUserCount() >= getUserCountLimit())
+	if (hasThisMode('l') && getUserCount() >= getUserCountLimit())  // 'l' is MODE_USERLIMIT .
 	{
 		// std::cerr << "Channel's user count limit reached!" << std::endl;
 		return (2);
