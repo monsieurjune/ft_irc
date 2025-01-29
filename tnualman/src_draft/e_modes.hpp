@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:57:56 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 14:05:20 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:59:39 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 enum e_modes
 {
 	MODE_INVITEONLY = 'i',
-	MODE_PROTECTTOPIC = 't',
 	MODE_CHANNELKEY = 'k',
-	MODE_OPERATOR = 'o',
 	MODE_USERLIMIT = 'l',
+	MODE_OPERATOR = 'o',
+	MODE_PROTECTTOPIC = 't'
 };
 
 #endif
