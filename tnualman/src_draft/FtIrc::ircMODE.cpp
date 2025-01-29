@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/29 23:30:43 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/30 00:19:42 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				//
 				break ;
 		}
+		it++;
 	}
 
 	// ERR_INVALIDMODEPARAM
