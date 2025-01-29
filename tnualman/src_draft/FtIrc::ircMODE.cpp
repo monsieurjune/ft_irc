@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/29 22:34:43 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/29 23:30:43 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	}
 
 	// ERR_INVALIDMODEPARAM
+	// ERR_CHANOPRIVSNEEDED
 	
 	batch.push_back(reply_sender);
 	return (batch);
