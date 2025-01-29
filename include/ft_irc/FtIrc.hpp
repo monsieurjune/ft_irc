@@ -156,8 +156,9 @@ class FtIrc
 		 * 
 		 * - 0: success
 		 * 
-		 * - 1: already has this channel
+		 * - 1: channel doesn't exist
 		 * 
+		 * - 2: client doesn't exist in this channel
 		 */
 		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
 

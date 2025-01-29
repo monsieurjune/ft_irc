@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/26 07:46:39 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:54:29 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,15 @@
 #include <map>
 #include <set>
 
-// TODO: i think you should have enum or macro of each mode charactor
-
-#ifndef ERROR_MODE
-#define ERROR_MODE '!'
-#endif
+enum e_modes
+{
+	MODE_INVITEONLY = 'i',
+	MODE_PROTECTTOPIC = 't',
+	MODE_CHANNELKEY = 'k',
+	MODE_OPERATOR = 'o',
+	MODE_USERLIMIT = 'l',
+	MODE_RESERVE_ERROR = '!',
+};
 
 // Forward Decalration to avoid CIRCULAR include
 class Client;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/29 17:06:25 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/30 02:00:47 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,12 @@ Channel::Channel(std::string const name, Client * const creator) : _name(name), 
 																	_timeCreated(std::time(NULL)), \
 																	_userCountLimit(0)
 {
-	// TODO: p'tat, please add operator "mode" to creator
-	// I write the setup, but have no clue, so here below
-
 	// Add creator as first operator of channel
+	addUserToChannel(creator, std::string(1, MODE_OPERATOR));
 	addUserToChannel(creator, "o"); // modestring is simply a string containing each of the character representing mode.
 
 	// Add certain mode that setted by default (i.e. topic mode)
+	addMode(MODE_PROTECTTOPIC);
 	// 'i' for MODE_INVITEONLY, 't' for MODE_PROTECTTOPIC . Tat believes neither is on by default, so the string should be empty, or just add no mode.
 	std::string	channel_mode = "it";
 	addMode(channel_mode);
@@ -158,6 +157,7 @@ int	Channel::addUserToChannel(Client * const client, std::string modestr)
 		return (1);
 	}
 
+	if (hasThisMode(MODE_USERLIMIT) && getUserCount() >= getUserCountLimit())
 	if (hasThisMode('l') && getUserCount() >= getUserCountLimit())  // 'l' is MODE_USERLIMIT .
 	{
 		// std::cerr << "Channel's user count limit reached!" << std::endl;
@@ -205,7 +205,7 @@ std::set<char>	Channel::getThisClientMembershipModes(Client * const client) cons
 
 		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 		// 	<< " not found on channel " << _name << " !" << std::endl;
-		ret.insert(ERROR_MODE);
+		ret.insert(MODE_RESERVE_ERROR);
 		return (ret);
 	}	
 }

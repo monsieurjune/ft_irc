@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 12:47:04 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/30 01:57:55 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
+#include "std/ft_cstd.hpp"
 
 // C Header
 #include <unistd.h>
+#include <fcntl.h>
+
 
 FtIrc::FtIrc(std::string const name, std::string const password) : _serverName(name), \
 																	_serverPassword(password), \
@@ -133,7 +136,7 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 	// Unjoin Client from channel
 	if (ptr->deleteUserFromChannel(client) != 0)
 	{
-		return 1;
+		return 2;
 	}
 
 	// Check if Channel's members is 0
@@ -157,13 +160,30 @@ void	FtIrc::addClient(int const fd)
 	// Other necessary network and irc operations here
 	try
 	{
+		struct pollfd	new_pollfd;
+
+		ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
 		ptr = new Client(fd);
+
+		// Set NON-BLOCKING
+		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
+		{
+			delete ptr;
+			return;
+		}
+
+		// Set pollfd value
+		new_pollfd.fd = fd;
+		new_pollfd.events = POLLIN | POLLOUT;
+
+		_pollfdVec.push_back(new_pollfd);
 		_clientMapByFd[fd] = ptr;
 	}
 	catch (std::bad_alloc const& e)
 	{
 		if (ptr != NULL)
 		{
+			_pollfdVec.pop_back();
 			delete ptr;
 		}
 		else
@@ -186,7 +206,17 @@ void	FtIrc::deleteClient(int const fd)
 	ptr = _clientMapByFd[fd];
 
 	// Get object attributes
-	std::string const&			nick = ptr->getNickname();
+	std::string const&	nick = ptr->getNickname();
+
+	// Remove fd from pollfd vector
+	for (std::vector<struct pollfd>::iterator it = _pollfdVec.begin(); it != _pollfdVec.end(); it++)
+	{
+		if (it->fd == fd)
+		{
+			_pollfdVec.erase(it);
+			break;
+		}
+	}
 
 	// Erase Client from ClientMap (No Free yet)
 	_clientMapByNickname.erase(nick);
@@ -208,5 +238,6 @@ void	FtIrc::deleteClient(int const fd)
 		}
 	}
 
-	delete ptr;	// Free Client
+	// Free Client
+	delete ptr;
 }
