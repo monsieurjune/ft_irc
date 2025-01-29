@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 01:57:55 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/30 05:23:22 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,33 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 	}	
 }
 
-const struct pollfd*	FtIrc::getPollFd() const
+std::string const&	FtIrc::getServerName()	const
 {
-	return (_pollfdVec.data());
+	return (_serverName);
+}
+
+std::string const&	FtIrc::getServerPassword()	const
+{
+	return (_serverPassword);
+}
+
+std::vector<struct pollfd> const&	FtIrc::getPollFdVector()	const
+{
+	return (_mainPollfdVec);
+}
+
+void	FtIrc::cleanUnusedPollFd()
+{
+	_tempPollfdVec.clear();
+
+	for (size_t i = 0; i < _mainPollfdVec.size(); i++)
+	{
+		if (_mainPollfdVec[i].fd != MARKED_REMOVE_FD)
+		{
+			_tempPollfdVec.push_back(_mainPollfdVec[i]);
+		}
+	}
+	std::swap(_mainPollfdVec, _tempPollfdVec);
 }
 
 int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
@@ -101,7 +125,7 @@ int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
 	if (_channelMapByName.find(channel_name) != _channelMapByName.end())
 	{
 		// TODO: Handle this
-		return 1;
+		return (1);
 	}
 
 	try
@@ -109,7 +133,7 @@ int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
 		ptr = new Channel(channel_name, creator);
 		_channelMapByName[channel_name] = ptr;
 		
-		return 0;
+		return (0);
 	}
 	catch (std::bad_alloc const& e)
 	{
@@ -117,7 +141,7 @@ int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
 		{
 			delete ptr;
 		}
-		return -1;
+		return (-1);
 	}
 }
 
@@ -128,7 +152,7 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 	if (_channelMapByName.find(channel_name) == _channelMapByName.end())
 	{
 		// TODO: Handle this
-		return 1;
+		return (1);
 	}
 
 	ptr = _channelMapByName[channel_name];
@@ -136,7 +160,7 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 	// Unjoin Client from channel
 	if (ptr->deleteUserFromChannel(client) != 0)
 	{
-		return 2;
+		return (2);
 	}
 
 	// Check if Channel's members is 0
@@ -145,7 +169,7 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 		_channelMapByName.erase(channel_name);
 		delete ptr;
 	}
-	return 0;
+	return (0);
 }
 
 void	FtIrc::addClient(int const fd)
@@ -157,7 +181,6 @@ void	FtIrc::addClient(int const fd)
 		return;
 	}
 
-	// Other necessary network and irc operations here
 	try
 	{
 		struct pollfd	new_pollfd;
@@ -165,7 +188,7 @@ void	FtIrc::addClient(int const fd)
 		ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
 		ptr = new Client(fd);
 
-		// Set NON-BLOCKING
+		// Set NON BLOCKING to fd
 		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 		{
 			delete ptr;
@@ -176,14 +199,14 @@ void	FtIrc::addClient(int const fd)
 		new_pollfd.fd = fd;
 		new_pollfd.events = POLLIN | POLLOUT;
 
-		_pollfdVec.push_back(new_pollfd);
+		_mainPollfdVec.push_back(new_pollfd);
 		_clientMapByFd[fd] = ptr;
 	}
 	catch (std::bad_alloc const& e)
 	{
 		if (ptr != NULL)
 		{
-			_pollfdVec.pop_back();
+			_mainPollfdVec.pop_back();
 			delete ptr;
 		}
 		else
@@ -208,20 +231,6 @@ void	FtIrc::deleteClient(int const fd)
 	// Get object attributes
 	std::string const&	nick = ptr->getNickname();
 
-	// Remove fd from pollfd vector
-	for (std::vector<struct pollfd>::iterator it = _pollfdVec.begin(); it != _pollfdVec.end(); it++)
-	{
-		if (it->fd == fd)
-		{
-			_pollfdVec.erase(it);
-			break;
-		}
-	}
-
-	// Erase Client from ClientMap (No Free yet)
-	_clientMapByNickname.erase(nick);
-	_clientMapByFd.erase(fd);
-
 	// Exit from Channel
 	for (std::map<std::string, Channel*>::iterator it = _channelMapByName.begin(); it != _channelMapByName.end();)
 	{
@@ -238,6 +247,20 @@ void	FtIrc::deleteClient(int const fd)
 		}
 	}
 
-	// Free Client
+	// Erase Client from ClientMap (No Free yet)
+	_clientMapByNickname.erase(nick);
+	_clientMapByFd.erase(fd);
+
+	// Remove fd from pollfd vector
+	for (std::vector<struct pollfd>::iterator it = _mainPollfdVec.begin(); it != _mainPollfdVec.end(); it++)
+	{
+		if (it->fd == fd)
+		{
+			it->fd = MARKED_REMOVE_FD;
+			break;
+		}
+	}
+
+	// Free Client (close fd here)
 	delete ptr;
 }

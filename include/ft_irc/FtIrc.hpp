@@ -34,6 +34,11 @@
 #define DEBUG_MODE 1
 #endif
 
+// Marked fd
+#ifndef MARKED_REMOVE_FD
+#define MARKED_REMOVE_FD -1
+#endif
+
 /**
  * @class FtIrc
  * @brief A Class that use for 
@@ -75,9 +80,14 @@ class FtIrc
 		std::map<std::string, Channel*>	_channelMapByName;
 
 		/**
-		 * @brief Array of PollFd in Vector from for ease of use
+		 * @brief Main Array of PollFd in Vector form for ease of use
 		 */
-		std::vector<struct pollfd>	_pollfdVec;
+		std::vector<struct pollfd>	_mainPollfdVec;
+
+		/**
+		 * @brief Temporary Vector for cleaning disconected fd
+		 */
+		std::vector<struct pollfd>	_tempPollfdVec;
 
 		/**
 		 * @brief Server Name
@@ -180,6 +190,7 @@ class FtIrc
 		 * @brief Add new Client Object by its socket fd
 		 * 
 		 * @param fd new socket fd from accept()
+		 * 
 		 */
 		void	addClient(int const fd);
 
@@ -189,6 +200,20 @@ class FtIrc
 		 * @param fd socket fd that disconnect or call QUIT
 		 */
 		void	deleteClient(int const fd);
+
+		/**
+		 * @brief Get Server's Name
+		 * 
+		 * @return Server Name as lvalue
+		 */
+		std::string const&	getServerName()	const;
+
+		/**
+		 * @brief Get Server Password
+		 * 
+		 * @return Server Password as lvalue
+		 */
+		std::string const&	getServerPassword()	const;
 
 		/**
 		 * @brief Get Client by its fd
@@ -218,13 +243,28 @@ class FtIrc
 		Channel*	getChannelByName(std::string const name)	const;
 
 		/**
-		 * @brief Get PollFd array
+		 * @brief Get PollFd array to work with poll()
 		 * 
-		 * @return pollfd array as pointer to its vector
-		 * 
-		 * @note Only use for calling poll() and nothing else
+		 * @return vector of main pollfd as lvalue
 		 */
-		const struct pollfd*	getPollFd()	const;
+		std::vector<struct pollfd> const&	getPollFdVector()	const;
+
+		/**
+		 * @brief Clean up the "disconnected" pollfd from vector
+		 * 
+		 * This method will remove all fd that marked by deleteClient()
+		 * 
+		 * @note This method existed to avoid O(N^2) of constant erase()
+		 * 
+		 * @warning This method must be called after pollfd loop is ended with these reason
+		 * 
+		 * - avoid "skipping" the index in loop
+		 * 
+		 * - avoid poll() to interact with invalid fd (marked fd)
+		 * 
+		 * - this method "swap" the original pollfd, so update the reference after that
+		 */
+		void	cleanUnusedPollFd();
 
 		/**
 		 * @brief IRC CMD Main Handler
