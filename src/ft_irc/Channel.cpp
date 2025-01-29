@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 02:00:47 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/30 03:29:11 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,9 @@ Channel::Channel(std::string const name, Client * const creator) : _name(name), 
 {
 	// Add creator as first operator of channel
 	addUserToChannel(creator, std::string(1, MODE_OPERATOR));
-	addUserToChannel(creator, "o"); // modestring is simply a string containing each of the character representing mode.
 
 	// Add certain mode that setted by default (i.e. topic mode)
 	addMode(MODE_PROTECTTOPIC);
-	// 'i' for MODE_INVITEONLY, 't' for MODE_PROTECTTOPIC . Tat believes neither is on by default, so the string should be empty, or just add no mode.
-	std::string	channel_mode = "it";
-	addMode(channel_mode);
 }
 
 Channel::~Channel()
@@ -158,7 +154,6 @@ int	Channel::addUserToChannel(Client * const client, std::string modestr)
 	}
 
 	if (hasThisMode(MODE_USERLIMIT) && getUserCount() >= getUserCountLimit())
-	if (hasThisMode('l') && getUserCount() >= getUserCountLimit())  // 'l' is MODE_USERLIMIT .
 	{
 		// std::cerr << "Channel's user count limit reached!" << std::endl;
 		return (2);
