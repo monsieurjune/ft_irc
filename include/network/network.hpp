@@ -1,14 +1,11 @@
 #ifndef __NETWORK_HPP__
 #define __NETWORK_HPP__
+
+// Project Header
+#include "ft_irc/FtIrcConstants.hpp"
+
+// CPP Header
 #include <string>
-
-#ifndef IRC_MAXSIZE
-#define IRC_MAXSIZE 512
-#endif
-
-#ifndef IRC_TERMINATE
-#define IRC_TERMINATE "\r\n"
-#endif
 
 namespace ft_net
 {

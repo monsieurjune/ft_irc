@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/24 05:25:04 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/30 05:49:50 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,13 @@ Message::Message(std::string const raw)
 
 Message::~Message(void) {}
 
-// TODO: Would you like to delete these comment?
-// I commented out these _isValid because it should be at Constructor
 int Message::parse(std::string const raw)
 {
 	// Empty message
 	if (raw.empty())
 	{
-		// _isValid = false;
 		return (1);
 	}
-
-	// if (_raw.find("\r\n") == std::string::npos) // Message has no \r\n
-	// {
-	// 	_is_valid = false;
-	// 	return (1);
-	// }
-	// _raw = _raw.substr(0, _raw.find("\r\n")); // Discard everything after \r\n
 	
 	std::vector<std::string> raw_splitted = split(raw, " ");
 	
@@ -90,7 +80,6 @@ int Message::parse(std::string const raw)
 	{
 		if (raw_splitted.size() == 1)
 		{
-			// _isValid = false;
 			return (1);
 		}
 
@@ -125,7 +114,6 @@ int Message::parse(std::string const raw)
 			break ;
 		}
 	}
-	// _isValid = true;
 	return (0);
 }
 

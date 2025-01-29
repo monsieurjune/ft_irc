@@ -34,16 +34,16 @@ namespace ft_net
 
 bool	irc_recv(int fd, std::string& msg)
 {
-	char 	buff[IRC_MAXSIZE + 1];
+	char 	buff[IRC_MSG_MAXSIZE + 1];
 	char	*term_pos	= NULL;
 	ssize_t	recv_len	= 0;
 	ssize_t	actual_len	= 0;
 
 	// Put '\0' at the end of buffer for safety and not mendle with irc rule
-	buff[IRC_MAXSIZE] = '\0';
+	buff[IRC_MSG_MAXSIZE] = '\0';
 
 	// Peek the Message first, Not outright remove it from socket's buffer
-	recv_len = recv(fd, buff, IRC_MAXSIZE, MSG_PEEK);
+	recv_len = recv(fd, buff, IRC_MSG_MAXSIZE, MSG_PEEK);
 	if (recv_len <= 0)
 	{
 		sb_check_recv_error(recv_len);
@@ -54,10 +54,10 @@ bool	irc_recv(int fd, std::string& msg)
 	// if not found \r\n then check if msg is already at 510 bytes or not
 	// 	- if it would likely to exceed 510 bytes, then give error
 	// 	- else, just exit and wait msg to fulfill buffer
-	term_pos = ft_std::strnstr(buff, IRC_TERMINATE, recv_len);
+	term_pos = ft_std::strnstr(buff, IRC_TERMINATE_BYTES, recv_len);
 	if (term_pos == NULL)
 	{
-		if (recv_len > IRC_MAXSIZE - 2)
+		if (recv_len > IRC_MSG_MAXSIZE - 2)
 		{
 			throw IrcInvalidPacketException("This Client's Message doesn\'t has proper terminate bytes");
 		}
