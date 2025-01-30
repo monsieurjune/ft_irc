@@ -6,11 +6,25 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 16:28:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:48:14 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/types.h> 
+
 #include "FtIrc.hpp"
+
+ssize_t	stoi(std::string str)
+{
+	std::stringstream	ss;
+	ssize_t				num = 0;
+
+	// conver string to int
+	ss << str;
+	ss >> num;
+
+	return num;
+}
 
 std::string	ltoa(long num)
 {
@@ -33,9 +47,6 @@ std::string const & set_of_char_to_string(std::set<char> const & set)
 FtIrc::t_replyBatch FtIrc::ircMODE(FtIrc * const obj, Message const & message, Client * const sender)
 {
 	std::vector<std::string> const &	params = message.getParams();
-	Message								reply_msg;
-	t_reply								reply;
-	t_replyBatch						batch;
 
 	if (params.size() == 0 || params.at(0).empty())
 	{
@@ -60,7 +71,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	
 	Message								reply_msg;
 	t_reply								reply_sender;
-	t_reply								reply_other;
+	t_reply								reply_members;
 	t_replyBatch						batch;
 
 	reply_msg.setSource(_serverName);
@@ -132,6 +143,10 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	char sign = modestr.at(0);
 	std::string working_modes = "iklot";
 
+	Channel::t_userMap 				userMap = channel->getUserMap();
+	Channel::t_userMap::iterator	it_umap;
+	Channel::t_userMap::iterator	it_umap_end;
+
 	for (std::string::iterator it = modestr.begin() + 1; it != modestr.end(); it++)
 	{
 		if (*it == '-' || *it == '+')
@@ -139,39 +154,178 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 			sign = *it;
 			continue ;
 		}
-		// ERR_UNKNOWNMODE
-		if (working_modes.find(*it) == std::string::npos)
-		{
-			reply_msg.setCommand(ERR_UNKNOWNMODE);
-			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam(std::string(1, *it));
-			reply_msg.pushParam("is not a recognized mode character");
-			reply_sender.second.push(reply_msg);
-			continue ;
-		}
+
+		reply_msg.setCommand("MODE");
 		
-		// This block should be its own sub method for FtIrc class (how about ircMODE_channel_changeMode() ?).
+		it_umap = userMap.begin();
+		it_umap_end = userMap.end();
+
 		switch (*it)
 		{
 			case (MODE_INVITEONLY):
-				//
-				break ;
+			{
+				if (channel->hasThisMode(MODE_INVITEONLY) && sign == '-')
+				{
+					channel->removeMode(MODE_INVITEONLY);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("-i");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+				if (!(channel->hasThisMode(MODE_INVITEONLY)) && sign == '+')
+				{
+					channel->addMode(MODE_INVITEONLY);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("+i");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+			} break ;
 			case (MODE_CHANNELKEY):
-				//
-				break ;
+			{
+				if (channel->hasThisMode(MODE_CHANNELKEY) && sign == '-')
+				{
+					channel->setPassword("");
+					channel->removeMode(MODE_CHANNELKEY);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("-k");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+				if (sign == '+')
+				{
+					// If new password not given in params.at(2), ignore this 'k' mode!  
+					if (params.size() < 3 || params.at(2).empty())
+					{
+						continue ;
+					}
+					channel->addMode(MODE_CHANNELKEY);
+					channel->setPassword(params.at(2));
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("+k");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+			} break ;
 			case (MODE_USERLIMIT):
-				//
-				break ;
+			{
+				if (channel->hasThisMode(MODE_USERLIMIT) && sign == '-')
+				{
+					channel->removeMode(MODE_USERLIMIT);
+					channel->setUserCountLimit(0);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("-l");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+				if (!(channel->hasThisMode(MODE_USERLIMIT)) && sign == '+')
+				{
+					int	limit;
+					
+					// If new user limit not given in params.at(2) or params.at(3), ignore this 'l' mode!  
+					if (params.size() < 3 || (params.size() == 3 && modestr.find(MODE_CHANNELKEY) != std::string::npos) 
+						|| (modestr.find(MODE_CHANNELKEY) == std::string::npos && params.at(2).empty())
+						|| (params.size() > 3 && modestr.find(MODE_CHANNELKEY) != std::string::npos && params.at(3).empty())) 
+					{
+						continue ;
+					}
+					
+					if (modestr.find(MODE_CHANNELKEY) == std::string::npos)
+					{
+						limit = stoi(params.at(2));
+					}
+					else
+					{
+						limit = stoi(params.at(3));
+					}
+
+					// If given user count limit is not valid (non-positive).
+					if (limit < 1)
+					{
+						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
+						reply_msg.pushParam(sender->getNickname());
+						reply_msg.pushParam(channel_name);
+						reply_msg.pushParam(std::string(1, MODE_USERLIMIT));
+						reply_msg.pushParam(ltoa(limit));
+						reply_msg.pushParam("Invalid user count limit (non-positive)");
+						reply_sender.second.push(reply_msg);
+						batch.push_back(reply_sender);
+						continue;
+					}
+
+					channel->setUserCountLimit(limit);
+					channel->addMode(MODE_USERLIMIT);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("+l");
+					reply_msg.pushParam(ltoa(limit));
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+			} break ;
 			case (MODE_OPERATOR):
-				// ERR_INVALIDMODEPARAM
+				// Check for user not in case in _userMap, then check if user is already an op, then change _userMembershipMode
 				break ;
 			case (MODE_PROTECTTOPIC):
-				//
-				break ;
+			{
+				if (channel->hasThisMode(MODE_PROTECTTOPIC) && sign == '-')
+				{
+					channel->removeMode(MODE_PROTECTTOPIC);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("-t");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+				if (!(channel->hasThisMode(MODE_PROTECTTOPIC)) && sign == '+')
+				{
+					channel->addMode(MODE_PROTECTTOPIC);
+					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam("+t");
+					reply_members.second.push(reply_msg);
+					for (it_umap; it_umap != it_umap_end; it_umap++)
+					{
+						reply_members.first = it_umap->first;
+						batch.push_back(reply_members);
+					}
+				}
+			} break ;
+			default:
+			{
+				reply_msg.setCommand(ERR_UNKNOWNMODE);
+				reply_msg.pushParam(sender->getNickname());
+				reply_msg.pushParam(std::string(1, *it));
+				reply_msg.pushParam("is not a recognized channel mode character");
+				reply_sender.second.push(reply_msg);
+			}
 		}
 	}
-
-	// ERR_INVALIDMODEPARAM
 	
 	batch.push_back(reply_sender);
 	return (batch);
