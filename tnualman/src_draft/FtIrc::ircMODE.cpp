@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 00:19:42 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:26:23 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	{
 		reply_msg.setCommand(ERR_NOSUCHCHANNEL);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam(channel_name);
+		reply_msg.pushParam("#" + channel_name);
 		reply_msg.pushParam("No such channel");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
@@ -83,7 +83,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		
 		reply_msg.setCommand(RPL_CHANNELMODEIS);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam(channel_name);
+		reply_msg.pushParam("#" + channel_name);
 		reply_msg.pushParam(modestr);
 		// <mode arguments> // Only deal with MODE_USERLIMET ('l'); MODE_CHANNELKEY ('k')'s argument (the password) is secret.
 		if (modestr.find(MODE_USERLIMIT) != std::string::npos)
@@ -95,7 +95,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		reply_msg.resetParams();
 		reply_msg.setCommand(RPL_CREATIONTIME);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam(channel_name);
+		reply_msg.pushParam("#" + channel_name);
 		reply_msg.pushParam(ltoa(channel->getTimeCreated()));
 		reply_sender.second.push(reply_msg);
 
@@ -103,6 +103,18 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		return (batch);
 	}
 
+	// ERR_CHANOPRIVSNEEDED // Assuming that all channel mode changing require operator privilege.
+	if (!(channel->hasThisClientMembershipMode(sender, MODE_OPERATOR)))
+	{
+		reply_msg.setCommand(ERR_CHANOPRIVSNEEDED);
+		reply_msg.pushParam(sender->getNickname());
+		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam("You're not channel operator");
+		reply_sender.second.push(reply_msg);
+		batch.push_back(reply_sender);
+		return (batch);
+	}
+	
 	std::string	modestr = params.at(1);
 	
 	// ERR_UNKNOWNERROR (bad modestring)
@@ -111,7 +123,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		reply_msg.setCommand(ERR_UNKNOWNERROR);
 		reply_msg.pushParam(sender->getNickname());
 		reply_msg.pushParam("MODE");
-		reply_msg.pushParam("Modestring is invalid");
+		reply_msg.pushParam("modestring is invalid");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
 		return (batch);
@@ -137,6 +149,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 			reply_sender.second.push(reply_msg);
 			continue ;
 		}
+		
 		// This block should be its own sub method for FtIrc class (how about ircMODE_channel_changeMode() ?).
 		switch (*it)
 		{
@@ -156,11 +169,9 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				//
 				break ;
 		}
-		it++;
 	}
 
 	// ERR_INVALIDMODEPARAM
-	// ERR_CHANOPRIVSNEEDED
 	
 	batch.push_back(reply_sender);
 	return (batch);
