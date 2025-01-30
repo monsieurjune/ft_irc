@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 16:26:23 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:28:15 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		{
 			reply_msg.setCommand(ERR_UNKNOWNMODE);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam(std::string() + *it); // A single character string hack :p
+			reply_msg.pushParam(std::string(1, *it));
 			reply_msg.pushParam("is not a recognized mode character");
 			reply_sender.second.push(reply_msg);
 			continue ;
