@@ -61,6 +61,13 @@ class FtIrc
 	
 	private:
 		/**
+		 * @brief Server's Listener socket fd
+		 * 
+		 * @note It must be created via listen() with proper bind()
+		 */
+		int const	_listen_fd;
+
+		/**
 		 * @brief Client Map that use its fd as key to Client Pointer
 		 * 
 		 * @note This is main place where store heap of Client
@@ -178,8 +185,9 @@ class FtIrc
 		 * 
 		 * @param password IRC Server's Password
 		 * @param servername IRC Server's Name (use for server's prefix)
+		 * @param listen_fd IRC Server's Listen socket fd
 		 */
-		FtIrc(std::string const password, std::string const servername);
+		FtIrc(std::string const password, std::string const servername, int const listen_fd);
 
 		/**
 		 * @brief Default Destructor
