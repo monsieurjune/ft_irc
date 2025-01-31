@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/30 20:15:23 by tponutha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
 #include "utils/ft_utils.hpp"
@@ -138,10 +150,10 @@ int	main(const int argc, const char *argv[])
 					{
 						std::string	msg;
 
-						if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
-						{
-							std::cout << "Receive: " << msg << std::endl;
-						}
+						// if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
+						// {
+						// 	std::cout << "Receive: " << msg << std::endl;
+						// }
 					}
 					catch(const std::exception& e)
 					{

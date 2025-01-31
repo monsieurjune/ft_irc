@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IrcInvalidPacketException.hpp                      :+:      :+:    :+:   */
+/*   IrcListenBindingException.hpp                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 10:52:25 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/30 10:52:25 by tponutha         ###   ########.fr       */
+/*   Created: 2025/01/30 18:17:19 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/30 20:11:54 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __IRC_INVALID_PACKET_EXCEPTION_HPP__
-#define __IRC_INVALID_PACKET_EXCEPTION_HPP__
+#ifndef __IRC_LISTEN_BINDING_EXCEPTION_HPP__
+#define __IRC_LISTEN_BINDING_EXCEPTION_HPP__
 #include <exception>
 #include <string>
 
-class IrcInvalidPacketException : public std::exception
+class IrcListenBindingException : public std::exception
 {
 	private:
 		std::string	_msg;
-	
+
 	public:
-		IrcInvalidPacketException(const char *msg);
-		virtual ~IrcInvalidPacketException() throw();
+		IrcListenBindingException(const char *msg);
+		virtual ~IrcListenBindingException() throw();
 		virtual const char* what() const throw();
 };
 

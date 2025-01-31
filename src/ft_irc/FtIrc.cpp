@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 10:43:45 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 07:09:37 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 #include <fcntl.h>
 
 FtIrc::FtIrc(std::string const name, std::string const password, int const listen_fd) 
-		: _serverName(name), \
+		: _listen_fd(listen_fd), \
+		_serverName(name), \
 		_serverPassword(password), \
-		_timeServerStarted(std::time(NULL)), \
-		_listen_fd(listen_fd)
+		_timeServerStarted(std::time(NULL))
 {
 	// Add listen fd to poll fd
 	struct pollfd	new_pollfd;

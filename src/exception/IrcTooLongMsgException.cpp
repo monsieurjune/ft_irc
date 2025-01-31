@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IrcInvalidPacketException.hpp                      :+:      :+:    :+:   */
+/*   IrcTooLongMsgException.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 10:52:25 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/30 10:52:25 by tponutha         ###   ########.fr       */
+/*   Created: 2025/01/30 19:54:54 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/30 20:12:27 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __IRC_INVALID_PACKET_EXCEPTION_HPP__
-#define __IRC_INVALID_PACKET_EXCEPTION_HPP__
-#include <exception>
-#include <string>
+#include "exception/IrcTooLongMsgException.hpp"
 
-class IrcInvalidPacketException : public std::exception
+IrcTooLongMsgException::IrcTooLongMsgException(const char *msg) : exception()
 {
-	private:
-		std::string	_msg;
-	
-	public:
-		IrcInvalidPacketException(const char *msg);
-		virtual ~IrcInvalidPacketException() throw();
-		virtual const char* what() const throw();
-};
+	_msg = msg;
+}
 
-#endif
+IrcTooLongMsgException::~IrcTooLongMsgException() throw() {}
+
+const char	*IrcTooLongMsgException::what() const throw()
+{
+	return _msg.c_str();
+}

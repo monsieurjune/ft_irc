@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   irc_recv.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/30 16:37:51 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/30 20:14:12 by tponutha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // Proiject Header
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
-
 #include "exception/CstdException.hpp"
 #include "exception/IrcInvalidPacketException.hpp"
 #include "exception/IrcDisconnectedException.hpp"
@@ -13,7 +24,6 @@
 
 // CPP Header
 #include <string>
-#include <iostream>
 
 static inline void	sb_check_recv_error(ssize_t recv_len)
 {
@@ -27,6 +37,27 @@ static inline void	sb_check_recv_error(ssize_t recv_len)
 		return;
 	}
 	throw CstdException(errno);
+}
+
+static inline ssize_t	sb_recv(int fd, void *buff, size_t len, int flags)
+{
+	ssize_t	recv_len = recv(fd, buff, len, flags);
+
+	if (recv_len == 0)
+	{
+		// Client is disconnected
+		throw IrcDisconnectedException(
+				"Client is Disconnected while trying to receive msg"
+			);
+	}
+
+	if (recv_len == -1)
+	{
+		// Client's socket is error
+		throw CstdException(errno);
+	}
+
+	return recv_len;
 }
 
 namespace ft_net
@@ -57,7 +88,7 @@ bool	irc_recv(int fd, std::string& msg)
 	term_pos = ft_std::strnstr(buff, IRC_TERMINATE_BYTES, recv_len);
 	if (term_pos == NULL)
 	{
-		if (recv_len > IRC_MSG_MAXSIZE - 2)
+		if (recv_len >= IRC_MSG_MAXSIZE)
 		{
 			throw IrcInvalidPacketException("This Client's Message doesn\'t has proper terminate bytes");
 		}
@@ -91,5 +122,21 @@ bool	irc_recv(int fd, std::string& msg)
 
 	return true;
 }
+
+// std::string	irc_recv(int fd)
+// {
+// 	char	buff[IRC_MSG_MAXSIZE + 1];
+// 	char*	terminate_pos	= NULL;
+// 	ssize_t	recv_len		= 0;
+// 	ssize_t	actual_len		= 0;
+
+// 	// Put '\0' at the end of buffer for safety and not mendle with irc rule
+// 	buff[IRC_MSG_MAXSIZE] = '\0';
+
+// 	// Peek the Message first, Not outright remove it from socket's buffer
+// 	recv_len = sb_recv(fd, buff, IRC_MSG_MAXSIZE, MSG_PEEK);
+
+	
+// }
 
 }
