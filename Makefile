@@ -30,7 +30,8 @@ EXCEPT_SRC		:= CstdException.cpp \
 					IrcInvalidPacketException.cpp \
 					IrcUnknownCmdException.cpp \
 					IrcListenBindingException.cpp \
-					IrcTooLongMsgException.cpp
+					IrcTooLongMsgException.cpp \
+					IrcContinueException.cpp
 EXCEPT_SRCS		:= $(addprefix $(EXCEPT_SRC_DIR), $(EXCEPT_SRC))
 
 # FtIRC Source
