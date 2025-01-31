@@ -289,6 +289,166 @@ class FtIrc
 		 * @param client Client Object of Client that send the msg
 		 */
 		void	ircMessageHandler(Message const & msg, Client * const client);
+
+		/* will delete this later
+		# IRC CMD to do
+		- ircKICK(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircINVITE(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircTOPIC(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircMODE(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircJOIN(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircPRIVMSG(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircPASS(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircNICK(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircUSER(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircCAP(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircPART(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircQUIT(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		- ircPING(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
+		*/
+		/**
+		 * @brief IRC CMD KICK
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircKICK(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD INVITE
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircINVITE(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD TOPIC
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircTOPIC(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD MODE
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircMODE(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief 
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircJOIN(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD PRIVMSG
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 *  
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircPRIVMSG (FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD PASS
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircPASS(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD NICK
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircNICK(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD USER
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircUSER(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD CAP
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircCAP(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD PART
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircPART(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD QUIT
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircQUIT(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * @brief IRC CMD PING
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircPING(FtIrc * const obj, Message const & msg, Client * const client);
+
 };
 
 #endif
