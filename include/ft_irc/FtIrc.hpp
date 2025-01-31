@@ -29,11 +29,6 @@
 #include <set>
 #include <string>
 
-// Debug Mode
-#ifndef DEBUG_MODE
-#define DEBUG_MODE 1
-#endif
-
 // Marked fd
 #ifndef MARKED_REMOVE_FD
 #define MARKED_REMOVE_FD -1
@@ -57,7 +52,7 @@ class FtIrc
 	
 		typedef std::pair<Client *, std::queue<Message> >	t_reply;
 		typedef std::vector<t_reply>						t_replyBatch;
-		typedef t_replyBatch (*t_IrcCmd)(Message const &, Client * const);
+		typedef t_replyBatch (*t_IrcCmd)(FtIrc * const, Message const &, Client * const);
 	
 	private:
 		/**
@@ -178,6 +173,13 @@ class FtIrc
 		 * - 2: client doesn't exist in this channel
 		 */
 		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
+
+		/**
+		 * @brief Transform and Put Message to Client's Storage
+		 * 
+		 * @param batch Group of Reply Message
+		 */
+		void	applyReplyBatchToClient(t_replyBatch& batch);
 
 	public:
 		/**

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/28 12:48:03 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 20:22:31 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 #include <string>
 #include <set>
 #include <queue>
+
+// Debug Mode
+
+#ifndef DEBUG_MODE
+#define DEBUG_MODE 1
+#endif
 
 // Authenication Flag
 
@@ -39,8 +45,12 @@
 #define LOGIN_FLAG 0x08
 #endif
 
+#ifndef CAP_FLAG
+#define CAP_FLAG 0x10
+#endif
+
 #ifndef DEBUG_FLAG
-#define DEBUG_FLAG 0x0F
+#define DEBUG_FLAG 0x80
 #endif
 
 // Forward Decalration to avoid CIRCULAR include
@@ -225,6 +235,13 @@ class Client
 		 * @return True if contain this mode, false otherwise
 		 */
 		bool	hasMode(char c)	const;
+
+		/**
+		 * @brief Creating Client's Source
+		 * 
+		 * @return Client's Source in format: <nick>!<user>@<ip>
+		 */
+		std::string	constructSource();
 
 		/**
 		 * @brief Set This Client's authenication level

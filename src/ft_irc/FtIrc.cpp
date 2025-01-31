@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/31 16:43:57 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 20:46:31 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,23 @@ FtIrc::FtIrc(std::string const name, std::string const password, int const liste
 	_mainPollfdVec.push_back(new_pollfd);
 
 	// NO PASSWORD CMD
+	_noPassCmdMap["PASS"] = ircPASS;
+	_noPassCmdMap["CAP"] = ircCAP;
+	_noPassCmdMap["PING"] = ircPING;
+	_noPassCmdMap["QUIT"] = ircQUIT;
 
 	// AUTHEN CMD
+	_authenCmdMap["NICK"] = ircNICK;
+	_authenCmdMap["USER"] = ircUSER;
 
 	// NORMAL CMD
+	_normalCmdMap["JOIN"] = ircJOIN;
+	_normalCmdMap["INVITE"] = ircINVITE;
+	_normalCmdMap["KICK"] = ircKICK;
+	_normalCmdMap["MODE"] = ircMODE;
+	_normalCmdMap["TOPIC"] = ircTOPIC;
+	_normalCmdMap["PRIVMSG"] = ircPRIVMSG;
+	_normalCmdMap["PART"] = ircPART;
 }
 
 FtIrc::~FtIrc()
@@ -283,4 +296,47 @@ void	FtIrc::deleteClient(int const fd)
 
 	// Free Client (close fd here)
 	delete ptr;
+}
+
+void	FtIrc::applyReplyBatchToClient(t_replyBatch& batch)
+{
+	for (std::vector<t_reply>::iterator it = batch.begin(); it != batch.end(); it++)
+	{
+		Client					*client	= it->first;
+		std::queue<Message>&	queue	= it->second;
+
+		while (!queue.empty())
+		{
+			std::string	msg	= queue.front().assembleRawMessage();
+
+			client->enqueueReply(msg);
+			queue.pop();
+		}
+	}
+}
+
+void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
+{
+	std::string const&	cmd	= msg.getCommand();
+
+	// if (_noPassCmdMap.find(cmd) != _noPassCmdMap.end())
+	// {
+	// 	t_IrcCmd		caller	= _noPassCmdMap[cmd];
+	// 	t_replyBatch	batch	= caller(msg, client);
+
+	// 	applyReplyBatchToClient(batch);
+	// }
+
+	// if (_authenCmdMap.find(cmd) != _authenCmdMap.end())
+	// {
+	// 	if (client->getAuthenLevel() & PASS_FLAG || client->getAuthenLevel() & DEBUG_FLAG)
+	// }
+
+	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
+	{
+		t_IrcCmd		caller	= _noPassCmdMap[cmd];
+		t_replyBatch	batch	= caller(this, msg, client);
+
+		applyReplyBatchToClient(batch);
+	}
 }
