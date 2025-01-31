@@ -6,67 +6,29 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/30 20:15:23 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:11:34 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/network.hpp"
-#include "std/ft_cstd.hpp"
 #include "utils/ft_utils.hpp"
+#include "ft_irc/FtIrc.hpp"
+#include "exception/IrcDisconnectedException.hpp"
 
-#include <unistd.h>
-#include <fcntl.h>
+bool	g_run	= true;
 
-#include <poll.h>
-#include <sys/errno.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-
-#include <string>
-#include <cstdlib>
-#include <vector>
-
-#include <iostream>
-
-static inline void	sb_close_all_fds(std::vector<struct pollfd>& pollfd_vector)
+static void	sb_killer(int signum)
 {
-	for (size_t i = 0; i < pollfd_vector.size(); i++)
-	{
-		close(pollfd_vector[i].fd);
-	}
+	(void)signum;
+	g_run = false;
 }
 
-static inline void	sb_add_pollfd(std::vector<struct pollfd>& pollfd_vector, int fd, short event)
+static void	sb_ignorer(int signum)
 {
-	struct pollfd	new_pollfd;
-
-	ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
-
-	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
-	{
-		return;
-	}
-	
-	new_pollfd.fd = fd;
-	new_pollfd.events = event;
-
-	pollfd_vector.push_back(new_pollfd);
+	(void)signum;	// ignore
 }
 
-static inline void	sb_delete_pollfd(std::vector<struct pollfd>& pollfd_vector, int fd)
-{
-	for (std::vector<struct pollfd>::iterator it = pollfd_vector.begin(); it != pollfd_vector.end(); it++)
-	{
-		if (it->fd == fd)
-		{
-			close(fd);
-			pollfd_vector.erase(it);
-			return;
-		}
-	}
-}
-
-static inline int	sb_argv_parser(const int argc, const char *argv[], std::string& password)
+static inline int	sb_initializer(const int argc, const char *argv[])
 {
 	if (argc != 3)
 	{
@@ -79,102 +41,78 @@ static inline int	sb_argv_parser(const int argc, const char *argv[], std::string
 		// TODO: Fix log here
 		return -1;
 	}
-	password.assign(argv[2]);
+
+	if (ft_utils::signal_init(sb_killer, sb_ignorer) != 0)
+	{
+		// TODO: Fix log here
+		return -1;
+	}
 
 	return ft_net::get_listener_scoket_fd(argv[1]);
 }
 
+#include <iostream>
+
+static inline void	sb_poll(FtIrc *main_obj)
+{
+	std::vector<struct pollfd>&	pollfd_vec = main_obj->getPollFdVector();
+	int	poll_count;
+
+	poll_count = poll(pollfd_vec.data(), pollfd_vec.size(), POLL_TIMEOUT_MS);
+	if (poll_count < 0)
+	{
+		return;
+	}
+
+	for (size_t i = 0; i < pollfd_vec.size(); i++)
+	{
+		int	fd		= pollfd_vec[i].fd;
+		int	revents	= pollfd_vec[i].revents;
+
+		try
+		{
+			ft_net::pollin(main_obj, fd, revents);
+			ft_net::pollout(main_obj, fd, revents);
+		}
+		catch (const IrcDisconnectedException& e)
+		{
+			std::cout << "Client Disconnected: " << main_obj->getClientByFd(fd)->getHost() << std::endl;
+			main_obj->deleteClient(fd);
+		}
+		catch (const std::exception& e)
+		{
+			// Ignored
+		}
+	}
+
+	// Clean any closed fd from pollfd
+	main_obj->cleanUnusedPollFd();
+}
+
 int	main(const int argc, const char *argv[])
 {
-	std::string					password;
-	std::vector<struct pollfd>	pollfd_vector(1024);
-	int							listen_socketfd;
-	int							poll_count					= 0;
-	int							poll_check_count			= 0;
+	int	listen_socketfd;
 
-	listen_socketfd = sb_argv_parser(argc, argv, password);
+	listen_socketfd = sb_initializer(argc, argv);
 	if (listen_socketfd == -1)
 	{
 		return 1;
 	}
 
-	// Set Up listen socket to pollfd
-	sb_add_pollfd(pollfd_vector, listen_socketfd, POLLIN | POLLOUT);
+	FtIrc	main_obj(argv[2], "irc.localhost.test", listen_socketfd);
 
 	// Infinite Loop
-	while (1)
+	while (g_run)
 	{
-		// If Error, Then Just Continue
-		poll_check_count = 0;
-		poll_count = poll(pollfd_vector.data(), pollfd_vector.size(), 100);
-		if (poll_count < 0)
+		try
+		{
+			sb_poll(&main_obj);
+		}
+		catch (const std::exception& e)
 		{
 			continue;
 		}
-
-		// Loop Through Whole FD
-		for (size_t i = 0; i < pollfd_vector.size(); i++)
-		{
-			if (poll_check_count == poll_count)
-			{
-				break;
-			}
-
-			// Check for fd that ready to read
-			if (pollfd_vector[i].revents & POLLIN)
-			{
-				poll_check_count++;
-
-				if (pollfd_vector[i].fd == listen_socketfd)
-				{
-					// It mean that someone want to connect
-					int client_sockfd = accept(listen_socketfd, NULL, NULL);
-
-					if (client_sockfd < 0)
-					{
-						// TODO: Put log here
-					}
-					else
-					{
-						sb_add_pollfd(pollfd_vector, client_sockfd, POLLIN);
-						
-						std::cout << "Someone Connect" << std::endl;
-						// TODO: Put log here
-					}
-				}
-				else
-				{
-					// It mean that client send irc msg
-
-					try
-					{
-						std::string	msg;
-
-						// if (ft_net::irc_recv(pollfd_vector[i].fd, msg))
-						// {
-						// 	std::cout << "Receive: " << msg << std::endl;
-						// }
-					}
-					catch(const std::exception& e)
-					{
-						std::cerr << e.what() << std::endl;
-					}
-				}
-			}
-
-			// Check for fd that "HUNG UP"
-			if (pollfd_vector[i].revents & POLLHUP)
-			{
-				poll_check_count++;
-
-				sb_delete_pollfd(pollfd_vector, pollfd_vector[i].fd);
-				std::cout << "Someone Disconnect" << std::endl;
-			}
-		}
 	}
-
-    // close socket
-	sb_close_all_fds(pollfd_vector);
 
 	return 0;
 }

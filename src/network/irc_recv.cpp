@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:37:51 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/31 11:50:18 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:44:40 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static inline void	sb_replace_nul(char* buff, ssize_t recv_len)
 	buff[recv_len] = '\0';
 }
 
+#include <iostream>
+
 namespace ft_net
 {
 
@@ -117,7 +119,7 @@ std::string	irc_recv(int fd)
 	size_t	cr_len	= ret_msg.find('\r');
 	size_t	lf_len	= ret_msg.find('\n');
 
-	if (cr_len == std::string::npos || lf_len == std::string::npos)
+	if (cr_len != std::string::npos || lf_len != std::string::npos)
 	{
 		sb_recv(fd, buff, ret_msg.length() + sizeof(IRC_TERMINATE_BYTES) - 1, 0);
 		throw IrcInvalidPacketException(

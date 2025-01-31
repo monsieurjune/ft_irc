@@ -198,9 +198,9 @@ class FtIrc
 		 * @brief Add new Client Object by its socket fd
 		 * 
 		 * @param fd new socket fd from accept()
-		 * 
+		 * @param ip Ip Address of Client in cstring
 		 */
-		void	addClient(int const fd);
+		void	addClient(int const fd, const char *ip);
 
 		/**
 		 * @brief Delete This Client Object by its socket fd
@@ -208,6 +208,15 @@ class FtIrc
 		 * @param fd socket fd that disconnect or call QUIT
 		 */
 		void	deleteClient(int const fd);
+
+		/**
+		 * @brief Get Listener Socket Fd
+		 * 
+		 * @return Listenner Socket Fd
+		 * 
+		 * @warning Don't close it outside of class at all
+		 */
+		int	getListenFd()	const;
 
 		/**
 		 * @brief Get Server's Name
@@ -255,7 +264,7 @@ class FtIrc
 		 * 
 		 * @return vector of main pollfd as lvalue
 		 */
-		std::vector<struct pollfd> const&	getPollFdVector()	const;
+		std::vector<struct pollfd>&	getPollFdVector();
 
 		/**
 		 * @brief Clean up the "disconnected" pollfd from vector

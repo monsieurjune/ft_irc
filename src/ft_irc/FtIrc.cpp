@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/31 07:09:37 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:43:57 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,27 @@ FtIrc::~FtIrc()
 	close(_listen_fd);
 }
 
+int	FtIrc::getListenFd()	const
+{
+	return (_listen_fd);
+}
+
+std::string const&	FtIrc::getServerName()	const
+{
+	return (_serverName);
+}
+
+std::string const&	FtIrc::getServerPassword()	const
+{
+	return (_serverPassword);
+}
+
+std::vector<struct pollfd>&	FtIrc::getPollFdVector()
+{
+	return (_mainPollfdVec);
+}
+
+
 Client*	FtIrc::getClientByFd(int const fd) const
 {
     try
@@ -99,21 +120,6 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 		// std::cerr << "Channel named " << name << " not found!" << std::endl;
 		return (NULL);
 	}	
-}
-
-std::string const&	FtIrc::getServerName()	const
-{
-	return (_serverName);
-}
-
-std::string const&	FtIrc::getServerPassword()	const
-{
-	return (_serverPassword);
-}
-
-std::vector<struct pollfd> const&	FtIrc::getPollFdVector()	const
-{
-	return (_mainPollfdVec);
 }
 
 void	FtIrc::cleanUnusedPollFd()
@@ -184,7 +190,7 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 	return (0);
 }
 
-void	FtIrc::addClient(int const fd)
+void	FtIrc::addClient(int const fd, const char *ip)
 {
 	Client*	ptr = NULL;
 
@@ -199,6 +205,7 @@ void	FtIrc::addClient(int const fd)
 
 		ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
 		ptr = new Client(fd);
+		ptr->setHost(ip);
 
 		// Set NON BLOCKING to fd
 		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
@@ -212,6 +219,7 @@ void	FtIrc::addClient(int const fd)
 		new_pollfd.events = POLLIN | POLLOUT;
 
 		_mainPollfdVec.push_back(new_pollfd);
+		
 		_clientMapByFd[fd] = ptr;
 	}
 	catch (std::bad_alloc const& e)

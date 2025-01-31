@@ -20,7 +20,9 @@ INCLUDE_DIR	:= ./include
 # Network Source
 NETWORK_SRC_DIR	:= $(SRC_DIR)/network/
 NETWORK_SRC		:= listen_init.cpp \
-					irc_recv.cpp
+					irc_recv.cpp \
+					pollin.cpp \
+					pollout.cpp
 NETWORK_SRCS	:= $(addprefix $(NETWORK_SRC_DIR), $(NETWORK_SRC))
 
 # Exception Source
@@ -41,14 +43,6 @@ FTIRC_SRC		:= Channel.cpp \
 					FtIrc.cpp \
 					Message.cpp
 FTIRC_SRCS		:= $(addprefix $(FTIRC_SRC_DIR), $(FTIRC_SRC))
-
-# IRC Command Source
-# IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
-# IRC_CMD_SRC		:= ircCommandINVITE.cpp \
-# 					ircCommandKICK.cpp \
-# 					ircCommandTOPIC.cpp \
-# 					ircCommandMODE.cpp
-# IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # STD Source
 STD_SRC_DIR		:= $(SRC_DIR)/std
@@ -71,8 +65,17 @@ STD_SRCS		:= $(CSTD_SRCS) $(CPPSTD_SRCS)
 
 # Utils Source
 UTILS_SRC_DIR	:= $(SRC_DIR)/utils/
-UTILS_SRC		:= log.cpp
+UTILS_SRC		:= logger.cpp \
+					signal_init.cpp
 UTILS_SRCS		:= $(addprefix $(UTILS_SRC_DIR), $(UTILS_SRC))
+
+# IRC Command Source
+# IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
+# IRC_CMD_SRC		:= ircCommandINVITE.cpp \
+# 					ircCommandKICK.cpp \
+# 					ircCommandTOPIC.cpp \
+# 					ircCommandMODE.cpp
+# IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # Main Source
 MAIN_SRC	:= main.cpp

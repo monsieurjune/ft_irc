@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 10:38:51 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:57:35 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 // C Header
 #include <unistd.h>
+
+#include <iostream>
 
 Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL)) {}
 
@@ -117,7 +119,7 @@ void	Client::enqueueReply(std::string const msg)
 std::string	Client::dequeueReply(void)
 {
 	std::string	msg = _replyQueue.front();
-	
+
 	_replyQueue.pop();
 	return (msg);
 }

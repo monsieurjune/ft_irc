@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 05:49:50 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:01:54 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ std::string	Message::assembleRawMessage(void)
 		msg += _params.at(i);
 	}
 
-	// Cut out exceed characters to fix IRC standard
+	// Cut out exceed characters to fix IRC standard (excluding \r\n)
 	if (msg.length() > IRC_MSG_MAXSIZE - 2)
 	{
 		msg.resize(IRC_MSG_MAXSIZE - 2);
