@@ -290,22 +290,6 @@ class FtIrc
 		 */
 		void	ircMessageHandler(Message const & msg, Client * const client);
 
-		/* will delete this later
-		# IRC CMD to do
-		- ircKICK(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircINVITE(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircTOPIC(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircMODE(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircJOIN(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircPRIVMSG(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircPASS(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircNICK(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircUSER(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircCAP(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircPART(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircQUIT(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		- ircPING(FtIrc * const obj, Message const & msg, Client * const client): static t_replyBatch
-		*/
 		/**
 		 * @brief IRC CMD KICK
 		 * 
