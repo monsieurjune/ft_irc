@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/31 23:47:09 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:46:48 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,93 +458,101 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	return (batch);
 }
 
-// WIP
-
-// FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const sender)
-// {
-// 	std::vector<std::string> const &	params = message.getParams();
-// 	std::string const 					target_name = params.at(0);
-// 	Client * const 						target = getClientByNickname(target_name);
+FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const sender)
+{
+	std::vector<std::string> const &	params = message.getParams();
+	std::string const 					target_name = params.at(0);
+	Client * const 						target = getClientByNickname(target_name);
 	
-// 	Message								reply_msg;
-// 	t_reply								reply_sender;
-// 	t_reply								reply_members;
-// 	t_replyBatch						batch;
+	Message								reply_msg;
+	t_reply								reply_sender;
+	t_reply								reply_members;
+	t_replyBatch						batch;
 
-// 	if (!target)
-// 	{
-// 		reply_msg.setCommand(ERR_NOSUCHNICK);
-// 		reply_msg.pushParam(sender->getNickname());
-// 		reply_msg.pushParam(target_name);
-// 		reply_msg.pushParam("No such nickname.");
-// 		reply_sender.second.push(reply_msg);
-// 		batch.push_back(reply_sender);
-// 		return (batch);
-// 	}
+	if (!target)
+	{
+		reply_msg.setCommand(ERR_NOSUCHNICK);
+		reply_msg.pushParam(sender->getNickname());
+		reply_msg.pushParam(target_name);
+		reply_msg.pushParam("No such nickname.");
+		reply_sender.second.push(reply_msg);
+		batch.push_back(reply_sender);
+		return (batch);
+	}
 
-// 	if (!sender->hasMode(MODE_OPERATOR))
-// 	{
-// 		reply_msg.setCommand(ERR_NOPRIVILEGES);
-// 		reply_msg.pushParam(sender->getNickname());
-// 		reply_msg.pushParam("You're not an IRC operator.");
-// 		reply_sender.second.push(reply_msg);
-// 		batch.push_back(reply_sender);
-// 		return (batch);
-// 	}
+	std::string							modestr = params.at(1);
+	char								sign = modestr.at(0);
+	std::map<int, Client*>				clientMap = getClientMapByFd();
+	std::map<int, Client*>::iterator	it_cmap;
+	std::map<int, Client*>::iterator	it_cmap_end;
 
-// 	std::string						modestr = params.at(1);
-// 	char							sign = modestr.at(0);
-// 	Channel::t_userMap 				userMap = get();
-// 	Channel::t_userMap::iterator	it_umap;
-// 	Channel::t_userMap::iterator	it_umap_end;
+	for (std::string::iterator it = modestr.begin() + 1; it != modestr.end(); it++)
+	{
+		if (*it == '-' || *it == '+')
+		{
+			sign = *it;
+			continue ;
+		}
 
-// 	int								mode_arg_idx = 1;
-
-// 	for (std::string::iterator it = modestr.begin() + 1; it != modestr.end(); it++)
-// 	{
-// 		if (*it == '-' || *it == '+')
-// 		{
-// 			sign = *it;
-// 			continue ;
-// 		}
-
-// 		reply_msg.setCommand("MODE");
+		reply_msg.setCommand("MODE");
 		
-// 		it_umap = userMap.begin();
-// 		it_umap_end = userMap.end();
+		it_cmap = clientMap.begin();
+		it_cmap_end = clientMap.end();
 
-// 		switch (*it)
-// 		{
-// 			case (MODE_OPERATOR):
-// 			{
-// 				++mode_arg_idx;
-					
-// 				// No parameter.
-// 				if (params.size() <= mode_arg_idx || params.at(mode_arg_idx).empty())
-// 				{
-// 					reply_msg.setCommand(ERR_INVALIDMODEPARAM);
-// 					reply_msg.pushParam(sender->getNickname());
-// 					reply_msg.pushParam("#" + channel_name);
-// 					reply_msg.pushParam("o");
-// 					reply_msg.pushParam("*");
-// 					reply_msg.pushParam("You must specify a parameter for the op mode.");
-// 					reply_sender.second.push(reply_msg);
-// 					continue ;
-// 				}
+		switch (*it)
+		{
+			case (MODE_OPERATOR):
+			{
+				if (!sender->hasMode(MODE_OPERATOR))
+				{		
+					reply_msg.setCommand(ERR_NOPRIVILEGES);
+					reply_msg.pushParam(sender->getNickname());
+					reply_msg.pushParam("You're not an IRC operator.");
+					reply_sender.second.push(reply_msg);
+					continue ;
+				}
 
-// 			} break ;
+				if (target->hasMode(MODE_OPERATOR) && sign == '-')
+				{
+					target->removeMode(MODE_OPERATOR);
+					reply_msg.pushParam(target_name);
+					reply_msg.pushParam("-o");
+					reply_members.second.push(reply_msg);
+					for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
+					{
+						reply_members.first = it_cmap->second;
+						batch.push_back(reply_members);
+					}
+					continue ;
+				}
 
-// 			default:
-// 			{
-// 				reply_msg.setCommand(ERR_UNKNOWNMODE);
-// 				reply_msg.pushParam(sender->getNickname());
-// 				reply_msg.pushParam(std::string(1, *it));
-// 				reply_msg.pushParam("is not a recognized channel mode character");
-// 				reply_sender.second.push(reply_msg);
-// 			}
-// 		}
-// 	}
+				if (!(target->hasMode(MODE_OPERATOR)) && sign == '+')
+				{
+					target->addMode(MODE_OPERATOR);
+					reply_msg.pushParam(target_name);
+					reply_msg.pushParam("+o");
+					reply_members.second.push(reply_msg);
+					for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
+					{
+						reply_members.first = it_cmap->second;
+						batch.push_back(reply_members);
+					}
+					continue ;
+				}
+
+			} break ;
+
+			default:
+			{
+				reply_msg.setCommand(ERR_UNKNOWNMODE);
+				reply_msg.pushParam(sender->getNickname());
+				reply_msg.pushParam(std::string(1, *it));
+				reply_msg.pushParam("is not a recognized user mode character.");
+				reply_sender.second.push(reply_msg);
+			}
+		}
+	}
 	
-// 	batch.push_back(reply_sender);
-// 	return (batch);
-// }
+	batch.push_back(reply_sender);
+	return (batch);
+}

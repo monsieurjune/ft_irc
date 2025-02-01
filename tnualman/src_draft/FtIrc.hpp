@@ -73,6 +73,8 @@ class FtIrc
 		Client*				getClientByNickname(std::string const name) const;
 		Channel*			getChannelByName(std::string const name) const;
 		std::string const &	getServerPassword(void) const;
+		// Additional getter
+		std::map<int, Client*> const &	getClientMapByFd(void) const;
 
 		// Changers
 		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
