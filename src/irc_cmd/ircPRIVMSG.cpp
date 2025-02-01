@@ -6,7 +6,7 @@
 /*   By: scharuka <scharuka@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:36:40 by scharuka          #+#    #+#             */
-/*   Updated: 2025/02/01 17:53:47 by scharuka         ###   ########.fr       */
+/*   Updated: 2025/02/01 19:27:07 by scharuka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 
+#include <iostream>
+
 FtIrc::t_replyBatch FtIrc::ircPRIVMSG(FtIrc * const obj, Message const & msg, Client * const client)
 {
 	t_replyBatch replies;
-	std::string target = msg.getParams().at(0);
-	std::string message = msg.getParams().at(1);
 	t_reply	reply;
 	Message	reply_msg;
 
-	if (target.empty() || message.empty()) 
+	if (msg.getParams().size() < 1)
 	{
 		reply_msg.setCommand(ERR_NEEDMOREPARAMS);
 		reply_msg.pushParam(client->getNickname());
@@ -34,6 +34,9 @@ FtIrc::t_replyBatch FtIrc::ircPRIVMSG(FtIrc * const obj, Message const & msg, Cl
 		replies.push_back(reply);
 		return replies;
 	}
+
+	std::string target = msg.getParams().at(0);
+	std::string message = msg.getParams().at(1);
 
 	if (target[0] == '#') {
 		Channel *channel = obj->getChannelByName(target);
@@ -58,8 +61,10 @@ FtIrc::t_replyBatch FtIrc::ircPRIVMSG(FtIrc * const obj, Message const & msg, Cl
 			return replies;
 		}
 		// Might need to boardcast the message here?
-		
-	} else {
+		Channel::t_userMap userMap = channel->getUserMap();
+	}
+	else
+	{
 		// Client *targetClient = obj->getClient(target);
 		Client *targetClient = obj->getClientByNickname(target);
 		if (!targetClient) {

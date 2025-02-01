@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FtIrc.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scharuka <scharuka@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 14:49:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 19:28:31 by scharuka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,6 +346,7 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 
 	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
 	{
+		std::cout << cmd << std::endl;
 		if (client->containFlags(PASS_FLAG | NICK_FLAG | USER_FLAG) || client->containFlags(DEBUG_FLAG))
 		{
 			t_IrcCmd		caller	= _normalCmdMap[cmd];
