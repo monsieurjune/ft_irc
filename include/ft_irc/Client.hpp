@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:10 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/02 03:36:38 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ class Client
 		/**
 		 * @brief UserMode for server level operation
 		 * 
-		 * @note I have no clue for this attribute, So You can come up with this one
+		 * @note For the minimum requirement, the only mode to implement is operator ('o').
 		 */
 		std::set<char>	_userMode;
 
