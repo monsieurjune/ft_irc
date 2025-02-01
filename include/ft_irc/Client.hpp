@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 17:17:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:50:34 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ class Client
 		/**
 		 * @brief UserMode for server level operation
 		 * 
-		 * @note I have no clue for this attribute, So You can come up with this one
+		 * @note For the minimum requirement, the only mode to implement is operator ('o').
 		 */
 		std::set<char>	_userMode;
 

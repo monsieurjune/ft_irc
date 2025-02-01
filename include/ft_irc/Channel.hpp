@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/02 03:41:38 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ class Channel
 		 * 
 		 * - 1: client doesn't existed here
 		 * 
-		 * @note Should be used under PART, QUIT and hardcore disconnect
+		 * @note Should be used under PART, QUIT, KICK, and hardcore disconnect
 		 */
 		int	deleteUserFromChannel(Client * const client);
 
