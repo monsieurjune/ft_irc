@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 06:02:41 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:57:01 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ std::string const&	Channel::getPassword(void) const
 std::time_t	Channel::getTimeCreated(void) const
 {
 	return (_timeCreated);
+}
+
+Channel::t_userMap const&	Channel::getUserMap(void) const
+{
+	return (_userMap);
 }
 
 size_t	Channel::getUserCount(void) const
@@ -294,4 +299,19 @@ int	Channel::removeThisClientMembershipMode(Client * const client, std::string s
 		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}
+}
+
+bool	Channel::isClientInvited(Client * const client)
+{
+	return (_inviteSet.find(client->getFd()) != _inviteSet.end());
+}
+
+void	Channel::addClientToInviteSet(Client * const client)
+{
+	_inviteSet.insert(client->getFd());
+}
+
+void	Channel::removeClientToInviteSet(Client * const client)
+{
+	_inviteSet.erase(client->getFd());
 }

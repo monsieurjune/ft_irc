@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 05:19:35 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:54:14 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ class Client;
  */
 class Channel
 {
+	public:
+		typedef std::map<Client*, std::set<char> >	t_userMap;
+
 	private:
 		/**
 		 * @brief Channel's Name
@@ -69,7 +72,7 @@ class Channel
 		 * 
 		 * @note Only insert/erase Client in specific methods
 		 */
-		std::map<Client *, std::set<char> >	_userMap;
+		t_userMap	_userMap;
 
 		/**
 		 * @brief Maximum User in This Channel. Ignore if userlimit mode is unset
@@ -95,6 +98,15 @@ class Channel
 		 * @brief The Nickname of most recent user that set topic
 		 */
 		std::string	_topicSetter;
+
+		/**
+		 * @brief Invite Set that conatain the "session" (fd)
+		 * 
+		 * @warning Erase its member out everytime when This Client is joined
+		 * 
+		 * @note This Field is ignored if invite mode is unset
+		 */
+		std::set<int>	_inviteSet;
 
 	public:
 		/**
@@ -136,6 +148,13 @@ class Channel
 		 * @return Time when this channel is created
 		 */
 		std::time_t	getTimeCreated()	const;
+
+		/**
+		 * @brief Get User map that joined this Channel
+		 * 
+		 * @return Map of Client Pointer and Its Membership Mode as lvalue
+		 */
+		t_userMap const&	getUserMap()	const;
 
 		/**
 		 * @brief Get Amount of Client that joined this Channel
@@ -359,6 +378,31 @@ class Channel
 		 * - -1: This Client isn't existed in This Channel
 		 */
 		int	removeThisClientMembershipMode(Client * const client, std::string const s);
+
+		/**
+		 * @brief Check if This Client is Invited
+		 * 
+		 * @param client Client Pointer 
+		 * 
+		 * @return True if This Client is Invited, False otherwise
+		 * 
+		 * @note Use when invite mode is setted
+		 */
+		bool	isClientInvited(Client * const client);
+
+		/**
+		 * @brief Add Client to Invite Set
+		 * 
+		 * @param client Client Pointer 
+		 */
+		void	addClientToInviteSet(Client * const client);
+
+		/**
+		 * @brief Remove Client from Invite Set
+		 * 
+		 * @param client Client Pointer 
+		 */
+		void	removeClientToInviteSet(Client * const client);
 };
 
 #endif
