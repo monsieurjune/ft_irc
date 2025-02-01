@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:19 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 21:19:16 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/02 04:20:55 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ class Client
 		bool						hasMode(char c) const;
 
 		bool						isInChannel(Channel * const channel);
+
+		std::string	const &			constructSource(void) const;
 
 	// Setters
 		void						setAuthenLevel(int const level);
