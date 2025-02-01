@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:28 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 21:23:35 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/26 22:03:05 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,50 +18,48 @@
 # include <vector>
 # include <map>
 
+# include "e_numerics.hpp"
+
 class Message
 {
 	private:
-		std::string					_raw;
+	// Attributes
 		std::string					_source; // a.k.a. prefix
-		// std::string				_sourceNickname;
-		// std::string				_sourceUsername;
-		// std::string				_sourceHost;
 		std::string					_command;
 		std::vector<std::string>	_params;
 		bool						_isValid;
-
-		Message(void);
 	
 	public:
-		Message(std::string const raw);
-		
+	// De/Constructor
+		Message(void);
+		Message(std::string const msg);
 		~Message(void);
-		
-		// Orthodox Canonical Form fluff :p
-		// Message(Message const & origin);
-		// Message & operator=(Message const & rhs);
 
-		// Returns status value, implemented separately from the constructor for the sake of modularity,
-		// in case we add something to the constructor later.
+	// Copy-assignment
+		Message(Message const & origin);
+		Message & operator=(Message const & rhs); 
+		
+	private:
+	// Parser
 		int	parse(std::string const raw);  
 
-		// Getters
-		std::string 				getRawMessage(void) const;
-		std::string					getSource(void) const;
-		// std::string				getSourceNickname(void) const;
-		// std::string				getSourceUsername(void) const;
-		// std::string				getSourceHost(void) const;
-		std::string					getCommand(void) const;
-		std::vector<std::string>	getParams(void) const;
-		bool						isValid(void) const;
+	public:
+	// Getters
+		std::string	const &					getSource(void) const;
+		std::string	const &					getCommand(void) const;
+		std::vector<std::string> const &	getParams(void) const;
+		bool								isValid(void) const;
+		std::string const &					getMessage(void);
 
-		// Setters
-		void						setSource(std::string src);
-		void						setCommand(std::string cmd);
-		void						setCommand(int cmd);
-		void						resetParams(void);
-		void						pushParam(std::string param);
-		std::string const &			assembleMessage(void);
+	// Setters
+		void								setSource(std::string src);
+		void								setCommand(std::string cmd);
+		void								setCommand(e_numerics cmd);
+		void								resetParams(void);
+		void								setParams(std::vector<std::string> const & params);
+		void								concatParams(std::vector<std::string> const & params);
+		void								pushParam(std::string param);
+	
 };
 
 #endif

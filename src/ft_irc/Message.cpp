@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 22:01:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:01:54 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Message.hpp"
+// Project Header
+#include "ft_irc/Message.hpp"
+#include "std/ft_cppstd.hpp"
 
-std::vector<std::string> split(std::string const & s, std::string const & delimiter) 
+static std::vector<std::string> split(std::string const & s, std::string const & delimiter) 
 {
     std::string tmp = s;
 	std::vector<std::string> tokens;
@@ -29,44 +31,61 @@ std::vector<std::string> split(std::string const & s, std::string const & delimi
     return (tokens);
 }
 
-Message::Message(void) {}
+Message::Message(void): _isValid(true) {}
+
+Message::Message(Message const & origin)
+{
+	*this = origin;
+}
+
+Message& Message::operator=(Message const & rhs)
+{
+	_source = rhs._source;
+	_command = rhs._command;
+	_params = rhs._params;
+	_isValid = rhs._isValid;
+
+	return (*this);
+}
 
 Message::Message(std::string const raw)
 {
-	// _raw = raw;
-	parse(raw);
+	if (parse(raw) == 0)
+	{
+		_isValid = true;
+	}
+	else
+	{
+		_isValid = false;
+	}
 }
 
 Message::~Message(void) {}
 
 int Message::parse(std::string const raw)
 {
-	if (raw.empty()) // Empty message
+	// Empty message
+	if (raw.empty())
 	{
-		_isValid = false;
 		return (1);
 	}
-	// if (_raw.find("\r\n") == std::string::npos) // Message has no \r\n
-	// {
-	// 	_is_valid = false;
-	// 	return (1);
-	// }
-	
-	// _raw = _raw.substr(0, _raw.find("\r\n")); // Discard everything after \r\n
 	
 	std::vector<std::string> raw_splitted = split(raw, " ");
 	
 	bool has_source = (raw.at(0) == ':');
 	int param_idx;	
 	
-	if (has_source) // Message has a source/prefix
+	// Message has a source/prefix
+	if (has_source)
 	{
 		if (raw_splitted.size() == 1)
 		{
-			_isValid = false;
 			return (1);
 		}
-		_source = raw_splitted.at(0).substr(1, std::string::npos); // Trim lreading ':'
+
+		// Trim lreading ':'
+		_source = raw_splitted.at(0).substr(1, std::string::npos);
+
 		// Parse _source here if it needs to be done.
 		_command = raw_splitted.at(1);
 		param_idx = 2;
@@ -80,38 +99,35 @@ int Message::parse(std::string const raw)
 	// Looping over the rest to get params
 	while (param_idx < (int)raw_splitted.size())
 	{
-		if (raw_splitted.at(param_idx).at(0) != ':') // Not yet the trailing param...
+		if (raw_splitted.at(param_idx).at(0) != ':')
 		{
+			// Not yet the trailing param...
 			_params.push_back(raw_splitted.at(param_idx++));
 		}
-		else // IS the trailing param
+		else
 		{
+			// IS the trailing param
 			int temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
 			std::string const temp = raw.substr(temp_pos + 1, std::string::npos);
+			
 			_params.push_back(temp);
 			break ;
 		}
 	}
-	_isValid = true;
 	return (0);
 }
 
-// std::string Message::getRawMessage(void) const
-// {
-// 	return (_raw);
-// }
-
-std::string Message::getSource(void) const
+std::string const & Message::getSource(void) const
 {
 	return (_source);
 }
 
-std::string Message::getCommand(void) const
+std::string const & Message::getCommand(void) const
 {
 	return (_command);
 }
 
-std::vector<std::string> Message::getParams(void) const
+std::vector<std::string> const & Message::getParams(void) const
 {
 	return (_params);
 }
@@ -119,6 +135,43 @@ std::vector<std::string> Message::getParams(void) const
 bool Message::isValid(void) const
 {
 	return (_isValid);
+}
+
+std::string	Message::assembleRawMessage(void)
+{
+	std::string msg;
+
+	// Reserve the memory
+	msg.reserve(IRC_MSG_MAXSIZE);
+
+	if (!_source.empty())
+	{
+		msg += ":" + _source + " ";
+	}
+	
+	msg += _command;
+	
+	for (size_t i = 0; i < _params.size(); i++)
+	{
+		msg += " ";
+		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
+		{
+			msg += ":";
+		}
+		msg += _params.at(i);
+	}
+
+	// Cut out exceed characters to fix IRC standard (excluding \r\n)
+	if (msg.length() > IRC_MSG_MAXSIZE - 2)
+	{
+		msg.resize(IRC_MSG_MAXSIZE - 2);
+	}
+
+	// Add IRC Terminate Bytes at the end
+	msg += IRC_TERMINATE_BYTES;
+
+	_isValid = true;
+	return (msg);
 }
 
 void Message::setSource(std::string src)
@@ -131,47 +184,19 @@ void Message::setCommand(std::string cmd)
 	_command = cmd;
 }
 
-void Message::setCommand(int cmd)
+void Message::setCommand(e_numerics cmd)
 {
-	std::stringstream ss;
+	int	code = static_cast<int>(cmd);
 
-	ss << cmd;
-	_command = ss.str();
+	_command = ft_std::itoa(code);
 }
 
 void Message::resetParams(void)
 {
 	_params.clear();
-	_params.resize(0);
 }
 
 void Message::pushParam(std::string param)
 {
 	_params.push_back(param);
-}
-
-std::string const & Message::assembleMessage(void)
-{
-	std::string raw;
-
-	if (!_source.empty())
-	{
-		raw += ":" + _source + " ";
-	}
-	
-	raw += _command;
-	
-	for (int i = 0; i < _params.size(); i++)
-	{
-		raw += " ";
-		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
-		{
-			raw += ":";
-		}
-		raw += _params.at(i);
-	}
-
-	_isValid = true;
-	// _raw = raw;
-	return (raw);
 }

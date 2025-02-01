@@ -6,18 +6,15 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/19 19:10:42 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:13:41 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-Channel::Channel(std::string const name): _name(name)
-{
-	std::time(&_timeCreated);
-	std::time(&_timeTopicSet);
-	_userCountLimit = -1;
-}
+Channel::Channel(std::string const name, Client * const creator)
+	: _name(name), _timeCreated(time(NULL)), _timeTopicSet(time(NULL)),
+		_userCountLimit(0){}
 
 Channel::~Channel(void) {}
 
@@ -26,9 +23,19 @@ std::string const & Channel::getName(void) const
 	return (_name);
 }
 
+std::string const & Channel::getPassword(void) const
+{
+	return (_password);
+}
+
 time_t Channel::getTimeCreated(void) const
 {
 	return (_timeCreated);
+}
+
+Channel::t_userMap const & Channel::getUserMap(void) const
+{
+	return (_userMap);
 }
 
 int Channel::getUserCount(void) const
@@ -39,11 +46,6 @@ int Channel::getUserCount(void) const
 int Channel::getUserCountLimit(void) const
 {
 	return (_userCountLimit);
-}
-
-bool Channel::hasUser(Client * const client) const
-{
-	return (_userMap.find(client) != _userMap.end());
 }
 
 std::string const & Channel::getTopic(void) const
@@ -66,7 +68,12 @@ std::set<char> const & Channel::getModes(void) const
 	return (_modes);
 }
 
-bool Channel::hasMode(char c) const
+bool Channel::hasThisClient(Client * const client) const
+{
+	return (_userMap.find(client) != _userMap.end());
+}
+
+bool Channel::hasThisMode(char c) const
 {
 	return (_modes.find(c) != _modes.end());
 }
@@ -74,6 +81,11 @@ bool Channel::hasMode(char c) const
 void Channel::setName(std::string const name)
 {
 	_name = name;
+}
+
+void Channel::setPassword(std::string const password)
+{
+	_password = password;
 }
 
 void Channel::setUserCountLimit(int const limit)
@@ -139,7 +151,7 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 		return (1);
 	}
 
-	if (hasMode('l') && getUserCount() >= getUserCountLimit())
+	if (hasThisMode('l') && getUserCount() >= getUserCountLimit())
 	{
 		std::cerr << "Channel's user count limit reached!" << std::endl;
 		return (2);
@@ -154,7 +166,7 @@ int Channel::addUserToChannel(Client * const client, std::string modestr)
 			mode_set.insert(*it);
 		}
 	}
-	_userMap.insert({client, mode_set});
+	_userMap[client] = mode_set;
 	
 	return (0);
 }
@@ -173,7 +185,7 @@ int	Channel::deleteUserFromChannel(Client * const client)
 	return (0);
 }
 
-std::set<char> const & Channel::getMembershipModes(Client * const client) const
+std::set<char> const & Channel::getThisClientMembershipModes(Client * const client) const
 {
 	try
 	{
@@ -183,11 +195,13 @@ std::set<char> const & Channel::getMembershipModes(Client * const client) const
 	{
 		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
 			<< " not found on channel " << _name << " !" << std::endl;
-		return (std::set<char>{'!'});
+		std::set<char> ret;
+		ret.insert('!');
+		return (ret);
 	}	
 }
 
-bool Channel::hasMembershipMode(Client * const client, char const c) const
+bool Channel::hasThisClientMembershipMode(Client * const client, char const c) const
 {
 	try
 	{
@@ -201,7 +215,7 @@ bool Channel::hasMembershipMode(Client * const client, char const c) const
 	}	
 }
 
-int	Channel::addMembershipMode(Client * const client, char const c)
+int	Channel::addThisClientMembershipMode(Client * const client, char const c)
 {
 	try
 	{
@@ -217,23 +231,7 @@ int	Channel::addMembershipMode(Client * const client, char const c)
 	}	
 }
 
-int	Channel::removeMembershipMode(Client * const client, char const c)
-{
-	try
-	{
-		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
-		mode_set.erase(c);
-		return (0);
-	}
-	catch (std::exception const & e)
-	{
-		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-			<< " not found on channel " << _name << " !" << std::endl;
-		return (-1);
-	}	
-}
-
-int	Channel::addMembershipMode(Client * const client, std::string s)
+int	Channel::addThisClientMembershipMode(Client * const client, std::string s)
 {
 	try
 	{
@@ -255,7 +253,23 @@ int	Channel::addMembershipMode(Client * const client, std::string s)
 	}
 }
 
-int	Channel::removeMembershipMode(Client * const client, std::string s)
+int	Channel::removeThisClientMembershipMode(Client * const client, char const c)
+{
+	try
+	{
+		std::set<char> & mode_set = _userMap.at(client); // throws if user is not found
+		mode_set.erase(c);
+		return (0);
+	}
+	catch (std::exception const & e)
+	{
+		std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
+			<< " not found on channel " << _name << " !" << std::endl;
+		return (-1);
+	}	
+}
+
+int	Channel::removeThisClientMembershipMode(Client * const client, std::string s)
 {
 	try
 	{
