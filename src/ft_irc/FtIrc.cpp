@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:58 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 14:49:16 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-FtIrc::FtIrc(std::string const name, std::string const password, int const listen_fd) 
+FtIrc::FtIrc(std::string const password, std::string const servername, int const listen_fd) 
 		: _listen_fd(listen_fd), \
-		_serverName(name), \
+		_serverName(servername), \
 		_serverPassword(password), \
 		_timeServerStarted(std::time(NULL))
 {
