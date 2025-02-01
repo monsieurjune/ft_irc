@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   IrcDisconnectedException.hpp                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/30 10:52:22 by tponutha          #+#    #+#             */
+/*   Updated: 2025/01/30 10:52:22 by tponutha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef __IRC_DISCONNECTED_EXCEPTION_HPP__
 #define __IRC_DISCONNECTED_EXCEPTION_HPP__
 #include <exception>
