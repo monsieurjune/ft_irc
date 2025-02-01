@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 15:46:48 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:04:57 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,7 +482,6 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 
 	std::string							modestr = params.at(1);
 	char								sign = modestr.at(0);
-	std::map<int, Client*>				clientMap = getClientMapByFd();
 	std::map<int, Client*>::iterator	it_cmap;
 	std::map<int, Client*>::iterator	it_cmap_end;
 
@@ -496,8 +495,8 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 
 		reply_msg.setCommand("MODE");
 		
-		it_cmap = clientMap.begin();
-		it_cmap_end = clientMap.end();
+		it_cmap = _clientMapByFd.begin();
+		it_cmap_end = _clientMapByFd.end();
 
 		switch (*it)
 		{
