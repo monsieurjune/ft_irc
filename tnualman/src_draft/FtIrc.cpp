@@ -128,10 +128,10 @@ int FtIrc::changeChannelName(std::string const name, std::string const newname)
 	return (0);
 }
 
-void FtIrc::changeServerPassword(std::string password)
-{
-	_serverPassword = password;
-}
+// void FtIrc::changeServerPassword(std::string password)
+// {
+// 	_serverPassword = password;
+// }
 
 int	FtIrc::addClient(int const fd, std::string const nickname,
 						std::string const username, std::string const host, std::string modestr)
