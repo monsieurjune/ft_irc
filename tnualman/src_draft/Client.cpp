@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 00:23:30 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 19:35:20 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/02 03:40:03 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ bool Client::hasMode(char c) const
 bool Client::isInChannel(Channel * const channel)
 {
 	return(_channels.find(channel) != _channels.end());
+}
+
+std::string	const & Client::constructSource() const
+{
+	return (_nickname + "!" + _username + "@" + _host);
 }
 
 void Client::setAuthenLevel(int const level)
