@@ -97,9 +97,6 @@ class FtIrc
 	private:
 	
 		// IRC Message handler
-		
-		int 				sendRepliesToClient(Client * const sender);
-		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
 		static t_replyBatch	ircKICK(FtIrc * const obj, Message const & message, Client * const sender);
 		static t_replyBatch	ircINVITE(FtIrc * const obj, Message const & message, Client * const sender);
