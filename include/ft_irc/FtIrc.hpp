@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FtIrc.hpp                                         :+:      :+:    :+:   */
+/*   FtIrc.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2024/12/31 20:50:08 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 14:03:33 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@
 class FtIrc
 {
 	public:
-	
 		typedef std::pair<Client *, std::queue<Message> >	t_reply;
 		typedef std::vector<t_reply>						t_replyBatch;
 		typedef t_replyBatch (*t_IrcCmd)(FtIrc * const, Message const &, Client * const);
