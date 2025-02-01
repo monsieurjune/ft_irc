@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:10 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:17:12 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 
 #ifndef DEBUG_MODE
 #define DEBUG_MODE true
+#endif
+
+// Name Length
+#ifndef USERLEN
+#define USERLEN 10
+#endif
+
+#ifndef NICKLEN
+#define NICKLEN 9
 #endif
 
 // Authenication Flag
