@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:23 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 16:04:57 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:29:53 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ std::string	ltoa(long num)
 	return oss.str();
 }
 
-std::string const & set_of_char_to_string(std::set<char> const & set)
+std::string const set_of_char_to_string(std::set<char> const & set)
 {
-	std::string str = "";
+	std::string str = std::string();
 	for (std::set<char>::iterator it = set.begin(); it != set.end(); it++)
 	{
 		str.push_back(*it);
@@ -86,7 +86,6 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	
 	Message								reply_msg;
 	t_reply								reply_sender;
-	t_reply								reply_members;
 	t_replyBatch						batch;
 
 	reply_msg.setSource(_serverName);
@@ -173,7 +172,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	Channel::t_userMap::iterator	it_umap;
 	Channel::t_userMap::iterator	it_umap_end;
 
-	int								mode_arg_idx = 1;
+	unsigned int								mode_arg_idx = 1;
 
 	for (std::string::iterator it = modestr.begin() + 1; it != modestr.end(); it++)
 	{
@@ -197,12 +196,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->removeMode(MODE_INVITEONLY);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("-i");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 				
@@ -211,12 +205,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->addMode(MODE_INVITEONLY);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("+i");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -230,12 +219,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->removeMode(MODE_CHANNELKEY);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("-k");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -260,12 +244,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->setPassword(params.at(2));
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("+k");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 			
@@ -279,12 +258,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->setUserCountLimit(0);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("-l");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -325,12 +299,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("+l");
 					reply_msg.pushParam(limit_arg);
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -385,12 +354,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("-o");
 					reply_msg.pushParam(target_str);
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -400,12 +364,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("+o");
 					reply_msg.pushParam(target_str);
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -418,13 +377,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->removeMode(MODE_PROTECTTOPIC);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("-t");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
-					continue ;
+					pushChannelReplyAll(reply_msg, channel, batch);
 				}
 				
 				if (!(channel->hasThisMode(MODE_PROTECTTOPIC)) && sign == '+')
@@ -432,12 +385,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					channel->addMode(MODE_PROTECTTOPIC);
 					reply_msg.pushParam("#" + channel_name);
 					reply_msg.pushParam("+t");
-					reply_members.second.push(reply_msg);
-					for (it_umap; it_umap != it_umap_end; it_umap++)
-					{
-						reply_members.first = it_umap->first;
-						batch.push_back(reply_members);
-					}
+					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
 				}
 
@@ -466,7 +414,6 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 	
 	Message								reply_msg;
 	t_reply								reply_sender;
-	t_reply								reply_members;
 	t_replyBatch						batch;
 
 	if (!target)
@@ -516,12 +463,7 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 					target->removeMode(MODE_OPERATOR);
 					reply_msg.pushParam(target_name);
 					reply_msg.pushParam("-o");
-					reply_members.second.push(reply_msg);
-					for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
-					{
-						reply_members.first = it_cmap->second;
-						batch.push_back(reply_members);
-					}
+					pushServerReplyAll(reply_msg, batch);
 					continue ;
 				}
 
@@ -530,12 +472,7 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 					target->addMode(MODE_OPERATOR);
 					reply_msg.pushParam(target_name);
 					reply_msg.pushParam("+o");
-					reply_members.second.push(reply_msg);
-					for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
-					{
-						reply_members.first = it_cmap->second;
-						batch.push_back(reply_members);
-					}
+					pushServerReplyAll(reply_msg, batch);
 					continue ;
 				}
 
