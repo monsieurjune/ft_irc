@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:37:51 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/31 17:44:40 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:35:44 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ static inline void	sb_replace_nul(char* buff, ssize_t recv_len)
 	// Put proper NUL at the end of buffer
 	buff[recv_len] = '\0';
 }
-
-#include <iostream>
 
 namespace ft_net
 {

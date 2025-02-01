@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 07:07:37 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:35:39 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 // C Header
 #include <unistd.h>
 
-#include <iostream>
-
 Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL))
 {
 	_authenLevel = 0;
@@ -27,8 +25,6 @@ Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL))
 	{
 		_authenLevel = DEBUG_FLAG;
 	}
-
-	std::cout << _authenLevel << " + " << DEBUG_MODE << std::endl;
 }
 
 Client::~Client()
