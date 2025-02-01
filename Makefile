@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/02/01 14:05:00 by tponutha         ###   ########.fr        #
+#    Updated: 2025/02/01 16:29:09 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,15 @@ IRC_CMD_SRC		:= ircCAP.cpp \
 					ircUSER.cpp
 IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
+# IRC Reply Source
+IRC_RPL_SRC_DIR	:= $(SRC_DIR)/irc_response/
+IRC_RPL_SRC		:= errAlreadyRegistered.cpp \
+					errInputTooLong.cpp \
+					errNeedMoreParams.cpp \
+					errNotRegistered.cpp \
+					errUnknownCmd.cpp
+IRC_RPL_SRCS	:= $(addprefix $(IRC_RPL_SRC_DIR), $(IRC_RPL_SRC))
+
 # FtIRC Source
 FTIRC_SRC_DIR	:= $(SRC_DIR)/ft_irc/
 FTIRC_SRC		:= Channel.cpp \
@@ -111,7 +120,8 @@ SRCS	:= $(MAIN_SRCS) \
 			$(STD_SRCS) \
 			$(NETWORK_SRCS) \
 			$(UTILS_SRCS) \
-			$(IRC_CMD_SRCS)
+			$(IRC_CMD_SRCS) \
+			$(IRC_RPL_SRCS)
 OBJS	:= $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEPS	:= $(OBJS:.o=.d)
 
