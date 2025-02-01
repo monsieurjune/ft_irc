@@ -75,10 +75,9 @@ class FtIrc
 		std::string const &	getServerPassword(void) const;
 
 		// Changers
-		// int	changeFd(int const fd, int const newfd); // Probably NOT! :p
 		int					changeNickname(std::string const name, std::string const newname);
 		int					changeChannelName(std::string const name, std::string const newname);
-		void				changeServerPassword(std::string password);
+		// void				changeServerPassword(std::string password);
 
 		// Adders
 		int					addClient(int const fd, std::string const nickname,
@@ -98,9 +97,6 @@ class FtIrc
 	private:
 	
 		// IRC Message handler
-		
-		int 				sendRepliesToClient(Client * const sender);
-		int					addReplyMessage(int const code, Client * const sender, std::string const & details);
 
 		static t_replyBatch	ircKICK(FtIrc * const obj, Message const & message, Client * const sender);
 		static t_replyBatch	ircINVITE(FtIrc * const obj, Message const & message, Client * const sender);
@@ -111,9 +107,12 @@ class FtIrc
 		t_replyBatch		ircMODE_user(Message const & message, Client * const sender);
 
 		// Common replies
-		
+
 		t_replyBatch		err_NeedMoreParams(Message const & message, Client * const sender);
 		t_replyBatch		rpl_Topic_WhoTime(Message const & message, Client * const sender, Channel * const channel);
+
+		void 				pushChannelReplyAll(Message const & reply_msg, Channel * const channel, t_replyBatch & batch);
+		void 				pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch);
 };
 
 #endif

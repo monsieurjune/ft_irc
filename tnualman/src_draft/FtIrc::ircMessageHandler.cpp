@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 19:53:55 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 20:09:10 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:10:47 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,35 @@ FtIrc::t_replyBatch FtIrc::rpl_Topic_WhoTime(Message const & message, Client * c
 	batch.push_back(reply);
 	
 	return (batch);
+}
+
+void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch)
+{
+	Channel::t_userMap				userMap = channel->getUserMap();
+	Channel::t_userMap::iterator	it_umap = userMap.begin();
+	Channel::t_userMap::iterator	it_umap_end = userMap.end();
+	t_reply							reply;
+
+	reply.second.push(reply_msg);
+
+	for (it_umap; it_umap != it_umap_end; it_umap++)
+	{
+		reply.first = it_umap->first;
+		batch.push_back(reply);
+	}
+}
+
+void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch)
+{
+	std::map<int, Client*>::iterator	it_cmap = _clientMapByFd.begin();
+	std::map<int, Client*>::iterator	it_cmap_end = _clientMapByFd.end();
+	t_reply								reply;
+
+	reply.second.push(reply_msg);
+
+	for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
+	{
+		reply.first = it_cmap->second;
+		batch.push_back(reply);
+	}
 }

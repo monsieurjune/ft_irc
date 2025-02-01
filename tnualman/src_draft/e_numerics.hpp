@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 23:06:33 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/05 23:08:07 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:18:58 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ enum e_numerics
     ERR_SASLTOOLONG = 905,
     ERR_SASLABORTED = 906,
     ERR_SASLALREADY = 907,
-    RPL_SASLMECHS = 908,
+    RPL_SASLMECHS = 908
 };
 
 #endif
