@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/30 05:50:17 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 05:41:35 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 
 #ifndef IRC_TERMINATE_BYTES
 #define IRC_TERMINATE_BYTES "\r\n"
+#endif
+
+#ifndef IRC_EMPTY_STRING
+#define IRC_EMPTY_STRING "*"
 #endif
 
 enum e_numerics

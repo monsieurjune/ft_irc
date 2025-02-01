@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/31 20:25:23 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 07:07:37 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL))
 
 	if (DEBUG_MODE)
 	{
-		_authenLevel &= DEBUG_FLAG;
+		_authenLevel = DEBUG_FLAG;
 	}
+
+	std::cout << _authenLevel << " + " << DEBUG_MODE << std::endl;
 }
 
 Client::~Client()
@@ -79,9 +81,16 @@ bool	Client::hasMode(char c) const
 	return (_userMode.find(c) != _userMode.end());
 }
 
+bool	Client::containFlags(int flags)	const
+{
+	int	ret	= _authenLevel & flags;
+
+	return (ret == flags);
+}
+
 std::string	Client::constructSource()
 {
-	return _nickname + "!" + _username + "@" + _host;
+	return (_nickname + "!" + _username + "@" + _host);
 }
 
 void	Client::setAuthenLevel(int const level)

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 03:29:11 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 06:02:41 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ Channel::~Channel()
 {
 	// Super edge case, which shouldn't happend in the first place
 	// i.e. Channel is destroyed while still has users
-	if (_userMap.size() == 0)
+	if (_userMap.size() > 0)
 	{
 		// TODO: might handle later
 	}

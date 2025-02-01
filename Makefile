@@ -7,7 +7,7 @@ MKDIR	:= mkdir -p
 
 # Complier Propeties
 CXX			:= c++
-CXX_WFLAG	:= -Wall -Wextra -std=c++98
+CXX_WFLAG	:= -Wall -Wextra -std=c++98 -g
 CXX_MFLAG	:= -MP -MD
 CXX_OFLAG	:= -O0
 CXXFLAG		:= $(CXX_WFLAG) $(CXX_MFLAG) $(CXX_OFLAG)
@@ -35,6 +35,24 @@ EXCEPT_SRC		:= CstdException.cpp \
 					IrcTooLongMsgException.cpp \
 					IrcContinueException.cpp
 EXCEPT_SRCS		:= $(addprefix $(EXCEPT_SRC_DIR), $(EXCEPT_SRC))
+
+# IRC Command Source
+IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
+IRC_CMD_SRC		:= ircCAP.cpp \
+					ircINVITE.cpp \
+					ircJOIN.cpp \
+					ircKICK.cpp \
+					ircMODE.cpp \
+					ircNICK.cpp \
+					ircPART.cpp \
+					ircPASS.cpp \
+					ircPING.cpp \
+					ircPONG.cpp \
+					ircPRIVMSG.cpp \
+					ircQUIT.cpp \
+					ircTOPIC.cpp \
+					ircUSER.cpp
+IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # FtIRC Source
 FTIRC_SRC_DIR	:= $(SRC_DIR)/ft_irc/
@@ -69,14 +87,6 @@ UTILS_SRC		:= logger.cpp \
 					signal_init.cpp
 UTILS_SRCS		:= $(addprefix $(UTILS_SRC_DIR), $(UTILS_SRC))
 
-# IRC Command Source
-# IRC_CMD_SRC_DIR	:= $(SRC_DIR)/irc_cmd/
-# IRC_CMD_SRC		:= ircCommandINVITE.cpp \
-# 					ircCommandKICK.cpp \
-# 					ircCommandTOPIC.cpp \
-# 					ircCommandMODE.cpp
-# IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
-
 # Main Source
 MAIN_SRC	:= main.cpp
 MAIN_DIR	:= $(SRC_DIR)/
@@ -89,7 +99,7 @@ SRCS	:= $(MAIN_SRCS) \
 			$(STD_SRCS) \
 			$(NETWORK_SRCS) \
 			$(UTILS_SRCS) \
-			# $(IRC_CMD_SRCS)
+			$(IRC_CMD_SRCS)
 OBJS	:= $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEPS	:= $(OBJS:.o=.d)
 

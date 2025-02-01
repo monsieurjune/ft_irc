@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:55 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/31 18:12:00 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 07:34:49 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,18 @@ static inline void	sb_read_msg_from_client(FtIrc *main_obj, int fd)
 	Message	msg(raw_msg);
 	Client	*client = main_obj->getClientByFd(fd);
 
+	// Client is not exist (shouldn't happen)
 	if (client == NULL)
 	{
 		return;
 	}
 
-	std::cout << raw_msg << std::endl;
+	if (!msg.isValid())
+	{
+		return;
+	}
+
+	main_obj->ircMessageHandler(msg, client);
 }
 
 namespace ft_net

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/01/31 20:22:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 07:06:22 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 // Debug Mode
 
 #ifndef DEBUG_MODE
-#define DEBUG_MODE 1
+#define DEBUG_MODE true
 #endif
 
 // Authenication Flag
@@ -83,7 +83,7 @@ class Client
 		/**
 		 * @brief Authenicate Level of IRC Client
 		 * 
-		 * Value that store authenicate levelaccording to IRC Protocol
+		 * Value that store authenicate level according to IRC Protocol
 		 * and use bitwise flag to define behaviour
 		 * 
 		 * Multiple flags can be combined using the bitwise OR (`|`) operator.
@@ -98,7 +98,9 @@ class Client
 		 * 
 		 * - 0x08 (LOGIN FALG): Verify that this Client is passed all authenication
 		 * 
-		 * - 0x0F (DEBUG FLAG): Use for overide authenication for debugging purpose
+		 * - 0x10 (CAP FLAG): Use for Checking if Client sent CAP LS
+		 * 
+		 * - 0x80 (DEBUG FLAG): Use for overide authenication for debugging purpose
 		 * 
 		 * @note This Attribute can be ignored if DEBUG flag is setted
 		 */
@@ -230,6 +232,27 @@ class Client
 		std::set<char> const&	getModes()	const;
 
 		/**
+		 * @brief Check Flags combination of This Client
+		 * 
+		 * Multiple flags can be combined using the bitwise OR (`|`) operator.
+		 * 
+		 * Possible values are:
+		 * 
+		 * - 0x01 (PASS FLAG): Verify Password Authenication
+		 * 
+		 * - 0x02 (USER FLAG): Verify Username Authenication
+		 * 
+		 * - 0x04 (NICK FLAG): Verify Nickname Authenication
+		 * 
+		 * - 0x08 (LOGIN FALG): Verify that this Client is passed all authenication
+		 * 
+		 * - 0x10 (CAP FLAG): Use for Checking if Client sent CAP LS
+		 * 
+		 * - 0x80 (DEBUG FLAG): Use for overide authenication for debugging purpose
+		 */
+		bool	containFlags(int flags)	const;
+
+		/**
 		 * @brief Check if This Client contain certain mode
 		 * 
 		 * @return True if contain this mode, false otherwise
@@ -258,7 +281,9 @@ class Client
 		 * 
 		 * - 0x08 (LOGIN FALG): Verify that this Client is passed all authenication
 		 * 
-		 * - 0x0F (DEBUG FLAG): Use for overide authenication for debugging purpose
+		 * - 0x10 (CAP FLAG): Use for Checking if Client sent CAP LS
+		 * 
+		 * - 0x80 (DEBUG FLAG): Use for overide authenication for debugging purpose
 		 * 
 		 * @param level Authenication Level
 		 * 

@@ -444,6 +444,16 @@ class FtIrc
 		 */
 		static t_replyBatch ircPING(FtIrc * const obj, Message const & msg, Client * const client);
 
+		/**
+		 * @brief IRC CMD PING
+		 * 
+		 * @param obj FtIrc Object
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
+		 */
+		static t_replyBatch ircPONG(FtIrc * const obj, Message const & msg, Client * const client);
 };
 
 #endif

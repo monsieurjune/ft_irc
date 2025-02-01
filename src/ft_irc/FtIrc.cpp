@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/31 20:46:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 07:45:33 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ FtIrc::FtIrc(std::string const name, std::string const password, int const liste
 	_noPassCmdMap["PASS"] = ircPASS;
 	_noPassCmdMap["CAP"] = ircCAP;
 	_noPassCmdMap["PING"] = ircPING;
+	_noPassCmdMap["PONG"] = ircPONG;
 	_noPassCmdMap["QUIT"] = ircQUIT;
 
 	// AUTHEN CMD
@@ -319,24 +320,46 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 {
 	std::string const&	cmd	= msg.getCommand();
 
-	// if (_noPassCmdMap.find(cmd) != _noPassCmdMap.end())
-	// {
-	// 	t_IrcCmd		caller	= _noPassCmdMap[cmd];
-	// 	t_replyBatch	batch	= caller(msg, client);
-
-	// 	applyReplyBatchToClient(batch);
-	// }
-
-	// if (_authenCmdMap.find(cmd) != _authenCmdMap.end())
-	// {
-	// 	if (client->getAuthenLevel() & PASS_FLAG || client->getAuthenLevel() & DEBUG_FLAG)
-	// }
-
-	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
+	if (_noPassCmdMap.find(cmd) != _noPassCmdMap.end())
 	{
 		t_IrcCmd		caller	= _noPassCmdMap[cmd];
 		t_replyBatch	batch	= caller(this, msg, client);
 
 		applyReplyBatchToClient(batch);
+		return;
 	}
+
+	if (_authenCmdMap.find(cmd) != _authenCmdMap.end())
+	{
+		if (client->containFlags(PASS_FLAG) || client->containFlags(DEBUG_FLAG))
+		{
+			t_IrcCmd		caller	= _authenCmdMap[cmd];
+			t_replyBatch	batch	= caller(this, msg, client);
+
+			applyReplyBatchToClient(batch);
+			return;
+		}
+
+		//  TODO: Return Not Registered
+		return;
+	}
+
+	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
+	{
+		if (client->containFlags(PASS_FLAG | NICK_FLAG | USER_FLAG) || client->containFlags(DEBUG_FLAG))
+		{
+			t_IrcCmd		caller	= _normalCmdMap[cmd];
+			t_replyBatch	batch	= caller(this, msg, client);
+
+			applyReplyBatchToClient(batch);
+			return;
+		}
+
+		//  TODO: Return Not Registered
+		return;
+	}
+
+	// TODO: Return Unknow Command
 }
+
+
