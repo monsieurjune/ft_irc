@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/30 16:22:15 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:16:19 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,8 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	reply_msg.setCommand("TOPIC");
 	reply_msg.pushParam("#" + channel_name);
 	reply_msg.pushParam(channel->getTopic());
-	reply.second.push(reply_msg);
 	
-	Channel::t_userMap userMap = channel->getUserMap();
-	for (Channel::t_userMap::iterator it = userMap.begin(); it != userMap.end(); it++)
-	{
-		reply.first = it->first;
-		batch.push_back(reply);
-	}
+	obj->pushChannelReplyAll(reply_msg, channel, batch);
 
 	return (batch);
 }
