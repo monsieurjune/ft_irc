@@ -1,3 +1,0 @@
-Since the InspIRCd uses lowerCamelCase for both attributes and methods of classes,
-I decided to follow suit, and use snake_case for those that are not class members
-(mostly for those that are in C-style conventions, and those used within functions).
