@@ -102,6 +102,7 @@ class FtIrc
 		static t_replyBatch	ircINVITE(FtIrc * const obj, Message const & message, Client * const sender);
 		static t_replyBatch	ircMODE(FtIrc * const obj, Message const & message, Client * const sender);
 		static t_replyBatch	ircTOPIC(FtIrc * const obj, Message const & message, Client * const sender);
+		static t_replyBatch	ircJOIN(FtIrc * const obj, Message const & message, Client * const sender);
 
 		t_replyBatch		ircMODE_channel(Message const & message, Client * const sender);
 		t_replyBatch		ircMODE_user(Message const & message, Client * const sender);
