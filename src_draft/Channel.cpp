@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:40:40 by tnualman          #+#    #+#             */
-/*   Updated: 2025/01/28 20:13:41 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/03 18:08:01 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,4 +289,19 @@ int	Channel::removeThisClientMembershipMode(Client * const client, std::string s
 			<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}
+}
+
+bool	Channel::isClientInvited(Client * const client)
+{
+	return (_inviteSet.find(client->getFd()) != _inviteSet.end());
+}
+
+void	Channel::addClientToInviteSet(Client * const client)
+{
+	_inviteSet.insert(client->getFd());
+}
+
+void	Channel::removeClientToInviteSet(Client * const client)
+{
+	_inviteSet.erase(client->getFd());
 }
