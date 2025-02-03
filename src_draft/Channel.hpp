@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:07:49 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 21:18:58 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/03 18:09:32 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,24 @@ class Channel
 	public:
 
 		typedef std::map<Client*, std::set<char> >	t_userMap;
-	
+
 	private:
 	// Attributes
-		std::string 	_name;
-		std::string		_password;
-		
-		std::time_t const 	_timeCreated;
+		std::string 		_name;
+		std::string			_password;
 
-		t_userMap		_userMap;
-		size_t			_userCountLimit;
+		std::time_t const	_timeCreated;
 
-		std::set<char> 	_modes;
-		
-		std::string		_topic;
-		time_t			_timeTopicSet;
-		std::string 	_topicSetter;
+		t_userMap			_userMap;
+		size_t				_userCountLimit;
+
+		std::set<char> 		_modes;
+
+		std::string			_topic;
+		time_t				_timeTopicSet;
+		std::string 		_topicSetter;
+
+		std::set<int>		_inviteSet;
 
 	public:
 	// De/Constructor
@@ -89,6 +91,12 @@ class Channel
 		int						addThisClientMembershipMode(Client * const client, std::string s); // Returns -1 is user is not found.
 		int						removeThisClientMembershipMode(Client * const client, char const c); // Returns -1 is user is not found.
 		int						removeThisClientMembershipMode(Client * const client, std::string s); // Returns -1 is user is not found.
+
+	// Invitation
+
+		bool					isClientInvited(Client * const client);
+		void					addClientToInviteSet(Client * const client);
+		void					removeClientToInviteSet(Client * const client);
 
 };
 
