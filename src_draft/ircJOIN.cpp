@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/03 18:13:00 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:04:48 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		return (obj->err_NeedMoreParams(message, sender));
 	}
 	
+	// Special case: leaving all channels. (WIP)
+	if (params.at(0) == "0")
+	{
+		return ;
+	}
+
 	reply_sender.first = sender;
 
 	std::vector<std::string>	channel_name_vec = split(params.at(0), ",");
@@ -127,7 +133,10 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		}
 
 		// General/valid joining case here.
-
+		{
+			channel->addUserToChannel(sender, "");
+			// Replies to sender
+		}
 	}
 
 	batch.push_back(reply_sender);
