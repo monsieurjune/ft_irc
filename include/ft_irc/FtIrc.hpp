@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:33 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:34:07 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,16 @@ class FtIrc
 		 * @return vector of main pollfd as lvalue
 		 */
 		std::vector<struct pollfd>&	getPollFdVector();
+
+		/**
+		 * @brief Set Client's Nickname
+		 * 
+		 * @param old_nick Old Client's Nickname
+		 * @param new_nick New Client's Nickname
+		 * 
+		 * @note It will ignored, if new_nick is already existed or old_nick isn't existed
+		 */
+		void	changeClientNickName(std::string const& old_nick, std::string const& new_nick);
 
 		/**
 		 * @brief Clean up the "disconnected" pollfd from vector
