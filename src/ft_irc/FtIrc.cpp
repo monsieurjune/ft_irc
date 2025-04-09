@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 14:49:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:33:12 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,30 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 		// std::cerr << "Channel named " << name << " not found!" << std::endl;
 		return (NULL);
 	}	
+}
+
+void	FtIrc::changeClientNickName(std::string const& old_nick, std::string const& new_nick)
+{
+	std::map<std::string, Client*>::iterator	it1 = _clientMapByNickname.find(new_nick);
+	std::map<std::string, Client*>::iterator	it2 = _clientMapByNickname.find(old_nick);
+
+	// true, if new_nick is already existed
+	if (it1 != _clientMapByNickname.end())
+	{
+		return;
+	}
+
+	// true, if old_nick isn't existed
+	if (it2 == _clientMapByNickname.end())
+	{
+		return;
+	}
+
+	Client*	ptr = it2->second;
+
+	ptr->setNickname(new_nick);
+	_clientMapByNickname.erase(it2);
+	_clientMapByNickname[new_nick] = ptr;
 }
 
 void	FtIrc::cleanUnusedPollFd()
