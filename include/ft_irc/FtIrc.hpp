@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/09 12:34:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:31:52 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,36 @@ class FtIrc
 		 * @param batch Group of Reply Message
 		 */
 		void	applyReplyBatchToClient(t_replyBatch& batch);
+
+		/**
+		 * 
+		 */
+		void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch);
+		
+		/**
+		 * 
+		 */
+		void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
+		
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_channel(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_user(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch		err_NeedMoreParams(Message const & message, Client * const sender);
+		
+		/**
+		 * 
+		 */
+		t_replyBatch		rpl_TopicWhoTime(Message const & message, Client * const sender, Channel * const channel);
 
 	public:
 		/**

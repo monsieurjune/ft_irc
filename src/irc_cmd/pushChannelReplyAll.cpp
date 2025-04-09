@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errNeedMoreParams.cpp                              :+:      :+:    :+:   */
+/*   pushChannelReplyAll.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/01 05:44:56 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:19:31 by tponutha         ###   ########.fr       */
+/*   Created: 2025/04/09 16:26:41 by tponutha          #+#    #+#             */
+/*   Updated: 2025/04/09 16:27:02 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch FtIrc::err_NeedMoreParams(Message const & message, Client * const sender)
+void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch)
 {
-	Message			reply_msg;
-	t_reply			reply;
-	t_replyBatch	batch;
-	
-	reply_msg.setSource(_serverName);
-	reply_msg.setCommand(ERR_NEEDMOREPARAMS);
-	reply_msg.pushParam(sender->getNickname());
-	reply_msg.pushParam(message.getCommand());
-	reply_msg.pushParam("Not enough parameters");
-	reply.first = sender;
+	Channel::t_userMap				userMap = channel->getUserMap();
+	Channel::t_userMap::iterator	it_umap = userMap.begin();
+	Channel::t_userMap::iterator	it_umap_end = userMap.end();
+	t_reply							reply;
+
 	reply.second.push(reply_msg);
-	batch.push_back(reply);
-	
-	return (batch);
+
+	for (it_umap; it_umap != it_umap_end; it_umap++)
+	{
+		reply.first = it_umap->first;
+		batch.push_back(reply);
+	}
 }

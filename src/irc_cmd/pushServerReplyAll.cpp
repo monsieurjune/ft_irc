@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errNeedMoreParams.cpp                              :+:      :+:    :+:   */
+/*   pushServerReplyAll.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/01 05:44:56 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:19:31 by tponutha         ###   ########.fr       */
+/*   Created: 2025/04/09 16:30:11 by tponutha          #+#    #+#             */
+/*   Updated: 2025/04/09 16:31:11 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch FtIrc::err_NeedMoreParams(Message const & message, Client * const sender)
+void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch)
 {
-	Message			reply_msg;
-	t_reply			reply;
-	t_replyBatch	batch;
-	
-	reply_msg.setSource(_serverName);
-	reply_msg.setCommand(ERR_NEEDMOREPARAMS);
-	reply_msg.pushParam(sender->getNickname());
-	reply_msg.pushParam(message.getCommand());
-	reply_msg.pushParam("Not enough parameters");
-	reply.first = sender;
+	std::map<int, Client*>::iterator	it_cmap = _clientMapByFd.begin();
+	std::map<int, Client*>::iterator	it_cmap_end = _clientMapByFd.end();
+	t_reply								reply;
+
 	reply.second.push(reply_msg);
-	batch.push_back(reply);
-	
-	return (batch);
+
+	for (it_cmap; it_cmap != it_cmap_end; it_cmap++)
+	{
+		reply.first = it_cmap->second;
+		batch.push_back(reply);
+	}
 }

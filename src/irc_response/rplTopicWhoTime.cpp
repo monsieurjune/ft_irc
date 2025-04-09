@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errNeedMoreParams.cpp                              :+:      :+:    :+:   */
+/*   rplTopicWhoTime.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/01 05:44:56 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:19:31 by tponutha         ###   ########.fr       */
+/*   Created: 2025/04/09 16:22:07 by tponutha          #+#    #+#             */
+/*   Updated: 2025/04/09 16:24:52 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,25 @@
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch FtIrc::err_NeedMoreParams(Message const & message, Client * const sender)
+FtIrc::t_replyBatch FtIrc::rpl_TopicWhoTime(Message const & message, Client * const client, Channel * const channel)
 {
 	Message			reply_msg;
 	t_reply			reply;
 	t_replyBatch	batch;
 	
 	reply_msg.setSource(_serverName);
-	reply_msg.setCommand(ERR_NEEDMOREPARAMS);
-	reply_msg.pushParam(sender->getNickname());
-	reply_msg.pushParam(message.getCommand());
-	reply_msg.pushParam("Not enough parameters");
-	reply.first = sender;
+	reply_msg.setCommand(RPL_TOPIC);
+	reply_msg.pushParam(client->getNickname());
+	reply_msg.pushParam(channel->getName());
+	reply_msg.pushParam(channel->getTopic());
+	reply.first = client;
+	reply.second.push(reply_msg);
+	reply_msg.resetParams();
+	reply_msg.setCommand(RPL_TOPICWHOTIME);
+	reply_msg.pushParam(client->getNickname());
+	reply_msg.pushParam(channel->getName());
+	reply_msg.pushParam(channel->getTopicSetter());
+	reply_msg.pushParam(ft_std::itoa(channel->getTimeTopicSet()));
 	reply.second.push(reply_msg);
 	batch.push_back(reply);
 	
