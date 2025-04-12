@@ -1,0 +1,21 @@
+Unwrite:
+- INVITE
+- PART
+- QUIT
+- USER
+
+Incomplete:
+- NICK
+- JOIN
+
+Complete but Untest:
+- TOPIC
+- KICK
+- MODE
+
+Complete and Tested:
+- PING
+
+Complete and Omitted:
+- PONG
+- CAP
