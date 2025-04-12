@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:58 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 06:00:35 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,9 @@
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-static std::vector<std::string> split(std::string const & s, std::string const & delimiter) 
-{
-    std::string tmp = s;
-	std::vector<std::string> tokens;
-    size_t pos = 0;
-    std::string token;
-    while ((pos = tmp.find(delimiter)) != std::string::npos)
-	{
-        token = tmp.substr(0, pos);
-        tokens.push_back(token);
-        tmp.erase(0, pos + delimiter.length());
-    }
-    tokens.push_back(tmp);
+// orthodox
 
-    return (tokens);
-}
-
-Message::Message(void): _isValid(true) {}
+Message::Message(void): _isValid(true), _hasTrailing(false) {}
 
 Message::Message(Message const & origin)
 {
@@ -50,6 +35,8 @@ Message& Message::operator=(Message const & rhs)
 
 Message::Message(std::string const raw)
 {
+	_hasTrailing = false;
+
 	if (parse(raw) == 0)
 	{
 		_isValid = true;
@@ -62,6 +49,8 @@ Message::Message(std::string const raw)
 
 Message::~Message(void) {}
 
+// parse
+
 int Message::parse(std::string const raw)
 {
 	// Empty message
@@ -69,12 +58,12 @@ int Message::parse(std::string const raw)
 	{
 		return (1);
 	}
-	
-	std::vector<std::string> raw_splitted = split(raw, " ");
-	
-	bool has_source = (raw.at(0) == ':');
-	int param_idx;	
-	
+
+	std::vector<std::string> raw_splitted = ft_std::split(raw, " ");
+
+	bool	has_source = (raw.at(0) == ':');
+	size_t	param_idx;	
+
 	// Message has a source/prefix
 	if (has_source)
 	{
@@ -97,7 +86,7 @@ int Message::parse(std::string const raw)
 	}
 
 	// Looping over the rest to get params
-	while (param_idx < (int)raw_splitted.size())
+	while (param_idx < raw_splitted.size())
 	{
 		if (raw_splitted.at(param_idx).at(0) != ':')
 		{
@@ -107,35 +96,45 @@ int Message::parse(std::string const raw)
 		else
 		{
 			// IS the trailing param
-			int temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
-			std::string const temp = raw.substr(temp_pos + 1, std::string::npos);
-			
+			size_t				temp_pos = has_source ? raw.find(':', 1) : raw.find(':');
+			std::string const	temp = raw.substr(temp_pos + 1, std::string::npos);
+
 			_params.push_back(temp);
+			_hasTrailing = true;
 			break ;
 		}
 	}
 	return (0);
 }
 
-std::string const & Message::getSource(void) const
+// getter
+
+std::string const&	Message::getSource(void) const
 {
 	return (_source);
 }
 
-std::string const & Message::getCommand(void) const
+std::string const&	Message::getCommand(void) const
 {
 	return (_command);
 }
 
-std::vector<std::string> const & Message::getParams(void) const
+std::vector<std::string> const&	Message::getParams(void) const
 {
 	return (_params);
 }
 
-bool Message::isValid(void) const
+bool	Message::isValid(void) const
 {
 	return (_isValid);
 }
+
+bool	Message::hasTrailing(void) const
+{
+	return (_hasTrailing);
+}
+
+// assembler
 
 std::string	Message::assembleRawMessage(void)
 {
@@ -156,6 +155,7 @@ std::string	Message::assembleRawMessage(void)
 		msg += " ";
 		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
 		{
+			_hasTrailing = true;
 			msg += ":";
 		}
 		msg += _params.at(i);
@@ -173,6 +173,8 @@ std::string	Message::assembleRawMessage(void)
 	_isValid = true;
 	return (msg);
 }
+
+// setter
 
 void Message::setSource(std::string src)
 {

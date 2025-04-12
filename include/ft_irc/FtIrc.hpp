@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/09 12:34:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 06:02:03 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,12 +183,12 @@ class FtIrc
 		/**
 		 * 
 		 */
-		void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch);
+		void	pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch);
 		
 		/**
 		 * 
 		 */
-		void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
+		void	pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
 		
 		/**
 		 * 
