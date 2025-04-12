@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/02/01 18:18:33 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/12 12:55:08 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,17 +130,17 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	{
 		if (tmpclient == client)
 		{
-			return FtIrc::t_replyBatch();
+			return FtIrc::t_replyBatch(); // IRC won't response and let client to "handle"
 		}
 		return sb_ERR_NICKNAMEINUSE(obj, client, new_nick);
 	}
 
 	// Set Nickname To Client
-	client->setNickname(new_nick);
+	obj->changeClientNickName(old_nick, new_nick);
 
-	// TODO: fix client_map after there is method
+	// Retrieve 
 
-	return FtIrc::t_replyBatch();
+	return FtIrc::t_replyBatch(); // TODO: fix this line later
 }
 
 static FtIrc::t_replyBatch	sb_non_authen(FtIrc * const obj, Message const & msg, Client * const client)
@@ -154,11 +154,10 @@ static FtIrc::t_replyBatch	sb_non_authen(FtIrc * const obj, Message const & msg,
 	}
 
 	// Set Nickname To Client
+	// TODO: change to ftirc's method
 	client->setNickname(new_nick);
 
-	client->setAuthenLevel(
-		client->getAuthenLevel() | USER_FLAG
-	);
+	client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
 
 	// TODO: fix client_map after there is method
 
