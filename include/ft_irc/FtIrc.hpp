@@ -180,6 +180,36 @@ class FtIrc
 		 */
 		void	applyReplyBatchToClient(t_replyBatch& batch);
 
+		/**
+		 * 
+		 */
+		void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch);
+		
+		/**
+		 * 
+		 */
+		void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
+		
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_channel(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_user(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch		err_NeedMoreParams(Message const & message, Client * const sender);
+		
+		/**
+		 * 
+		 */
+		t_replyBatch		rpl_TopicWhoTime(Message const & message, Client * const sender, Channel * const channel);
+
 	public:
 		/**
 		 * @brief Construct an FtIrc Object
