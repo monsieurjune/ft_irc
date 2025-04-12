@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:09 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:25:58 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,9 @@
 
 FtIrc::t_replyBatch	FtIrc::ircPONG(FtIrc * const obj, Message const & msg, Client * const client)
 {
-	
+	(void)obj;
+	(void)msg;
+	(void)client;
+
+	return FtIrc::t_replyBatch();
 }
