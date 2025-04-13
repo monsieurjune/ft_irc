@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:44:52 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 22:00:43 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:27:21 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,8 @@ FtIrc::t_replyBatch	FtIrc::errAlreadyRegistered(Client * const client)
 	// Creating MSG
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_ALREADYREGISTERED);
-	if (client->getNickname().empty())
-	{
-		reply_msg.pushParam("*");
-	}
-	else
-	{
-		reply_msg.pushParam(client->getNickname());
-	}
+	nicknameMessageHelper(reply_msg, client);
 	reply_msg.pushParam("You may not reregister");
 
-	// Put it in proper struct
-	std::queue<Message>	queue;
-
-	queue.push(reply_msg);
-
-	FtIrc::t_reply		reply(client, queue);
-	FtIrc::t_replyBatch	batch(1, reply);
-
-	return batch;
+	return singleReplyBatchHelper(reply_msg, client);
 }

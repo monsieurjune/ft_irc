@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:22:07 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 21:37:22 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:31:22 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ FtIrc::t_replyBatch FtIrc::rplTopicWhoTime(Client * const client, Channel * cons
 
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(RPL_TOPIC);
-	reply_msg.pushParam(client->getNickname());
+	nicknameMessageHelper(reply_msg, client);
 	reply_msg.pushParam(channel->getName());
 	reply_msg.pushParam(channel->getTopic());
 	reply.first = client;
