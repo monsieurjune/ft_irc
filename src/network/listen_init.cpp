@@ -6,17 +6,20 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:36 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:29 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:13:06 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "network/network.hpp"
 #include "std/ft_cstd.hpp"
 #include "std/ft_cppstd.hpp"
 
+// C Header (fd)
 #include <unistd.h>
 #include <fcntl.h>
 
+// C Header (Network)
 #include <sys/types.h>
 #include <sys/errno.h>
 #include <sys/socket.h>

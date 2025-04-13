@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:22:07 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:24:52 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:37:22 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch FtIrc::rpl_TopicWhoTime(Message const & message, Client * const client, Channel * const channel)
+FtIrc::t_replyBatch FtIrc::rplTopicWhoTime(Client * const client, Channel * const channel)
 {
 	Message			reply_msg;
 	t_reply			reply;
 	t_replyBatch	batch;
-	
+
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(RPL_TOPIC);
 	reply_msg.pushParam(client->getNickname());
@@ -38,6 +38,6 @@ FtIrc::t_replyBatch FtIrc::rpl_TopicWhoTime(Message const & message, Client * co
 	reply_msg.pushParam(ft_std::itoa(channel->getTimeTopicSet()));
 	reply.second.push(reply_msg);
 	batch.push_back(reply);
-	
+
 	return (batch);
 }

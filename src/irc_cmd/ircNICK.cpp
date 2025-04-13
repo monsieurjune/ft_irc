@@ -6,15 +6,15 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/13 09:40:13 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:15:16 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
-#include "ft_irc/ircReply.hpp"
 
 static bool	sb_is_nickname_valid(std::string const& nick)
 {
@@ -25,7 +25,7 @@ static bool	sb_is_nickname_valid(std::string const& nick)
 
 	for (size_t i = 0; i < nick.size(); i++)
 	{
-		if (nick[i] == '#' || nick[i] == ':')
+		if (nick[i] == '#' || nick[i] == ':' || nick[i] == '*')
 		{
 			return false;
 		}

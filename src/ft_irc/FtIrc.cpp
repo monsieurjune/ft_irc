@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 09:40:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 22:15:39 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,9 +285,7 @@ void	FtIrc::addClient(int const fd, const char *ip)
 		// Set pollfd value
 		new_pollfd.fd = fd;
 		new_pollfd.events = POLLIN | POLLOUT;
-
 		_mainPollfdVec.push_back(new_pollfd);
-		
 		_clientMapByFd[fd] = ptr;
 	}
 	catch (std::bad_alloc const& e)

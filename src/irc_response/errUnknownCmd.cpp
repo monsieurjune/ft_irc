@@ -6,18 +6,23 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:45:02 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 16:48:21 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:55:56 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc/ircReply.hpp"
+// Project Header
+#include "ft_irc/FtIrc.hpp"
+#include "ft_irc/Client.hpp"
+#include "ft_irc/Channel.hpp"
+#include "ft_irc/Message.hpp"
+#include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch	errUnknowCmd(FtIrc * const obj, Client * const client, std::string const& cmd)
+FtIrc::t_replyBatch	FtIrc::errUnknownCmd(Client * const client, std::string const& cmd)
 {
 	Message	reply_msg;
 
 	// Creating MSG
-	reply_msg.setSource(obj->getServerName());
+	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_UNKNOWNCOMMAND);
 	if (client->getNickname().empty())
 	{

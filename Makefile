@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/02/01 16:29:09 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/13 22:30:27 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,8 @@ IRC_CMD_SRC		:= ircCAP.cpp \
 					ircJOIN.cpp \
 					ircKICK.cpp \
 					ircMODE.cpp \
+					ircMODE_user.cpp \
+					ircMODE_channel.cpp \
 					ircNICK.cpp \
 					ircPART.cpp \
 					ircPASS.cpp \
@@ -63,7 +65,9 @@ IRC_CMD_SRC		:= ircCAP.cpp \
 					ircPRIVMSG.cpp \
 					ircQUIT.cpp \
 					ircTOPIC.cpp \
-					ircUSER.cpp
+					ircUSER.cpp \
+					pushChannelReplyAll.cpp \
+					pushServerReplyAll.cpp
 IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # IRC Reply Source
@@ -72,7 +76,11 @@ IRC_RPL_SRC		:= errAlreadyRegistered.cpp \
 					errInputTooLong.cpp \
 					errNeedMoreParams.cpp \
 					errNotRegistered.cpp \
-					errUnknownCmd.cpp
+					errUnknownCmd.cpp \
+					rplNameReply.cpp \
+					rplTopicWhoTime.cpp \
+					rplWelcome.cpp \
+					rplWhoReply.cpp
 IRC_RPL_SRCS	:= $(addprefix $(IRC_RPL_SRC_DIR), $(IRC_RPL_SRC))
 
 # FtIRC Source
@@ -97,7 +105,8 @@ CSTD_SRCS		:= $(addprefix $(CSTD_SRC_DIR), $(CSTD_SRC))
 #  CPPSTD Source
 CPPSTD_SRC_DIR	:= $(STD_SRC_DIR)/cpp/
 CPPSTD_SRC		:= stoi.cpp \
-					itoa.cpp
+					itoa.cpp \
+					split.cpp
 CPPSTD_SRCS		:= $(addprefix $(CPPSTD_SRC_DIR), $(CPPSTD_SRC))
 
 STD_SRCS		:= $(CSTD_SRCS) $(CPPSTD_SRCS)

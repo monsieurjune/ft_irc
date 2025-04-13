@@ -6,13 +6,16 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:42:52 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:43:59 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 22:29:36 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "std/ft_cppstd.hpp"
 
-std::vector<std::string> split(std::string const & s, std::string const & delimiter) 
+namespace ft_std
+{
+
+std::vector<std::string> split(std::string const & s, std::string const & delimiter)
 {
     std::string tmp = s;
 	std::vector<std::string> tokens;
@@ -26,4 +29,6 @@ std::vector<std::string> split(std::string const & s, std::string const & delimi
     }
     tokens.push_back(tmp);
     return (tokens);
+}
+
 }

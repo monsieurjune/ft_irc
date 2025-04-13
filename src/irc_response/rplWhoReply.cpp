@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pushServerReplyAll.cpp                             :+:      :+:    :+:   */
+/*   rplWhoReply.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 16:30:11 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 23:14:46 by tponutha         ###   ########.fr       */
+/*   Created: 2025/04/13 09:35:05 by tponutha          #+#    #+#             */
+/*   Updated: 2025/04/13 21:41:29 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,9 @@
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
-void FtIrc::pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch)
+FtIrc::t_replyBatch FtIrc::rplWhoReply(Channel * const channel)
 {
-	std::map<int, Client*>::iterator	it_cmap;
-	std::map<int, Client*>::iterator	it_cmap_end = _clientMapByFd.end();
-	t_reply								reply;
+    (void)channel;
 
-	reply.second.push(reply_msg);
-
-	for (it_cmap = _clientMapByFd.begin(); it_cmap != it_cmap_end; it_cmap++)
-	{
-		reply.first = it_cmap->second;
-		batch.push_back(reply);
-	}
+    return t_replyBatch();
 }

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:37:51 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:30 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 22:17:46 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static inline void	sb_replace_nul(char* buff, ssize_t recv_len)
 		{
 			continue;
 		}
-		
+
 		// Avoid creating irc's terminate (\r\n)
 		if (buff[i + 1] == '\r' || buff[i + 1] == '\n')
 		{
@@ -99,7 +99,8 @@ std::string	irc_recv(int fd)
 		// Check if buff's length is at least 512 bytes or not
 		if (recv_len >= IRC_MSG_MAXSIZE)
 		{
-			sb_recv(fd, buff, IRC_MSG_MAXSIZE, 0); // Discard socket's message
+			// Discard socket's message
+			sb_recv(fd, buff, IRC_MSG_MAXSIZE, 0);
 			throw IrcTooLongMsgException("Message might be too long, Discarded");
 		}
 
@@ -127,7 +128,7 @@ std::string	irc_recv(int fd)
 
 	// There is no invaid message here now, so remove msg from socket's buffer
 	sb_recv(fd, buff, ret_msg.length() + sizeof(IRC_TERMINATE_BYTES) - 1, 0);
-	
+
 	return ret_msg;
 }
 

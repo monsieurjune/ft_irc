@@ -6,23 +6,16 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/09 17:03:42 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:14:16 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
-
-// std::string	ltoa(long num)
-// {
-// 	std::ostringstream oss;
-
-// 	oss << num;
-// 	return oss.str();
-// }
 
 FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, Client * const sender)
 {
@@ -35,7 +28,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	
 	if (param_count < 1)
 	{
-		return (obj->err_NeedMoreParams(message, sender));
+		return (obj->errNeedMoreParams(sender, message));
 	}
 
 	std::string	channel_name = message.getParams().at(0);
@@ -68,7 +61,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 		}
 		else
 		{
-			return (obj->rpl_TopicWhoTime(message, sender, channel));
+			return (obj->rplTopicWhoTime(sender, channel));
 		}
 	}
 
@@ -103,7 +96,6 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	reply_msg.setCommand("TOPIC");
 	reply_msg.pushParam("#" + channel_name);
 	reply_msg.pushParam(channel->getTopic());
-	
 	obj->pushChannelReplyAll(reply_msg, channel, batch);
 
 	return (batch);

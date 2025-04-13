@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 09:40:08 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 22:10:37 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -507,12 +507,47 @@ class FtIrc
 		/**
 		 * 
 		 */
-		t_replyBatch		errNeedMoreParams(Message const & message, Client * const sender);
-		
+		t_replyBatch	errNeedMoreParams(Client * const client, Message const & message);
+
 		/**
 		 * 
 		 */
-		t_replyBatch		rplTopicWhoTime(Message const & message, Client * const sender, Channel * const channel);
+		t_replyBatch	errUnknownCmd(Client * const client, std::string const& cmd);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	errAlreadyRegistered(Client * const client);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	errNotRegistered(Client * const client);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	errInputTooLong(Client * const client);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	rplTopicWhoTime(Client * const sender, Channel * const channel);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	rplNameReply(Channel * const channel);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	rplWelcome(Client * const client);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	rplWhoReply(Channel * const channel);
 };
 
 #endif

@@ -6,10 +6,11 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:58 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:14:57 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"

@@ -6,10 +6,11 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:26:41 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 16:27:02 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:14:37 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
@@ -19,13 +20,13 @@
 void FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch)
 {
 	Channel::t_userMap				userMap = channel->getUserMap();
-	Channel::t_userMap::iterator	it_umap = userMap.begin();
+	Channel::t_userMap::iterator	it_umap;
 	Channel::t_userMap::iterator	it_umap_end = userMap.end();
 	t_reply							reply;
 
 	reply.second.push(reply_msg);
 
-	for (it_umap; it_umap != it_umap_end; it_umap++)
+	for (it_umap = userMap.begin(); it_umap != it_umap_end; it_umap++)
 	{
 		reply.first = it_umap->first;
 		batch.push_back(reply);

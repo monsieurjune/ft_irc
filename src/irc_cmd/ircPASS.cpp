@@ -6,15 +6,15 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/02/01 16:53:02 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:15:06 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project Header
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
-#include "ft_irc/ircReply.hpp"
 
 static FtIrc::t_replyBatch	sb_ERR_PASSWDMISMATCH(FtIrc * const obj, Client * const client)
 {
@@ -51,13 +51,13 @@ FtIrc::t_replyBatch	FtIrc::ircPASS(FtIrc * const obj, Message const & msg, Clien
 	// Invalid size of Params
 	if (params.size() != 1)
 	{
-		return errNeedMoreParams(obj, client, msg.getCommand());
+		return obj->errNeedMoreParams(client, msg);
 	}
 
 	// Already Provide PASS
 	if (client->containFlags(PASS_FLAG))
 	{
-		return errAlreadyRegistered(obj, client);
+		return obj->errAlreadyRegistered(client);
 	}
 
 	if (params.at(0) != obj->getServerPassword())

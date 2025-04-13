@@ -6,18 +6,23 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:44:59 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 16:38:09 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:56:59 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc/ircReply.hpp"
+// Project Header
+#include "ft_irc/FtIrc.hpp"
+#include "ft_irc/Client.hpp"
+#include "ft_irc/Channel.hpp"
+#include "ft_irc/Message.hpp"
+#include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch	errNotRegistered(FtIrc * const obj, Client * const client)
+FtIrc::t_replyBatch	FtIrc::errNotRegistered(Client * const client)
 {
 	Message	reply_msg;
 
 	// Creating MSG
-	reply_msg.setSource(obj->getServerName());
+	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_NOTREGISTERED);
 	if (client->getNickname().empty())
 	{
