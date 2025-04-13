@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 06:02:03 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 09:40:08 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,26 +189,6 @@ class FtIrc
 		 * 
 		 */
 		void	pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
-		
-		/**
-		 * 
-		 */
-		t_replyBatch	ircMODE_channel(Message const & message, Client * const sender);
-
-		/**
-		 * 
-		 */
-		t_replyBatch	ircMODE_user(Message const & message, Client * const sender);
-
-		/**
-		 * 
-		 */
-		t_replyBatch		err_NeedMoreParams(Message const & message, Client * const sender);
-		
-		/**
-		 * 
-		 */
-		t_replyBatch		rpl_TopicWhoTime(Message const & message, Client * const sender, Channel * const channel);
 
 	public:
 		/**
@@ -298,6 +278,15 @@ class FtIrc
 		std::vector<struct pollfd>&	getPollFdVector();
 
 		/**
+		 * @brief Create the set of Channel that this client is joining
+		 * 
+		 * @param client Client Pointer
+		 * 
+		 * @return Set of Channel Pointer
+		 */
+		std::set<Channel*>	getChannelSetByClient(Client * const client);
+
+		/**
 		 * @brief Set Client's Nickname
 		 * 
 		 * @param old_nick Old Client's Nickname
@@ -305,7 +294,17 @@ class FtIrc
 		 * 
 		 * @note It will ignored, if new_nick is already existed or old_nick isn't existed
 		 */
-		void	changeClientNickName(std::string const& old_nick, std::string const& new_nick);
+		void	changeClientNickname(std::string const& old_nick, std::string const& new_nick);
+
+		/**
+		 * @brief Set Client Object to Map with its Nickname
+		 * 
+		 * @param client Client Pointer
+		 * @param nick Client's Nickname
+		 * 
+		 * @warning Only Use for register new client that provided nickname in authenication
+		 */
+		void	setClientNickname(Client * const client, std::string const& nick);
 
 		/**
 		 * @brief Clean up the "disconnected" pollfd from vector
@@ -340,6 +339,7 @@ class FtIrc
 		 */
 		void	ircMessageHandler(Message const & msg, Client * const client);
 
+	private:
 		/**
 		 * @brief IRC CMD KICK
 		 * 
@@ -493,6 +493,26 @@ class FtIrc
 		 * @return Vector of reply Message Objects of associate clients
 		 */
 		static t_replyBatch ircPONG(FtIrc * const obj, Message const & msg, Client * const client);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_channel(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch	ircMODE_user(Message const & message, Client * const sender);
+
+		/**
+		 * 
+		 */
+		t_replyBatch		errNeedMoreParams(Message const & message, Client * const sender);
+		
+		/**
+		 * 
+		 */
+		t_replyBatch		rplTopicWhoTime(Message const & message, Client * const sender, Channel * const channel);
 };
 
 #endif

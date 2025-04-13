@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/12 12:55:08 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 09:40:13 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,10 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	}
 
 	// Set Nickname To Client
-	obj->changeClientNickName(old_nick, new_nick);
+	obj->changeClientNickname(old_nick, new_nick);
 
-	// Retrieve 
+	// Retrieve
+	// TODO: beware of mid change nickname while authen too
 
 	return FtIrc::t_replyBatch(); // TODO: fix this line later
 }
@@ -154,12 +155,13 @@ static FtIrc::t_replyBatch	sb_non_authen(FtIrc * const obj, Message const & msg,
 	}
 
 	// Set Nickname To Client
-	// TODO: change to ftirc's method
-	client->setNickname(new_nick);
-
+	obj->setClientNickname(client, new_nick);
 	client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
 
-	// TODO: fix client_map after there is method
+	if (client->containFlags(USER_FLAG | PASS_FLAG | NICK_FLAG))
+	{
+		// TODO: Handle the greeting
+	}
 
 	return FtIrc::t_replyBatch();
 }
@@ -175,12 +177,14 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 
 	std::string const&	new_nick	= params.at(0);
 
-	// TODO: notify when msg can get trailing
-	// if (params.size() == 1 && msg.)
+	if (params.size() == 1 && msg.hasTrailing())
+	{
+		return sb_ERRONEUSNICKNAME(obj, client, "*");
+	}
 
 	if (!sb_is_nickname_valid(new_nick))
 	{
-		return sb_ERRONEUSNICKNAME(obj, client, new_nick);
+		return sb_ERRONEUSNICKNAME(obj, client, "*");
 	}
 
 	if (client->containFlags(NICK_FLAG))

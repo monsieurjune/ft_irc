@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/09 12:33:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 09:40:16 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,28 +136,58 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 	}	
 }
 
-void	FtIrc::changeClientNickName(std::string const& old_nick, std::string const& new_nick)
+std::set<Channel*>	FtIrc::getChannelSetByClient(Client * const client)
 {
-	std::map<std::string, Client*>::iterator	it1 = _clientMapByNickname.find(new_nick);
-	std::map<std::string, Client*>::iterator	it2 = _clientMapByNickname.find(old_nick);
+	std::set<Channel*>							channelSet;
+	std::map<std::string, Channel*>::iterator	it;
+
+	for (it = _channelMapByName.begin(); it != _channelMapByName.end(); it++)
+	{
+		if (it->second->hasThisClient(client))
+		{
+			channelSet.insert(it->second);
+		}
+	}
+
+	return channelSet;
+}
+
+void	FtIrc::changeClientNickname(std::string const& old_nick, std::string const& new_nick)
+{
+	std::map<std::string, Client*>::iterator	it_new = _clientMapByNickname.find(new_nick);
+	std::map<std::string, Client*>::iterator	it_old = _clientMapByNickname.find(old_nick);
 
 	// true, if new_nick is already existed
-	if (it1 != _clientMapByNickname.end())
+	if (it_new != _clientMapByNickname.end())
 	{
 		return;
 	}
 
 	// true, if old_nick isn't existed
-	if (it2 == _clientMapByNickname.end())
+	if (it_old == _clientMapByNickname.end())
 	{
 		return;
 	}
 
-	Client*	ptr = it2->second;
+	Client*	ptr = it_old->second;
 
 	ptr->setNickname(new_nick);
-	_clientMapByNickname.erase(it2);
+	_clientMapByNickname.erase(it_old);
 	_clientMapByNickname[new_nick] = ptr;
+}
+
+void	FtIrc::setClientNickname(Client * const client, std::string const& nick)
+{
+	std::map<std::string, Client*>::iterator	it1 = _clientMapByNickname.find(nick);
+
+	// true, if nick is already existed
+	if (it1 != _clientMapByNickname.end())
+	{
+		return;
+	}
+
+	client->setNickname(nick);
+	_clientMapByNickname[nick] = client;
 }
 
 void	FtIrc::cleanUnusedPollFd()
