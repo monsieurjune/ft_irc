@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/04/13 22:30:27 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/14 04:07:03 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,9 +65,7 @@ IRC_CMD_SRC		:= ircCAP.cpp \
 					ircPRIVMSG.cpp \
 					ircQUIT.cpp \
 					ircTOPIC.cpp \
-					ircUSER.cpp \
-					pushChannelReplyAll.cpp \
-					pushServerReplyAll.cpp
+					ircUSER.cpp
 IRC_CMD_SRCS	:= $(addprefix $(IRC_CMD_SRC_DIR), $(IRC_CMD_SRC))
 
 # IRC Reply Source
@@ -87,8 +85,9 @@ IRC_RPL_SRCS	:= $(addprefix $(IRC_RPL_SRC_DIR), $(IRC_RPL_SRC))
 FTIRC_SRC_DIR	:= $(SRC_DIR)/ft_irc/
 FTIRC_SRC		:= Channel.cpp \
 					Client.cpp \
+					Message.cpp \
 					FtIrc.cpp \
-					Message.cpp
+					FtIrcHelper.cpp
 FTIRC_SRCS		:= $(addprefix $(FTIRC_SRC_DIR), $(FTIRC_SRC))
 
 # STD Source

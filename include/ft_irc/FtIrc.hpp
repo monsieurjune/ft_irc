@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 22:10:37 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:59:54 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@
 #include <map>
 #include <set>
 #include <string>
-
-// Marked fd
-#ifndef MARKED_REMOVE_FD
-#define MARKED_REMOVE_FD -1
-#endif
 
 /**
  * @class FtIrc
@@ -126,69 +121,6 @@ class FtIrc
 		 * before use them (literally majority of cmd)
 		 */
 		std::map<std::string, t_IrcCmd>	_normalCmdMap;
-
-		/**
-		 * @brief Create Channel
-		 * 
-		 * This method is where Channel allocation and storage management occrued
-		 * 
-		 * @param channel_name New Channel Name
-		 * @param creator Client that request for creating CHannel
-		 * 
-		 * @warning This method should not work with unvalidate data, despite it has validation
-		 * @note Should be called under JOIN
-		 * 
-		 * @return Integer that indicate success
-		 * 
-		 * - 0: success
-		 * 
-		 * - 1: already has this channel
-		 * 
-		 * - -1: allocation failed
-		 */
-		int	createChannel(std::string const channel_name, Client * const creator);
-
-		/**
-		 * @brief Unjoin certain Client from Channel
-		 * 
-		 * There are 2 possible outcome for Channel:
-		 * 
-		 * - member_after_removed > 0: Nothing Happend for Channel
-		 * 
-		 * - member_after_removed = 0: Channel is deleted
-		 * 
-		 * @param channel_name Channel Name that certain client want to unjoin
-		 * @param client Client that want to unjoin
-		 * 
-		 * @warning This method should not work with unvalidate data, despite it has validation
-		 * @note Should be called under PART, KICK, QUIT and unexpected quit case
-		 * 
-		 * @return Integer that indicate success
-		 * 
-		 * - 0: success
-		 * 
-		 * - 1: channel doesn't exist
-		 * 
-		 * - 2: client doesn't exist in this channel
-		 */
-		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
-
-		/**
-		 * @brief Transform and Put Message to Client's Storage
-		 * 
-		 * @param batch Group of Reply Message
-		 */
-		void	applyReplyBatchToClient(t_replyBatch& batch);
-
-		/**
-		 * 
-		 */
-		void	pushChannelReplyAll(Message const & reply_msg, Channel * const channel, FtIrc::t_replyBatch & batch);
-		
-		/**
-		 * 
-		 */
-		void	pushServerReplyAll(Message const & reply_msg, FtIrc::t_replyBatch & batch);
 
 	public:
 		/**
@@ -340,6 +272,102 @@ class FtIrc
 		void	ircMessageHandler(Message const & msg, Client * const client);
 
 	private:
+		/**
+		 * @brief Create Channel
+		 * 
+		 * This method is where Channel allocation and storage management occrued
+		 * 
+		 * @param channel_name New Channel Name
+		 * @param creator Client that request for creating CHannel
+		 * 
+		 * @warning This method should not work with unvalidate data, despite it has validation
+		 * @note Should be called under JOIN
+		 * 
+		 * @return Integer that indicate success
+		 * 
+		 * - 0: success
+		 * 
+		 * - 1: already has this channel
+		 * 
+		 * - -1: allocation failed
+		 */
+		int	createChannel(std::string const channel_name, Client * const creator);
+
+		/**
+		 * @brief Unjoin certain Client from Channel
+		 * 
+		 * There are 2 possible outcome for Channel:
+		 * 
+		 * - member_after_removed > 0: Nothing Happend for Channel
+		 * 
+		 * - member_after_removed = 0: Channel is deleted
+		 * 
+		 * @param channel_name Channel Name that certain client want to unjoin
+		 * @param client Client that want to unjoin
+		 * 
+		 * @warning This method should not work with unvalidate data, despite it has validation
+		 * @note Should be called under PART, KICK, QUIT and unexpected quit case
+		 * 
+		 * @return Integer that indicate success
+		 * 
+		 * - 0: success
+		 * 
+		 * - 1: channel doesn't exist
+		 * 
+		 * - 2: client doesn't exist in this channel
+		 */
+		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
+
+		/**
+		 * @brief Transform and Put Message to Client's Storage
+		 * 
+		 * @param batch Group of Reply Message
+		 */
+		void	applyReplyBatchToClient(t_replyBatch& batch);
+
+		/**
+		 * @brief Push Message in Reply Batch for all Clients in this Channel
+		 * 
+		 * @param reply_msg Message that want to send
+		 * @param channel Target Channel that want to broadcast
+		 * @param batch Reply Batch Data Structure
+		 * 
+		 * @warning Don't use this method in scenario that client joined multiple channels
+		 */
+		void	pushChannelReplyAll(Message const & reply_msg, Channel * const channel, t_replyBatch & batch);
+
+		/**
+		 * @brief Push Message in Reply Batch for all Clients in server
+		 * 
+		 * @param reply_msg Message that want to send
+		 * @param batch Reply Batch Data Structure
+		 */
+		void	pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch);
+
+		/**
+		 * @brief Push Nickname to Message's param with empty nickname handle
+		 * 
+		 * - <nickname> != '': Put <nickname>
+		 * 
+		 * - <nickname> == '': Put *
+		 * 
+		 * @param reply_msg Message
+		 * @param client Client
+		 * 
+		 * @warning Should be used to put Nickname at first param of Message
+		 */
+		void	nicknameMessageHelper(Message & reply_msg, Client * const client);
+
+		/**
+		 * @brief Construct Reply Batch for reply back to Sender
+		 * 
+		 * @param reply_msg Setted Message
+		 * @param client Sender
+		 * 
+		 * @return Reply Batch for response back to sender
+		 */
+		t_replyBatch	singleReplyBatchHelper(Message const & reply_msg, Client * const client);
+
 		/**
 		 * @brief IRC CMD KICK
 		 * 

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 23:15:53 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:33:18 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,9 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		}
 
 		// General/valid joining case here.
+		// TODO: do you forget to put if statement or something?
 		{
-			channel->addUserToChannel(sender, "");
-			// Replies to sender
+			channel->addUserToChannel(sender, ""); // Replies to sender
 		}
 	}
 	batch.push_back(reply_sender);

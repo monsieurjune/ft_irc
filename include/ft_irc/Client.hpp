@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/09 12:51:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:08:51 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,6 @@
 #include <string>
 #include <set>
 #include <queue>
-
-// Debug Mode
-
-#ifndef DEBUG_MODE
-#define DEBUG_MODE true
-#endif
-
-// Name Length
-#ifndef USERLEN
-#define USERLEN 10
-#endif
-
-#ifndef NICKLEN
-#define NICKLEN 9
-#endif
 
 // Authenication Flag
 

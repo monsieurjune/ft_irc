@@ -6,12 +6,16 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:09:00 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __FT_IRC_CONSTANTS_HPP__
 #define __FT_IRC_CONSTANTS_HPP__
+
+#ifndef DEBUG_MODE
+#define DEBUG_MODE true
+#endif
 
 #ifndef IRC_MSG_MAXSIZE
 #define IRC_MSG_MAXSIZE 512
@@ -23,6 +27,18 @@
 
 #ifndef IRC_EMPTY_STRING
 #define IRC_EMPTY_STRING "*"
+#endif
+
+#ifndef MARKED_REMOVE_FD
+#define MARKED_REMOVE_FD -1
+#endif
+
+#ifndef USERLEN
+#define USERLEN 10
+#endif
+
+#ifndef NICKLEN
+#define NICKLEN 9
 #endif
 
 enum e_numerics
