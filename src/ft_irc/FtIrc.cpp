@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 22:15:39 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/13 23:49:01 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,6 @@ int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
 	
 	if (_channelMapByName.find(channel_name) != _channelMapByName.end())
 	{
-		// TODO: Handle this
 		return (1);
 	}
 
@@ -237,7 +236,6 @@ int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * cons
 
 	if (_channelMapByName.find(channel_name) == _channelMapByName.end())
 	{
-		// TODO: Handle this
 		return (1);
 	}
 
@@ -337,7 +335,7 @@ void	FtIrc::deleteClient(int const fd)
 	_clientMapByNickname.erase(nick);
 	_clientMapByFd.erase(fd);
 
-	// Remove fd from pollfd vector
+	// Remove fd from pollfd vector by mark it with MARKED_REMOVE_FD
 	for (std::vector<struct pollfd>::iterator it = _mainPollfdVec.begin(); it != _mainPollfdVec.end(); it++)
 	{
 		if (it->fd == fd)
@@ -392,7 +390,10 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 			return;
 		}
 
-		//  TODO: Return Not Registered
+		// Return Not Registered
+		t_replyBatch	batch = errNotRegistered(client);
+
+		applyReplyBatchToClient(batch);
 		return;
 	}
 
@@ -407,11 +408,17 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 			return;
 		}
 
-		//  TODO: Return Not Registered
+		// Return Not Registered
+		t_replyBatch	batch = errNotRegistered(client);
+
+		applyReplyBatchToClient(batch);
 		return;
 	}
 
-	// TODO: Return Unknow Command
+	// Return Unknow Command
+	t_replyBatch	batch = errUnknownCmd(client, cmd);
+
+	applyReplyBatchToClient(batch);
 }
 
 
