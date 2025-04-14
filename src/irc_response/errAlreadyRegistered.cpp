@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:44:52 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:27:21 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:15:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
-#include "std/ft_cppstd.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 
 FtIrc::t_replyBatch	FtIrc::errAlreadyRegistered(Client * const client)
 {
@@ -27,5 +27,5 @@ FtIrc::t_replyBatch	FtIrc::errAlreadyRegistered(Client * const client)
 	nicknameMessageHelper(reply_msg, client);
 	reply_msg.pushParam("You may not reregister");
 
-	return singleReplyBatchHelper(reply_msg, client);
+	return singleReplySingleClientBatch(reply_msg, client);
 }

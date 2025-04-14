@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 23:49:01 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:45:26 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ Channel* FtIrc::getChannelByName(std::string const name) const
 	}	
 }
 
-std::set<Channel*>	FtIrc::getChannelSetByClient(Client * const client)
+std::set<Channel*>	FtIrc::getChannelSetByClient(Client * const client) const
 {
-	std::set<Channel*>							channelSet;
-	std::map<std::string, Channel*>::iterator	it;
+	std::set<Channel*>								channelSet;
+	std::map<std::string, Channel*>::const_iterator	it;
 
 	for (it = _channelMapByName.begin(); it != _channelMapByName.end(); it++)
 	{
@@ -150,6 +150,35 @@ std::set<Channel*>	FtIrc::getChannelSetByClient(Client * const client)
 	}
 
 	return channelSet;
+}
+
+std::set<Client*>	FtIrc::getClientSetByChannel(Channel * const channel) const
+{
+	std::set<Client*>					clientSet;
+	Channel::t_userMap const&			userMap = channel->getUserMap();
+	Channel::t_userMap::const_iterator	it;
+
+	for (it = userMap.begin(); it != userMap.end(); it++)
+	{
+		clientSet.insert(it->first);
+	}
+
+	return clientSet;
+}
+
+std::set<Client*>	FtIrc::getClientSetByChannelSet(std::set<Channel*> const& channelSet) const
+{
+	std::set<Client*>					clientSet;
+	std::set<Channel*>::const_iterator	it;
+
+	for (it = channelSet.begin(); it != channelSet.end(); it++)
+	{
+		std::set<Client*>	clientSubSet = getClientSetByChannel(*it);
+
+		clientSet.insert(clientSubSet.begin(), clientSubSet.end());
+	}
+
+	return clientSet;
 }
 
 void	FtIrc::changeClientNickname(std::string const& old_nick, std::string const& new_nick)

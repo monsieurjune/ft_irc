@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FtIrcHelper.cpp                                    :+:      :+:    :+:   */
+/*   FtIrcMethodHelper.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 03:08:52 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:01:20 by tponutha         ###   ########.fr       */
+/*   Created: 2025/04/15 00:40:23 by tponutha          #+#    #+#             */
+/*   Updated: 2025/04/15 00:41:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,4 @@ void    FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const ch
 		reply.first = it_umap->first;
 		batch.push_back(reply);
 	}
-}
-
-void    FtIrc::nicknameMessageHelper(Message & reply_msg, Client * const client)
-{
-    if (client->getNickname().empty())
-    {
-        reply_msg.pushParam(IRC_EMPTY_STRING);
-    }
-    else
-    {
-        reply_msg.pushParam(client->getNickname());
-    }
-}
-
-FtIrc::t_replyBatch FtIrc::singleReplyBatchHelper(Message const & reply_msg, Client * const client)
-{
-    std::queue<Message> queue;
-
-    queue.push(reply_msg);
-
-    FtIrc::t_reply		reply(client, queue);
-	FtIrc::t_replyBatch	batch(1, reply);
-
-	return batch;
 }

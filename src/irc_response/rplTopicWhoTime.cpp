@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:22:07 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:31:22 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:12:52 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 
 FtIrc::t_replyBatch FtIrc::rplTopicWhoTime(Client * const client, Channel * const channel)
 {

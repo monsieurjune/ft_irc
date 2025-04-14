@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:45:02 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:30:55 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:15:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
-#include "std/ft_cppstd.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 
 FtIrc::t_replyBatch	FtIrc::errUnknownCmd(Client * const client, std::string const& cmd)
 {
@@ -28,5 +28,5 @@ FtIrc::t_replyBatch	FtIrc::errUnknownCmd(Client * const client, std::string cons
 	reply_msg.pushParam(cmd);
 	reply_msg.pushParam("Unknown command");
 
-	return singleReplyBatchHelper(reply_msg, client);
+	return singleReplySingleClientBatch(reply_msg, client);
 }

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/14 03:59:54 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:43:35 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,11 +212,29 @@ class FtIrc
 		/**
 		 * @brief Create the set of Channel that this client is joining
 		 * 
-		 * @param client Client Pointer
+		 * @param client Target Client
 		 * 
 		 * @return Set of Channel Pointer
 		 */
-		std::set<Channel*>	getChannelSetByClient(Client * const client);
+		std::set<Channel*>	getChannelSetByClient(Client * const client) const;
+
+		/**
+		 * @brief Create the set of Client that is joining this channel
+		 * 
+		 * @param channel Target Channel
+		 * 
+		 * @return Set of Client Pointer
+		 */
+		std::set<Client*>	getClientSetByChannel(Channel * const channel) const;
+
+		/**
+		 * @brief Create the set of Client that is joining these channels
+		 * 
+		 * @param channelSet Channel Set
+		 * 
+		 * @return Set of Client Pointer
+		 */
+		std::set<Client*>	getClientSetByChannelSet(std::set<Channel*> const& channelSet) const;
 
 		/**
 		 * @brief Set Client's Nickname
@@ -271,7 +289,6 @@ class FtIrc
 		 */
 		void	ircMessageHandler(Message const & msg, Client * const client);
 
-	private:
 		/**
 		 * @brief Create Channel
 		 * 
@@ -319,13 +336,6 @@ class FtIrc
 		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
 
 		/**
-		 * @brief Transform and Put Message to Client's Storage
-		 * 
-		 * @param batch Group of Reply Message
-		 */
-		void	applyReplyBatchToClient(t_replyBatch& batch);
-
-		/**
 		 * @brief Push Message in Reply Batch for all Clients in this Channel
 		 * 
 		 * @param reply_msg Message that want to send
@@ -344,29 +354,13 @@ class FtIrc
 		 */
 		void	pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch);
 
+	private:
 		/**
-		 * @brief Push Nickname to Message's param with empty nickname handle
+		 * @brief Transform and Put Message to Client's Storage
 		 * 
-		 * - <nickname> != '': Put <nickname>
-		 * 
-		 * - <nickname> == '': Put *
-		 * 
-		 * @param reply_msg Message
-		 * @param client Client
-		 * 
-		 * @warning Should be used to put Nickname at first param of Message
+		 * @param batch Group of Reply Message
 		 */
-		void	nicknameMessageHelper(Message & reply_msg, Client * const client);
-
-		/**
-		 * @brief Construct Reply Batch for reply back to Sender
-		 * 
-		 * @param reply_msg Setted Message
-		 * @param client Sender
-		 * 
-		 * @return Reply Batch for response back to sender
-		 */
-		t_replyBatch	singleReplyBatchHelper(Message const & reply_msg, Client * const client);
+		void	applyReplyBatchToClient(t_replyBatch& batch);
 
 		/**
 		 * @brief IRC CMD KICK
@@ -565,7 +559,7 @@ class FtIrc
 		/**
 		 * 
 		 */
-		t_replyBatch	rplNameReply(Channel * const channel);
+		t_replyBatch	rplNameReply(Client * const client, Channel * const channel);
 
 		/**
 		 * 

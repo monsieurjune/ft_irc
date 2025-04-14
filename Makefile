@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/04/14 04:07:03 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/15 00:45:07 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,8 @@ FTIRC_SRC		:= Channel.cpp \
 					Client.cpp \
 					Message.cpp \
 					FtIrc.cpp \
-					FtIrcHelper.cpp
+					FtIrcFunctionHelper.cpp \
+					FtIrcMethodHelper.cpp
 FTIRC_SRCS		:= $(addprefix $(FTIRC_SRC_DIR), $(FTIRC_SRC))
 
 # STD Source
