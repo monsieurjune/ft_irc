@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/15 15:20:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:26:41 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,26 +81,25 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	std::string						old_nick	= client->getNickname();
 	std::string const&				new_nick	= params.at(0);
 	std::string						old_source	= client->constructSource();
+	Message							reply_msg;
 
 	// Set Nickname To Client
 	obj->changeClientNickname(old_nick, new_nick);
 
+	// Creating MSG
+	reply_msg.setSource(old_source);
+	reply_msg.setCommand("NICK");
+	reply_msg.pushParam(new_nick);
+
 	// in case of mid change nickname during authen process
 	if (!client->containFlags(LOGIN_FLAG))
 	{
-		return FtIrc::t_replyBatch(); // Return Nothing
+		return singleReplySingleClientBatch(reply_msg, client);
 	}
 
 	// Retrieve All Client that share same channels with this client
 	std::set<Channel*>	channelSet = obj->getChannelSetByClient(client);
 	std::set<Client*>	clientSet = obj->getClientSetByChannelSet(channelSet);
-
-	// publish to all client
-	Message	reply_msg;
-
-	reply_msg.setSource(old_source);
-	reply_msg.setCommand("NICK");
-	reply_msg.pushParam(new_nick);
 
 	return singleReplyMultiClientBatch(reply_msg, clientSet);
 }
@@ -112,7 +111,7 @@ static inline void	sb_non_authen(FtIrc * const obj, Message const & msg, Client 
 
 	// Set Nickname To Client
 	obj->setClientNickname(client, new_nick);
-	client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
+	client->setAuthenLevel(client->getAuthenLevel() | NICK_FLAG);
 }
 
 // <nickname> [ <hopcount> ]
@@ -133,6 +132,7 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 		return obj->errNeedMoreParams(client, msg);
 	}
 
+	// Get neccesary variable
 	std::string const&	new_nick	= params.at(0);
 	Client				*tmpclient	= NULL;
 
