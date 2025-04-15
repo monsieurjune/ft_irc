@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/04/15 03:27:30 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/16 01:55:25 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,12 @@ MKDIR	:= mkdir -p
 
 # Complier Propeties
 CXX			:= c++
-CXX_WFLAG	:= -Wall -Wextra -std=c++98 -g
+CXX_STDFLAG	:= -std=c++98
+CXX_WFLAG	:= -Wall -Werror -Wextra
 CXX_MFLAG	:= -MP -MD
 CXX_OFLAG	:= -O0
-CXXFLAG		:= $(CXX_WFLAG) $(CXX_MFLAG) $(CXX_OFLAG)
+CXX_DFLAG	:= -g
+CXXFLAG		:= $(CXX_STDFLAG) $(CXX_WFLAG) $(CXX_OFLAG) $(CXX_DFLAG)
 
 # Directories
 BUILD_DIR	:= ./build
@@ -143,7 +145,7 @@ $(NAME):	$(OBJS)
 
 $(BUILD_DIR)/%.o:	%.cpp
 	$(MKDIR) $(@D)
-	$(CXX) $(CXXFLAG) -I$(INCLUDE_DIR) -c $< -o $@
+	$(CXX) $(CXXFLAG) $(CXX_MFLAG) -I$(INCLUDE_DIR) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
