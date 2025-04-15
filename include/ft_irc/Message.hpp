@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 21:58:31 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 05:59:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:30:11 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,6 @@ class Message
 		 * @note It's only matter when parsing string to Message
 		 */
 		bool	_isValid;
-
-		/**
-		 * @brief Indicator that this message contain trailing parameter (default is false)
-		 * 
-		 * @note This attribute isn't used when assemble msg
-		 */
-		bool	_hasTrailing;
 
 		/**
 		 * @brief Parser of Raw IRC Message
@@ -126,17 +119,6 @@ class Message
 		 * @return Vector of IRC Params in lvalue
 		 */
 		std::vector<std::string> const&	getParams()	const;
-
-		/**
-		 * @brief Check if this msg contain trailing
-		 * 
-		 * @return
-		 * 
-		 * - true: contain trailing
-		 * 
-		 * - false: doesn't contain trailing
-		 */
-		bool	hasTrailing() const;
 
 		/**
 		 * @brief Get Validation of IRC Message

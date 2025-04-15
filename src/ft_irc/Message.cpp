@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 06:00:35 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:30:43 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 // orthodox
 
-Message::Message(void): _isValid(true), _hasTrailing(false) {}
+Message::Message(void): _isValid(true) {}
 
 Message::Message(Message const & origin)
 {
@@ -35,8 +35,6 @@ Message& Message::operator=(Message const & rhs)
 
 Message::Message(std::string const raw)
 {
-	_hasTrailing = false;
-
 	if (parse(raw) == 0)
 	{
 		_isValid = true;
@@ -100,7 +98,6 @@ int Message::parse(std::string const raw)
 			std::string const	temp = raw.substr(temp_pos + 1, std::string::npos);
 
 			_params.push_back(temp);
-			_hasTrailing = true;
 			break ;
 		}
 	}
@@ -129,11 +126,6 @@ bool	Message::isValid(void) const
 	return (_isValid);
 }
 
-bool	Message::hasTrailing(void) const
-{
-	return (_hasTrailing);
-}
-
 // assembler
 
 std::string	Message::assembleRawMessage(void)
@@ -155,7 +147,6 @@ std::string	Message::assembleRawMessage(void)
 		msg += " ";
 		if (i == _params.size() - 1 && (_params.at(i).empty() || _params.at(i).find(' ') != std::string::npos))
 		{
-			_hasTrailing = true;
 			msg += ":";
 		}
 		msg += _params.at(i);
