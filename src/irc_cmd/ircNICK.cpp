@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/15 02:32:20 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:20:12 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,11 @@ static inline void	sb_non_authen(FtIrc * const obj, Message const & msg, Client 
 	client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
 }
 
+// <nickname> [ <hopcount> ]
+
 FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Client * const client)
 {
 	std::vector<std::string> const&	params	= msg.getParams();
-	Client							*tmpclient;
 
 	if (params.size() < 1)
 	{
@@ -126,12 +127,14 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 	}
 
 	// Either return ERRONEUSNICKNAME or NOTENOUGHPARAM
-	if (params.size() > 1)
+	// The second parameter is ignored if client is send (not server)
+	if (params.size() > 2)
 	{
 		return obj->errNeedMoreParams(client, msg);
 	}
 
 	std::string const&	new_nick	= params.at(0);
+	Client				*tmpclient	= NULL;
 
 	// Invalid Character
 	if (!sb_is_nickname_valid(new_nick))
@@ -143,9 +146,10 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 	tmpclient = obj->getClientByNickname(new_nick);
 	if (tmpclient != NULL)
 	{
+		// Do Nothing, if client just send same name
 		if (tmpclient == client)
 		{
-			return FtIrc::t_replyBatch(); // do nothing
+			return FtIrc::t_replyBatch();
 		}
 		return sb_ERR_NICKNAMEINUSE(obj, client, new_nick);
 	}

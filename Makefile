@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/04/15 00:45:07 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/15 03:27:30 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,6 @@ EXCEPT_SRC_DIR	:= $(SRC_DIR)/exception/
 EXCEPT_SRC		:= CstdException.cpp \
 					IrcDisconnectedException.cpp \
 					IrcInvalidPacketException.cpp \
-					IrcUnknownCmdException.cpp \
 					IrcListenBindingException.cpp \
 					IrcTooLongMsgException.cpp \
 					IrcContinueException.cpp

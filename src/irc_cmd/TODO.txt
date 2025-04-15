@@ -2,18 +2,20 @@ Unwrite:
 - INVITE
 - PART
 - QUIT
-- USER
+- WHO
 
 Incomplete:
-- NICK
 - JOIN
 
 Complete but Untest:
+- NICK
 - TOPIC
 - KICK
 - MODE
 
 Complete and Tested:
+- PASS
+- USER
 - PING
 
 Complete and Omitted:
