@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/15 15:30:43 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:48:24 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Message& Message::operator=(Message const & rhs)
 	return (*this);
 }
 
-Message::Message(std::string const raw)
+Message::Message(std::string const& raw)
 {
 	if (parse(raw) == 0)
 	{
@@ -49,7 +49,7 @@ Message::~Message(void) {}
 
 // parse
 
-int Message::parse(std::string const raw)
+int Message::parse(std::string const& raw)
 {
 	// Empty message
 	if (raw.empty())
@@ -167,12 +167,12 @@ std::string	Message::assembleRawMessage(void)
 
 // setter
 
-void Message::setSource(std::string src)
+void Message::setSource(std::string const& src)
 {
 	_source = src;
 }
 
-void Message::setCommand(std::string cmd)
+void Message::setCommand(std::string const& cmd)
 {
 	_command = cmd;
 }
@@ -189,7 +189,7 @@ void Message::resetParams(void)
 	_params.clear();
 }
 
-void Message::pushParam(std::string param)
+void Message::pushParam(std::string const& param)
 {
 	_params.push_back(param);
 }

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 21:58:31 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 15:30:11 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:47:27 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class Message
 		 * 
 		 * - else: error
 		 */
-		int	parse(std::string const raw);
+		int	parse(std::string const& raw);
 
 	public:
 		/**
@@ -78,7 +78,7 @@ class Message
 		 * 
 		 * @note Should be use when try to parse reply msg from client
 		 */
-		Message(std::string const msg);
+		Message(std::string const& msg);
 
 		/**
 		 * @brief Default Destructor of This Object
@@ -139,14 +139,14 @@ class Message
 		 * 
 		 * @param source IRC Prefix
 		 */
-		void	setSource(std::string const source);
+		void	setSource(std::string const& source);
 
 		/**
 		 * @brief Set IRC Command
 		 * 
 		 * @param cmd IRC Command
 		 */
-		void	setCommand(std::string const cmd);
+		void	setCommand(std::string const& cmd);
 
 		/**
 		 * @brief Set IRC Response Code
@@ -167,7 +167,7 @@ class Message
 		 * 
 		 * @warning Do not try to add some character that specify IRC Message
 		 */
-		void	pushParam(std::string const param);
+		void	pushParam(std::string const& param);
 };
 
 #endif
