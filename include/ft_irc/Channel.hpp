@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/02 03:41:38 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/04/16 02:08:51 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ class Channel
 		 * @param name Channel's Name
 		 * @param creator Client that requested to create channel
 		 */
-		Channel(std::string const name, Client * const creator);
-		
+		Channel(std::string const& name, Client * const creator);
+
 		/**
 		 * @brief Default Destructor
 		 * 
@@ -225,7 +225,7 @@ class Channel
 		 * 
 		 * @note This Field is ignored if password mode is unsetted
 		 */
-		void	setPassword(std::string const password);
+		void	setPassword(std::string const& password);
 
 		/**
 		 * @brief Set User Limit in This Channel
@@ -244,7 +244,7 @@ class Channel
 		 * 
 		 * @warning This Method isn't check validation of setter
 		 */
-		void	setTopic(std::string const topic, Client const * const setter);
+		void	setTopic(std::string const& topic, Client const * const setter);
 
 		/**
 		 * @brief Add Channel Mode
@@ -258,7 +258,7 @@ class Channel
 		 * 
 		 * @param s String of Charracter Mode
 		 */
-		void	addMode(std::string const s);
+		void	addMode(std::string const& s);
 
 		/**
 		 * @brief Remove Channel Mode
@@ -272,7 +272,7 @@ class Channel
 		 * 
 		 * @param s String of Charracter Mode
 		 */
-		void	removeMode(std::string const s);
+		void	removeMode(std::string const& s);
 
 		/**
 		 * @brief Add Client to This Channel
@@ -289,7 +289,7 @@ class Channel
 		 * 
 		 * @note Should be used under JOIN
 		 */
-		int	addUserToChannel(Client * const client, std::string const mode_str);
+		int	addUserToChannel(Client * const client, std::string const& mode_str);
 
 		/**
 		 * @brief Delete Client from This Channel
@@ -351,7 +351,7 @@ class Channel
 		 * 
 		 * - -1: This Client isn't existed in This Channel
 		 */
-		int	addThisClientMembershipMode(Client * const client, std::string const s);
+		int	addThisClientMembershipMode(Client * const client, std::string const& s);
 
 		/**
 		 * @brief Remove certain Channel Membership Mode to This Client in This Channel
@@ -377,7 +377,7 @@ class Channel
 		 * 
 		 * - -1: This Client isn't existed in This Channel
 		 */
-		int	removeThisClientMembershipMode(Client * const client, std::string const s);
+		int	removeThisClientMembershipMode(Client * const client, std::string const& s);
 
 		/**
 		 * @brief Check if This Client is Invited
