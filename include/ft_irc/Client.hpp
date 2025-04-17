@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:08:51 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 03:29:30 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ class Client
 		 * 
 		 * @warning It must be called in NICK's fucntion
 		 */
-		void	setNickname(std::string const name);
+		void	setNickname(std::string const& name);
 
 		/**
 		 * @brief Set This Client's Username
@@ -302,7 +302,7 @@ class Client
 		 * 
 		 * @warning It must be called in USER's function
 		 */
-		void	setUsername(std::string const name);
+		void	setUsername(std::string const& name);
 
 		/**
 		 * @brief Set This Client's Realname
@@ -311,7 +311,7 @@ class Client
 		 * 
 		 * @warning It must be called in USER's function
 		 */
-		void	setRealname(std::string const name);
+		void	setRealname(std::string const& name);
 
 		/**
 		 * @brief Set This Client's Host Information
@@ -320,7 +320,7 @@ class Client
 		 * 
 		 * @warning It must be called after Client is built
 		 */
-		void	setHost(std::string const host);
+		void	setHost(std::string const& host);
 
 		/**
 		 * @brief Add This Membership Mode to This Client
@@ -348,7 +348,7 @@ class Client
 		 * 
 		 * @param msg IRC Response Message
 		 */
-		void	enqueueReply(std::string const msg);
+		void	enqueueReply(std::string const& msg);
 
 		/**
 		 * @brief Dequeue This Message

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/14 04:33:03 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 03:24:32 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,22 +95,22 @@ void	Client::setAuthenLevel(int const level)
 	_authenLevel = level;
 }
 
-void	Client::setNickname(std::string const name)
+void	Client::setNickname(std::string const& name)
 {
 	_nickname = name;
 }
 
-void	Client::setUsername(std::string const name)
+void	Client::setUsername(std::string const& name)
 {
 	_username = name;
 }
 
-void	Client::setRealname(std::string const name)
+void	Client::setRealname(std::string const& name)
 {
 	_realname = name;
 }
 
-void	Client::setHost(std::string const host)
+void	Client::setHost(std::string const& host)
 {
 	_host = host;
 }
@@ -130,7 +130,7 @@ size_t	Client::countReply(void) const
 	return (_replyQueue.size());
 }
 
-void	Client::enqueueReply(std::string const msg)
+void	Client::enqueueReply(std::string const& msg)
 {
 	_replyQueue.push(msg);
 }
