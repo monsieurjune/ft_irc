@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/15 16:26:41 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:57:07 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,6 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	reply_msg.setCommand("NICK");
 	reply_msg.pushParam(new_nick);
 
-	// in case of mid change nickname during authen process
-	if (!client->containFlags(LOGIN_FLAG))
-	{
-		return singleReplySingleClientBatch(reply_msg, client);
-	}
-
 	// Retrieve All Client that share same channels with this client
 	std::set<Channel*>	channelSet = obj->getChannelSetByClient(client);
 	std::set<Client*>	clientSet = obj->getClientSetByChannelSet(channelSet);
@@ -154,7 +148,7 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 		return sb_ERR_NICKNAMEINUSE(obj, client, new_nick);
 	}
 
-	if (client->containFlags(NICK_FLAG))
+	if (client->containFlags(LOGIN_FLAG))
 	{
 		return sb_authen(obj, msg, client);
 	}
@@ -164,8 +158,10 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 
 		if (client->containFlags(USER_FLAG | PASS_FLAG | NICK_FLAG))
 		{
+			client->setAuthenLevel(client->getAuthenLevel() | LOGIN_FLAG);
+
 			return obj->rplWelcome(client);
 		}
-		return FtIrc::t_replyBatch(); // Do Nothing
+		return FtIrc::t_replyBatch(); // Return Nothing
 	}
 }

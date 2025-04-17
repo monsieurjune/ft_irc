@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/17 16:14:17 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:00:36 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,20 +399,12 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 {
 	std::string const&	cmd	= msg.getCommand();
 
-	if (_noPassCmdMap.find(cmd) != _noPassCmdMap.end())
+	// NORMAL CMD
+	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
 	{
-		t_IrcCmd		caller	= _noPassCmdMap[cmd];
-		t_replyBatch	batch	= caller(this, msg, client);
-
-		applyReplyBatchToClient(batch);
-		return;
-	}
-
-	if (_authenCmdMap.find(cmd) != _authenCmdMap.end())
-	{
-		if (client->containFlags(PASS_FLAG) || client->containFlags(DEBUG_FLAG))
+		if (client->containFlags(LOGIN_FLAG) || client->containFlags(DEBUG_FLAG))
 		{
-			t_IrcCmd		caller	= _authenCmdMap[cmd];
+			t_IrcCmd		caller	= _normalCmdMap[cmd];
 			t_replyBatch	batch	= caller(this, msg, client);
 
 			applyReplyBatchToClient(batch);
@@ -426,11 +418,22 @@ void	FtIrc::ircMessageHandler(Message const & msg, Client * const client)
 		return;
 	}
 
-	if (_normalCmdMap.find(cmd) != _normalCmdMap.end())
+	// NO PASS CMD
+	if (_noPassCmdMap.find(cmd) != _noPassCmdMap.end())
 	{
-		if (client->containFlags(PASS_FLAG | NICK_FLAG | USER_FLAG) || client->containFlags(DEBUG_FLAG))
+		t_IrcCmd		caller	= _noPassCmdMap[cmd];
+		t_replyBatch	batch	= caller(this, msg, client);
+
+		applyReplyBatchToClient(batch);
+		return;
+	}
+
+	// AUTHEN CMD
+	if (_authenCmdMap.find(cmd) != _authenCmdMap.end())
+	{
+		if (client->containFlags(PASS_FLAG) || client->containFlags(DEBUG_FLAG))
 		{
-			t_IrcCmd		caller	= _normalCmdMap[cmd];
+			t_IrcCmd		caller	= _authenCmdMap[cmd];
 			t_replyBatch	batch	= caller(this, msg, client);
 
 			applyReplyBatchToClient(batch);

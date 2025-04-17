@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/13 23:15:06 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:56:57 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 
 static FtIrc::t_replyBatch	sb_ERR_PASSWDMISMATCH(FtIrc * const obj, Client * const client)
 {
@@ -23,25 +24,10 @@ static FtIrc::t_replyBatch	sb_ERR_PASSWDMISMATCH(FtIrc * const obj, Client * con
 	// Creating MSG
 	reply_msg.setSource(obj->getServerName());
 	reply_msg.setCommand(ERR_PASSWDMISMATCH);
-	if (client->getNickname().empty())
-	{
-		reply_msg.pushParam("*");
-	}
-	else
-	{
-		reply_msg.pushParam(client->getNickname());
-	}
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam("Password is incorrected");
 
-	// Put it in proper struct
-	std::queue<Message>	queue;
-
-	queue.push(reply_msg);
-
-	FtIrc::t_reply		reply(client, queue);
-	FtIrc::t_replyBatch	batch(1, reply);
-
-	return batch;
+	return singleReplySingleClientBatch(reply_msg, client);
 }
 
 FtIrc::t_replyBatch	FtIrc::ircPASS(FtIrc * const obj, Message const & msg, Client * const client)
@@ -65,8 +51,8 @@ FtIrc::t_replyBatch	FtIrc::ircPASS(FtIrc * const obj, Message const & msg, Clien
 		return sb_ERR_PASSWDMISMATCH(obj, client);
 	}
 
-	client->setAuthenLevel(PASS_FLAG);
+	// Just for avoid confusion in DEBUG MODE
+	client->setAuthenLevel(client->getAuthenLevel() | PASS_FLAG);
 
-	// Return 0 size vector
-	return FtIrc::t_replyBatch();
+	return FtIrc::t_replyBatch(); // Return Nothing
 }

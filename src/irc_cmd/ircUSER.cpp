@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/15 03:18:22 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:56:43 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ FtIrc::t_replyBatch	FtIrc::ircUSER(FtIrc * const obj, Message const & msg, Clien
     client->setUsername(username);
     client->setRealname(realname);
     client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
+
+    if (client->containFlags(PASS_FLAG | USER_FLAG | NICK_FLAG))
+    {
+        client->setAuthenLevel(client->getAuthenLevel() | LOGIN_FLAG);
+
+        return obj->rplWelcome(client);
+    }
 
     return FtIrc::t_replyBatch(); // Return Nothing
 }
