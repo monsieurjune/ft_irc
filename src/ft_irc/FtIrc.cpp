@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/15 01:45:26 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:14:17 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-FtIrc::FtIrc(std::string const password, std::string const servername, int const listen_fd) 
+FtIrc::FtIrc(std::string const& password, std::string const& servername, int const listen_fd) 
 		: _listen_fd(listen_fd), \
 		_serverName(servername), \
 		_serverPassword(password), \
@@ -110,7 +110,7 @@ Client*	FtIrc::getClientByFd(int const fd) const
 	}	
 }
 
-Client*	FtIrc::getClientByNickname(std::string const name) const
+Client*	FtIrc::getClientByNickname(std::string const& name) const
 {
     try
 	{
@@ -123,7 +123,7 @@ Client*	FtIrc::getClientByNickname(std::string const name) const
 	}	
 }
 
-Channel* FtIrc::getChannelByName(std::string const name) const
+Channel* FtIrc::getChannelByName(std::string const& name) const
 {
     try
 	{
@@ -233,7 +233,7 @@ void	FtIrc::cleanUnusedPollFd()
 	std::swap(_mainPollfdVec, _tempPollfdVec);
 }
 
-int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
+int	FtIrc::createChannel(std::string const& channel_name, Client * const creator)
 {
 	Channel*	ptr = NULL;
 	
@@ -259,7 +259,7 @@ int	FtIrc::createChannel(std::string const channel_name, Client * const creator)
 	}
 }
 
-int	FtIrc::deleteClientFromChannel(std::string const channel_name, Client * const client)
+int	FtIrc::deleteClientFromChannel(std::string const& channel_name, Client * const client)
 {
 	Channel*	ptr = NULL;
 

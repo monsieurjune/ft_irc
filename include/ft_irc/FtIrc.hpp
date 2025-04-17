@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/15 01:43:35 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:10:53 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ class FtIrc
 		 * @param servername IRC Server's Name (use for server's prefix)
 		 * @param listen_fd IRC Server's Listen socket fd
 		 */
-		FtIrc(std::string const password, std::string const servername, int const listen_fd);
+		FtIrc(std::string const& password, std::string const& servername, int const listen_fd);
 
 		/**
 		 * @brief Default Destructor
@@ -187,20 +187,20 @@ class FtIrc
 		/**
 		 * @brief Get Client by its nickname
 		 * 
-		 * @param fd This Client's Nickname
+		 * @param nick This Client's Nickname
 		 * 
 		 * @return Client Object as pointer (mustn't call delete on it)
 		 */
-		Client*	getClientByNickname(std::string const nick)	const;
+		Client*	getClientByNickname(std::string const& nick)	const;
 
 		/**
 		 * @brief Get Channel by its Name
 		 * 
-		 * @param fd This Channel's Name
+		 * @param name This Channel's Name
 		 * 
 		 * @return Channel Object as pointer (mustn't call delete on it)
 		 */
-		Channel*	getChannelByName(std::string const name)	const;
+		Channel*	getChannelByName(std::string const& name)	const;
 
 		/**
 		 * @brief Get PollFd array to work with poll()
@@ -308,7 +308,7 @@ class FtIrc
 		 * 
 		 * - -1: allocation failed
 		 */
-		int	createChannel(std::string const channel_name, Client * const creator);
+		int	createChannel(std::string const& channel_name, Client * const creator);
 
 		/**
 		 * @brief Unjoin certain Client from Channel
@@ -333,7 +333,7 @@ class FtIrc
 		 * 
 		 * - 2: client doesn't exist in this channel
 		 */
-		int	deleteClientFromChannel(std::string const channel_name, Client * const client);
+		int	deleteClientFromChannel(std::string const& channel_name, Client * const client);
 
 		/**
 		 * @brief Push Message in Reply Batch for all Clients in this Channel
