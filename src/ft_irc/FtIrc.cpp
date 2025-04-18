@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/17 18:00:36 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 03:43:20 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,15 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-FtIrc::FtIrc(std::string const& password, std::string const& servername, int const listen_fd) 
+FtIrc::FtIrc(
+		int const listen_fd, 
+		std::string const& servername,
+		std::string const& networkname,
+		std::string const& password
+	)
 		: _listen_fd(listen_fd), \
 		_serverName(servername), \
+		_networkName(networkname), \
 		_serverPassword(password), \
 		_timeServerStarted(std::time(NULL))
 {
@@ -62,14 +68,12 @@ FtIrc::~FtIrc()
 	for (std::map<int, Client*>::iterator it = _clientMapByFd.begin(); it != _clientMapByFd.end(); it++)
 	{
 		delete it->second;
-		it->second = NULL;
 	}
 
 	// Free Channel
 	for (std::map<std::string, Channel*>::iterator it = _channelMapByName.begin(); it != _channelMapByName.end(); it++)
 	{
 		delete it->second;
-		it->second = NULL;
 	}
 
 	// Close Listen fd
@@ -84,6 +88,11 @@ int	FtIrc::getListenFd()	const
 std::string const&	FtIrc::getServerName()	const
 {
 	return (_serverName);
+}
+
+std::string const&	FtIrc::getNetworkName() const
+{
+	return (_networkName);
 }
 
 std::string const&	FtIrc::getServerPassword()	const
