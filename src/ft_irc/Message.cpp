@@ -6,13 +6,14 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/15 15:48:24 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 06:46:17 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Project Header
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
+#include "std/ft_cstd.hpp"
 
 // orthodox
 
@@ -179,9 +180,16 @@ void Message::setCommand(std::string const& cmd)
 
 void Message::setCommand(e_numerics cmd)
 {
-	int	code = static_cast<int>(cmd);
+	int	code	= static_cast<int>(cmd);
+	int	digit	= ft_std::log10i(code);
+	int	padding	= 2 - digit;
 
-	_command = ft_std::itoa(code);
+	for (int i = 0; i < padding; i++)
+	{
+		_command += '0';
+	}
+
+	_command += ft_std::itoa(code);
 }
 
 void Message::resetParams(void)

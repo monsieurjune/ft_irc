@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/04/16 01:55:25 by tponutha         ###   ########.fr        #
+#    Updated: 2025/04/19 06:48:41 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,8 @@ CSTD_SRC_DIR	:= $(STD_SRC_DIR)/c/
 CSTD_SRC		:= memset.cpp \
 					isnumber.cpp \
 					strcnlen.cpp \
-					strnstr.cpp
+					strnstr.cpp \
+					log10i.cpp
 CSTD_SRCS		:= $(addprefix $(CSTD_SRC_DIR), $(CSTD_SRC))
 
 #  CPPSTD Source
