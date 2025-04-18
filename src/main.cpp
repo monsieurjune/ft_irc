@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:54 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 01:24:26 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(const int argc, const char *argv[])
 		return 1;
 	}
 
-	FtIrc	main_obj(argv[2], "irc.localhost.test", listen_socketfd);
+	FtIrc	main_obj(listen_socketfd, "irc.localhost.test", "FTIRC", argv[2]);
 
 	// Infinite Loop
 	while (g_run)

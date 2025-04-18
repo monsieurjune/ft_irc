@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/17 16:10:53 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 03:16:30 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,32 @@ class FtIrc
 		int const	_listen_fd;
 
 		/**
+		 * @brief Server Name
+		 * 
+		 * @note It use as Prefix for Server Response
+		 */
+		std::string const	_serverName;
+
+		/**
+		 * @brief Network Name
+		 * 
+		 * @note It's only matter when implement server-to-server communication
+		 */
+		std::string const	_networkName;
+
+		/**
+		 * @brief Server Passsword
+		 */
+		std::string const	_serverPassword;
+
+		/**
+		 * @brief Time when Server is stared
+		 * 
+		 * @warning If it might not be used, it would be remove later
+		 */
+		std::time_t const	_timeServerStarted;
+
+		/**
 		 * @brief Client Map that use its fd as key to Client Pointer
 		 * 
 		 * @note This is main place where store heap of Client
@@ -86,25 +112,6 @@ class FtIrc
 		std::vector<struct pollfd>	_tempPollfdVec;
 
 		/**
-		 * @brief Server Name
-		 * 
-		 * @note It use as Prefix for Server Response
-		 */
-		std::string const	_serverName;
-
-		/**
-		 * @brief Server Passsword
-		 */
-		std::string const	_serverPassword;
-
-		/**
-		 * @brief Time when Server is stared
-		 * 
-		 * @warning If it might not be used, it would be remove later
-		 */
-		std::time_t const	_timeServerStarted;
-
-		/**
 		 * @brief Map of IRC CMD that doesn't required client to 
 		 * provide password before use them (i.e. PASS, CAP)
 		 */
@@ -126,11 +133,17 @@ class FtIrc
 		/**
 		 * @brief Construct an FtIrc Object
 		 * 
-		 * @param password IRC Server's Password
-		 * @param servername IRC Server's Name (use for server's prefix)
 		 * @param listen_fd IRC Server's Listen socket fd
+		 * @param servername IRC Server's Name (use for server's prefix)
+		 * @param networkname IRC Server's Name (use for server's prefix)
+		 * @param password IRC Server's Password
 		 */
-		FtIrc(std::string const& password, std::string const& servername, int const listen_fd);
+		FtIrc(
+			int const listen_fd, 
+			std::string const& servername,
+			std::string const& networkname,
+			std::string const& password
+		);
 
 		/**
 		 * @brief Default Destructor
@@ -167,6 +180,13 @@ class FtIrc
 		 * @return Server Name as lvalue
 		 */
 		std::string const&	getServerName()	const;
+
+		/**
+		 * @brief Get Network Name
+		 * 
+		 * @return Network Name as lvalue
+		 */
+		std::string const&	getNetworkName() const;
 
 		/**
 		 * @brief Get Server Password
