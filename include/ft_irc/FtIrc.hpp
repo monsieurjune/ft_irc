@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 03:16:30 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 06:55:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,13 @@ class FtIrc
 		 * @return Server Password as lvalue
 		 */
 		std::string const&	getServerPassword()	const;
+
+		/**
+		 * @brief Get Time When this object (Server) is created
+		 * 
+		 * @return Time When this object is created in lvalue
+		 */
+		std::time_t const&	getTimeServerCreated() const;
 
 		/**
 		 * @brief Get Client by its fd

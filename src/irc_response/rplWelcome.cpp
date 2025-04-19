@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:33:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/19 06:01:23 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 07:06:05 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,19 @@ static Message  sb_rpl_YOURHOST(FtIrc * const obj, Client * const client)
 
 static Message  sb_rpl_CREATED(FtIrc * const obj, Client * const client)
 {
-    Message reply_msg;
+    char                timebuff[128];
+    Message             reply_msg;
+    std::string         trailing;
+    std::time_t const&  start       = obj->getTimeServerCreated();
+    struct std::tm*     timeinfo    = std::localtime(&start);
+
+    std::strftime(timebuff, 128, "%H:%M:%S %d %B %Y", timeinfo);
+    trailing = std::string("This server was created ") + std::string(timebuff);
 
     reply_msg.setSource(obj->getServerName());
     reply_msg.setCommand(RPL_CREATED);
     reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
-    reply_msg.pushParam("This server was created "); // TODO: forget time getter
+    reply_msg.pushParam(trailing);
 
     return reply_msg;
 }

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 03:43:20 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 06:56:24 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ std::string const&	FtIrc::getNetworkName() const
 std::string const&	FtIrc::getServerPassword()	const
 {
 	return (_serverPassword);
+}
+
+std::time_t const&	FtIrc::getTimeServerCreated() const
+{
+	return (_timeServerStarted);
 }
 
 std::vector<struct pollfd>&	FtIrc::getPollFdVector()
