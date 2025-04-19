@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 06:46:17 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 07:28:15 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,9 @@ void Message::setCommand(e_numerics cmd)
 	int	code	= static_cast<int>(cmd);
 	int	digit	= ft_std::log10i(code);
 	int	padding	= 2 - digit;
+
+	// flush old string
+	_command.clear();
 
 	for (int i = 0; i < padding; i++)
 	{
