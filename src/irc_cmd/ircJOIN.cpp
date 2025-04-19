@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/14 03:33:18 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 08:17:32 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 	// Special case: leaving all channels. (WIP)
 	if (params.at(0) == "0")
 	{
-		// TODO: what it should return (if return nothing to client, then below is correct)
 		return (FtIrc::t_replyBatch());
 	}
 
@@ -42,7 +41,6 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 	std::vector<std::string>	channel_key_vec;
 	size_t						idx;
 	size_t						idx_temp;
-	// bool						has_key_param = false;
 
 	// Assigning channel_key_vec.
 	// and matching numbers of chennel and keys in vectors by adding empty strings to channel missing keys.
@@ -117,7 +115,6 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		}
 
 		// General/valid joining case here.
-		// TODO: do you forget to put if statement or something?
 		{
 			channel->addUserToChannel(sender, ""); // Replies to sender
 		}

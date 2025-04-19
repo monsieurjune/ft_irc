@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/17 17:57:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 08:14:58 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	// Set Nickname To Client
 	obj->changeClientNickname(old_nick, new_nick);
 
-	// Creating MSG
+	// Creating Broadcast MSG
 	reply_msg.setSource(old_source);
 	reply_msg.setCommand("NICK");
 	reply_msg.pushParam(new_nick);
@@ -94,6 +94,9 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	// Retrieve All Client that share same channels with this client
 	std::set<Channel*>	channelSet = obj->getChannelSetByClient(client);
 	std::set<Client*>	clientSet = obj->getClientSetByChannelSet(channelSet);
+
+	// Guarantee that clientSet must contain sender
+	clientSet.insert(client);
 
 	return singleReplyMultiClientBatch(reply_msg, clientSet);
 }

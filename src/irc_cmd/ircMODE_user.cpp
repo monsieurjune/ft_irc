@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:13 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 22:10:10 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 07:50:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 	t_reply								reply_sender;
 	t_replyBatch						batch;
 
+	// Set Up Common Thing
+	reply_msg.setSource(_serverName);
+	reply_sender.first = sender;
+
 	if (!target)
 	{
 		reply_msg.setCommand(ERR_NOSUCHNICK);
@@ -35,6 +39,7 @@ FtIrc::t_replyBatch	FtIrc::ircMODE_user(Message const & message, Client * const 
 		reply_msg.pushParam("No such nickname.");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
+
 		return (batch);
 	}
 
