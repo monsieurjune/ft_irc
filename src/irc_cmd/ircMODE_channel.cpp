@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:10 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 21:50:17 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 08:15:34 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 
 	reply_msg.setSource(_serverName);
 	reply_sender.first = sender;
-	
+
 	if (channel == NULL)
 	{
 		reply_msg.setCommand(ERR_NOSUCHCHANNEL);

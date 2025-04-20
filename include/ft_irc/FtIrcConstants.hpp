@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/14 04:09:00 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 06:02:25 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 #define __FT_IRC_CONSTANTS_HPP__
 
 #ifndef DEBUG_MODE
-#define DEBUG_MODE true
+#define DEBUG_MODE false
+#endif
+
+#ifndef FT_IRC_VERSION
+#define FT_IRC_VERSION "FtIrc-v1.0.0"
 #endif
 
 #ifndef IRC_MSG_MAXSIZE

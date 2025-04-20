@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/17 17:57:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:57:50 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static FtIrc::t_replyBatch	sb_ERR_NONICKNAMEGIVEN(FtIrc * const obj, Client * co
 	// Creating MSG
 	reply_msg.setSource(obj->getServerName());
 	reply_msg.setCommand(ERR_NONICKNAMEGIVEN);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam("No nickname given");
 
 	return singleReplySingleClientBatch(reply_msg, client);
@@ -54,7 +54,7 @@ static FtIrc::t_replyBatch	sb_ERRONEUSNICKNAME(FtIrc * const obj, Client * const
 	// Creating MSG
 	reply_msg.setSource(obj->getServerName());
 	reply_msg.setCommand(ERR_ERRONEUSNICKNAME);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam(new_nick);
 	reply_msg.pushParam("Erroneus nickname");
 
@@ -68,7 +68,7 @@ static FtIrc::t_replyBatch	sb_ERR_NICKNAMEINUSE(FtIrc * const obj, Client * cons
 	// Creating MSG
 	reply_msg.setSource(obj->getServerName());
 	reply_msg.setCommand(ERR_NICKNAMEINUSE);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam(new_nick);
 	reply_msg.pushParam("Nickname is already in use");
 
@@ -86,7 +86,7 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	// Set Nickname To Client
 	obj->changeClientNickname(old_nick, new_nick);
 
-	// Creating MSG
+	// Creating Broadcast MSG
 	reply_msg.setSource(old_source);
 	reply_msg.setCommand("NICK");
 	reply_msg.pushParam(new_nick);
@@ -94,6 +94,9 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	// Retrieve All Client that share same channels with this client
 	std::set<Channel*>	channelSet = obj->getChannelSetByClient(client);
 	std::set<Client*>	clientSet = obj->getClientSetByChannelSet(channelSet);
+
+	// Guarantee that clientSet must contain sender
+	clientSet.insert(client);
 
 	return singleReplyMultiClientBatch(reply_msg, clientSet);
 }
@@ -140,10 +143,9 @@ FtIrc::t_replyBatch	FtIrc::ircNICK(FtIrc * const obj, Message const & msg, Clien
 	tmpclient = obj->getClientByNickname(new_nick);
 	if (tmpclient != NULL)
 	{
-		// Do Nothing, if client just send same name
 		if (tmpclient == client)
 		{
-			return FtIrc::t_replyBatch();
+			return FtIrc::t_replyBatch(); // Return Nothing
 		}
 		return sb_ERR_NICKNAMEINUSE(obj, client, new_nick);
 	}

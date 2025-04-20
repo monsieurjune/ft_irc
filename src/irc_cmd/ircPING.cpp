@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/13 23:15:02 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:12:10 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 
 FtIrc::t_replyBatch	FtIrc::ircPING(FtIrc * const obj, Message const & msg, Client * const client)
 {
@@ -34,13 +35,5 @@ FtIrc::t_replyBatch	FtIrc::ircPING(FtIrc * const obj, Message const & msg, Clien
 	reply_msg.pushParam(obj->getServerName());
 	reply_msg.pushParam(params.at(0));
 
-	// Put it in proper struct
-	std::queue<Message>	queue;
-
-	queue.push(reply_msg);
-
-	FtIrc::t_reply		reply(client, queue);
-	FtIrc::t_replyBatch	batch(1, reply);
-
-	return batch;
+	return singleReplySingleClientBatch(reply_msg, client);
 }

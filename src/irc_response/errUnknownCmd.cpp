@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:45:02 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 02:15:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:18:13 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ FtIrc::t_replyBatch	FtIrc::errUnknownCmd(Client * const client, std::string cons
 	// Creating MSG
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_UNKNOWNCOMMAND);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam(cmd);
 	reply_msg.pushParam("Unknown command");
 

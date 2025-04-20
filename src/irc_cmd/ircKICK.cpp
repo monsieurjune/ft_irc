@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 15:51:16 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 23:15:36 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/19 08:18:26 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
 	t_replyBatch	            batch;
 
     reply_sender.first = sender;
-	
+
 	if (params.size() < 2 || params.at(0).empty() || params.at(1).empty())
 	{
 		return (obj->errNeedMoreParams(sender, message));
@@ -33,7 +33,7 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
 
     std::string channel_name = params.at(0);
     Channel *   channel = obj->getChannelByName(channel_name);
-    
+
     if (!channel)
     {
         reply_msg.setSource(obj->getServerName());
@@ -68,9 +68,9 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
     {
         reason = params.at(2);
     }
-    
+
     std::vector<std::string>    target_name_vec = ft_std::split(params.at(1), ",");
-    
+
     for (std::vector<std::string>::iterator it = target_name_vec.begin(); it != target_name_vec.end(); it++)
     {
         if (it->empty())
@@ -112,7 +112,7 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
         reply_msg.pushParam(reason);
         obj->pushChannelReplyAll(reply_msg, channel, batch);
     }
-
     batch.push_back(reply_sender);
+
     return (batch);
 }
