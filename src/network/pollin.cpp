@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:55 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:33 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:58:32 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-// CPP Header
-#include <iostream>
-
 static inline void	sb_accept_new_client(FtIrc *main_obj, int listen_fd)
 {
 	sockaddr_in	client_addr;
@@ -42,8 +39,6 @@ static inline void	sb_accept_new_client(FtIrc *main_obj, int listen_fd)
 
 	client_ip = inet_ntoa(client_addr.sin_addr);
 	main_obj->addClient(client_fd, client_ip);
-
-	std::cout << "New Client: " << client_ip << std::endl;
 }
 
 static inline void	sb_read_msg_from_client(FtIrc *main_obj, int fd)

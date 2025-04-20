@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/19 01:24:26 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:58:15 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ static inline int	sb_initializer(const int argc, const char *argv[])
 	return ft_net::get_listener_scoket_fd(argv[1]);
 }
 
-#include <iostream>
-
 static inline void	sb_poll(FtIrc *main_obj)
 {
 	std::vector<struct pollfd>&	pollfd_vec = main_obj->getPollFdVector();
@@ -76,7 +74,6 @@ static inline void	sb_poll(FtIrc *main_obj)
 		}
 		catch (const IrcDisconnectedException& e)
 		{
-			std::cout << "Client Disconnected: " << main_obj->getClientByFd(fd)->getHost() << std::endl;
 			main_obj->deleteClient(fd);
 		}
 		catch (const std::exception& e)
