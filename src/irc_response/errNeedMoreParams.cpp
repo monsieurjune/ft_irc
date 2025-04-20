@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:44:56 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 02:15:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:58:46 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ FtIrc::t_replyBatch	FtIrc::errNeedMoreParams(Client * const client, Message cons
 	// Creating MSG
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_NEEDMOREPARAMS);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam(message.getCommand());
 	reply_msg.pushParam("Not enough parameters");
 

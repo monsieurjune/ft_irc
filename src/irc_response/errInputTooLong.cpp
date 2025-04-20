@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 05:45:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 02:15:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:58:40 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ FtIrc::t_replyBatch	FtIrc::errInputTooLong(Client * const client)
 	// Creating MSG
 	reply_msg.setSource(_serverName);
 	reply_msg.setCommand(ERR_INPUTTOOLONG);
-	nicknameMessageHelper(reply_msg, client);
+	reply_msg.pushParam(client->getNickname().empty() ? "*" : client->getNickname());
 	reply_msg.pushParam("Input line was too long");
 
 	return singleReplySingleClientBatch(reply_msg, client);

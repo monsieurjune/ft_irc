@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:34:14 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 01:13:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:22:59 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static Message   sb_rpl_NAMREPLY(FtIrc * const obj, Client * const sender, Chann
     // Creating MSG
     reply_msg.setSource(obj->getServerName());
     reply_msg.setCommand(RPL_NAMREPLY);
-    reply_msg.pushParam(sender->getNickname());
+    reply_msg.pushParam(sender->getNickname().empty() ? "*" : sender->getNickname());
     reply_msg.pushParam("="); // there is only public channel here
-    reply_msg.pushParam("#" + channel->getName());
+    reply_msg.pushParam(channel->getName());
 
     // Construct Trailing Params
     if (channel->hasThisClientMembershipMode(client, MODE_OPERATOR))
@@ -53,7 +53,7 @@ static Message  sb_rpl_ENDOFNAMES(FtIrc * const obj, Client * const sender, Chan
     reply_msg.setSource(obj->getServerName());
     reply_msg.setCommand(RPL_ENDOFNAMES);
     reply_msg.pushParam(sender->getNickname());
-    reply_msg.pushParam("#" + channel->getName());
+    reply_msg.pushParam(channel->getName());
     reply_msg.pushParam("End of /NAMES list");
 
     return reply_msg;
@@ -65,7 +65,8 @@ FtIrc::t_replyBatch FtIrc::rplNameReply(Client * const client, Channel * const c
     std::set<Client*>::iterator it;
     t_reply                     reply;
 
-    reply.first = client; // set client ptr
+    // Set Sender
+    reply.first = client;
 
     // Loop to create Name List
     for (it = clientSet.begin(); it != clientSet.end(); it++)
