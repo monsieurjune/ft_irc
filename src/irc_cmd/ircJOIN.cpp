@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircJOIN.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 08:17:32 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:55:04 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,23 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		return (obj->errNeedMoreParams(sender, message));
 	}
 	
-	// Special case: leaving all channels. (WIP)
+	// Special case: leaving all channels. (Finished WIP?)
+	// Finished (?)
 	if (params.at(0) == "0")
 	{
-		return (FtIrc::t_replyBatch());
+		std::set<Channel*>	channelSet = obj->getChannelSetByClient(sender);
+		for (std::set<Channel*>::iterator it = channelSet.begin(); it != channelSet.end(); it++)
+		{
+			// reply_msg is reuesd here to push a message into ircPART().
+			reply_msg.setSource(obj->_serverName);
+			reply_msg.setCommand("PART");
+			reply_msg.pushParam((*it)->getName());
+			// Call PART for each channel here.
+			// (pseudo) batch.concat(obj->ircPART(obj, reply_msg, sender));
+		}
+		return (batch);
 	}
+	// Finished (?)
 
 	reply_sender.first = sender;
 
@@ -65,15 +77,25 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		std::string	channel_name = channel_name_vec.at(idx);
 		Channel *	channel = channel_name.empty() ? NULL : obj->getChannelByName(channel_name);
 
-		if (!channel)
+		// ERR_NOSUCHCHANNEL has different meaning!
+
+		// Validate channel_name first (?)
+		if (channel_name.at(0) != '#')
 		{
 			reply_msg.setSource(obj->_serverName);
 			reply_msg.setCommand(ERR_NOSUCHCHANNEL);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam(channel_name.empty() ? "*" : "#" + channel_name);
+			reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
 			reply_msg.pushParam("No such channel.");
 			reply_sender.second.push(reply_msg);
 			continue ;
+		}
+		
+		if (!channel)
+		{
+			obj->createChannel(channel_name, sender);
+			// TODO: Reply message(s) to sender for newly created channel here.
+			continue ; 
 		}
 
 		if (channel->hasThisClient(sender))
@@ -116,7 +138,9 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 
 		// General/valid joining case here.
 		{
-			channel->addUserToChannel(sender, ""); // Replies to sender
+			channel->addUserToChannel(sender, "");
+			// TODO: Replies to sender for the existing channel here.
+			// TODO: Then, announcement to channel members here.
 		}
 	}
 	batch.push_back(reply_sender);
