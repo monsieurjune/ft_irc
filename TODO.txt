@@ -8,7 +8,6 @@ Incomplete:
 - JOIN
 
 Complete but Untest:
-- NICK
 - TOPIC
 - KICK
 - MODE
@@ -17,7 +16,11 @@ Complete and Tested:
 - PASS
 - USER
 - PING
+- NICK
 
 Complete and Omitted:
 - PONG
 - CAP
+
+Improvements (uncessary):
+- Name reply with 16 names for each message.

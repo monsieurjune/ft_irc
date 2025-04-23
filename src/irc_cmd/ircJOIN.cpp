@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/23 15:05:21 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:15:03 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.setSource(obj->_serverName);
 			reply_msg.setCommand(ERR_CHANNELISFULL);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam("#" + channel_name);
+			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+l).");
 			reply_sender.second.push(reply_msg);
 			continue ;
@@ -119,7 +119,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.setSource(obj->_serverName);
 			reply_msg.setCommand(ERR_INVITEONLYCHAN);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam("#" + channel_name);
+			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+i).");
 			reply_sender.second.push(reply_msg);
 			continue ;
@@ -130,7 +130,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.setSource(obj->_serverName);
 			reply_msg.setCommand(ERR_BADCHANNELKEY);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam("#" + channel_name);
+			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+k).");
 			reply_sender.second.push(reply_msg);
 			continue ;
