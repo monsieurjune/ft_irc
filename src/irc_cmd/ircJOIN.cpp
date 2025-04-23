@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/23 14:55:04 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:05:21 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		return (obj->errNeedMoreParams(sender, message));
 	}
 	
-	// Special case: leaving all channels. (Finished WIP?)
-	// Finished (?)
+	// Special case: leaving all channels. (WIP)
+	// WIP WIP WIP
 	if (params.at(0) == "0")
 	{
 		std::set<Channel*>	channelSet = obj->getChannelSetByClient(sender);
@@ -45,7 +45,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		}
 		return (batch);
 	}
-	// Finished (?)
+	// WIP WIP WIP
 
 	reply_sender.first = sender;
 
