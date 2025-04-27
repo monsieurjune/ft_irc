@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/23 17:15:03 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:47:35 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 
 		// ERR_NOSUCHCHANNEL has different meaning!
 
-		// Validate channel_name first (?)
+		// Validate channel_name first.
 		if (channel_name.at(0) != '#')
 		{
 			reply_msg.setSource(obj->_serverName);
@@ -91,10 +91,20 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			continue ;
 		}
 		
+		// Create new channel if channel does not already exist.
 		if (!channel)
 		{
 			obj->createChannel(channel_name, sender);
-			// TODO: Reply message(s) to sender for newly created channel here.
+			// Reply message(s) to sender for newly created channel here.
+			channel = obj->getChannelByName(channel_name);
+			std::string sender_source = (sender->getUsername().empty() || sender->getHost().empty())
+				? sender->getNickname() : sender->constructSource();
+			reply_msg.setSource(":" + sender_source);
+			reply_msg.setCommand("JOIN");
+			reply_msg.pushParam(channel_name);
+			reply_sender.second.push(reply_msg);
+			// (WIP) NameReply: how to?
+			// (pseudocode) batch.concat(obj->rplNameReply(sender, channel));
 			continue ; 
 		}
 
@@ -139,8 +149,22 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		// General/valid joining case here.
 		{
 			channel->addUserToChannel(sender, "");
-			// TODO: Replies to sender for the existing channel here.
-			// TODO: Then, announcement to channel members here.
+			// (WIP) Replies to sender for the existing channel here.
+			std::string sender_source = (sender->getUsername().empty() || sender->getHost().empty())
+				? sender->getNickname() : sender->constructSource();
+			reply_msg.setSource(":" + sender_source);
+			reply_msg.setCommand("JOIN");
+			reply_msg.pushParam(channel_name);
+			reply_sender.second.push(reply_msg);
+			if (!channel->getTopic().empty())
+			{
+				// RPL_TOPIC
+				// RPL_TOPICWHOTIME
+			}
+			// (WIP) NameReply: how to?
+			// (pseudocode) batch.concat(obj->rplNameReply(sender, obj->getChannelByName(channel_name)));
+			
+			// TODO: Then, code for announcement to channel members here.
 		}
 	}
 	batch.push_back(reply_sender);
