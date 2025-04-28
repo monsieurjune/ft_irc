@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/17 03:24:32 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:06:12 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ bool	Client::containFlags(int flags)	const
 
 std::string	Client::constructSource()
 {
-	return (_nickname + "!" + _username + "@" + _host);
+	return ((_username.empty() || _host.empty()) ? _nickname : (_nickname + "!" + _username + "@" + _host));
 }
 
 void	Client::setAuthenLevel(int const level)
