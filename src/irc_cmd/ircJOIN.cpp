@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/28 19:20:01 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:38:34 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		for (std::set<Channel*>::iterator it = channelSet.begin(); it != channelSet.end(); it++)
 		{
 			// reply_msg is reuesd here to push a message into ircPART().
-			reply_msg.setSource(obj->_serverName);
+			reply_msg.setSource("");
 			reply_msg.setCommand("PART");
 			reply_msg.pushParam((*it)->getName());
 			// Call PART for each channel here.
@@ -88,6 +88,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
 			reply_msg.pushParam("No such channel.");
 			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
 			batch.push_back(reply_sender);
 			continue ;
 		}
@@ -96,22 +97,21 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		if (!channel)
 		{
 			obj->createChannel(channel_name, sender);
-			// Reply message(s) to sender for newly created channel here.
+			// Reply message(s) to sender for newly created channel starts from here.
 			channel = obj->getChannelByName(channel_name);
-			reply_msg.setSource(":" + sender->constructSource());
+			reply_msg.setSource(sender->constructSource());
 			reply_msg.setCommand("JOIN");
 			reply_msg.pushParam(channel_name);
 			reply_sender.second.push(reply_msg);
-			
-			// (pseudocode) batch.concat(obj->rplNameReply(sender, channel));
-			// WIP WIP WIP
-			t_replyBatch tmp = obj->rplNameReply(sender, channel);
-			std::queue<Message> * tmp_msgQueue = &(tmp.at(0).second);
-			// for (std::queue<Message>::iterator)
-			// {
-			// 	reply_sender.second.push((*it).second);
-			// }
-			// WIP WIP WIP
+			reply_msg.resetParams();
+			// RPL_NAMREPLY
+			// Getting messages from inside the reply batch.
+			std::queue<Message> tmp = obj->rplNameReply(sender, channel).at(0).second;
+			while (!tmp.empty())
+			{
+				reply_sender.second.push(tmp.front());
+				tmp.pop();
+			}
 			batch.push_back(reply_sender);
 			continue ; 
 		}
@@ -129,6 +129,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+l).");
 			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
 			batch.push_back(reply_sender);
 			continue ;
 		}
@@ -141,6 +142,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+i).");
 			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
 			batch.push_back(reply_sender);
 			continue ;
 		}
@@ -153,6 +155,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("Cannot join channel (+k).");
 			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
 			batch.push_back(reply_sender);
 			continue ;
 		}
@@ -161,29 +164,42 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		{
 			channel->addUserToChannel(sender, "");
 			// (WIP) Replies to sender for the existing channel here.
-			reply_msg.setSource(":" + sender->constructSource());
+			reply_msg.setSource(sender->constructSource());
 			reply_msg.setCommand("JOIN");
 			reply_msg.pushParam(channel_name);
 			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
 			if (!channel->getTopic().empty())
 			{
 				// RPL_TOPIC
+				reply_msg.setSource(obj->_serverName);
+				reply_msg.setCommand(RPL_TOPIC);
+				reply_msg.pushParam(sender->getNickname());
+				reply_msg.pushParam(channel->getName());
+				reply_msg.pushParam(channel->getTopic());
+				reply_sender.second.push(reply_msg);
+				reply_msg.resetParams();
 				// RPL_TOPICWHOTIME
+				reply_msg.setSource(obj->_serverName);
+				reply_msg.setCommand(RPL_TOPICWHOTIME);
+				reply_msg.pushParam(sender->getNickname());
+				reply_msg.pushParam(channel->getName());
+				reply_msg.pushParam(channel->getTopicSetter());
+				reply_msg.pushParam(ft_std::itoa(channel->getTimeTopicSet()));
+				reply_sender.second.push(reply_msg);
+				reply_msg.resetParams();
 			}
-			
-			// Getting replies from inside the reply batch.
-			t_replyBatch tmp = obj->rplNameReply(sender, channel);
-			for (t_replyBatch::iterator it = tmp.begin(); it != tmp.end(); it++)
+			// RPL_NAMREPLY
+			// Getting messages from inside the reply batch.
+			std::queue<Message> tmp = obj->rplNameReply(sender, channel).at(0).second;
+			while (!tmp.empty())
 			{
-				for 
-				reply_sender.second.push((*it).second());
+				reply_sender.second.push(tmp.front());
+				tmp.pop();
 			}
-
-
 			batch.push_back(reply_sender);
-
+			
 			// TODO: Then, code for announcement to channel members here.
-
 			
 			continue ;
 		}
