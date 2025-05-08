@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircPART.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/13 23:15:09 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:56:31 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,76 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
+#include "std/ft_cppstd.hpp"
 
-FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & msg, Client * const client)
+FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, Client * const sender)
 {
-    (void)obj;
-    (void)msg;
-    (void)client;
+	std::vector<std::string>	params = message.getParams();
+	Message						reply_msg;
+	t_reply						reply_sender;
+	t_replyBatch				batch;
 
-    return FtIrc::t_replyBatch();
+	if (params.size() < 1 || params.at(0).empty())
+	{
+		return (obj->errNeedMoreParams(sender, message));
+	}
+
+    reply_sender.first = sender;
+    std::string reason = (params.size() < 2 || params.at(1).empty()) ? "" : params.at(1);
+    std::vector<std::string>	channel_name_vec = ft_std::split(params.at(0), ",");
+
+	// Primary for loop here.
+	for (int idx = 0; idx < channel_name_vec.size(); idx++)
+	{
+		std::string	channel_name = channel_name_vec.at(idx);
+		Channel *	channel = channel_name.empty() ? NULL : obj->getChannelByName(channel_name);
+
+		// ERR_NOSUCHCHANNEL has different meaning!
+
+		// Validate channel_name first.
+		if (channel_name.at(0) != '#' || !channel)
+		{
+			reply_msg.setSource(obj->_serverName);
+			reply_msg.setCommand(ERR_NOSUCHCHANNEL);
+			reply_msg.pushParam(sender->getNickname());
+			reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
+			reply_msg.pushParam("No such channel.");
+			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
+			batch.push_back(reply_sender);
+			continue ;
+		}
+
+		if (!(channel->hasThisClient(sender)))
+		{
+			reply_msg.setSource(obj->_serverName);
+			reply_msg.setCommand(ERR_NOTONCHANNEL);
+			reply_msg.pushParam(sender->getNickname());
+			reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
+			reply_msg.pushParam("You're not on that channel.");
+			reply_sender.second.push(reply_msg);
+			reply_msg.resetParams();
+			batch.push_back(reply_sender);
+			continue ;
+		}
+
+        // General/valid PARTing case here.
+		{
+			channel->deleteUserFromChannel(sender);
+			reply_msg.setSource(sender->constructSource());
+			reply_msg.setCommand("PART");
+			reply_msg.pushParam(channel_name);
+			if (!reason.empty())
+            {
+                reply_msg.pushParam(reason);
+            }
+            reply_sender.second.push(reply_msg);
+			batch.push_back(reply_sender);
+			// PARTing announcement to other channel members here.	
+			obj->pushChannelReplyOthers(reply_msg, channel, batch, sender);
+			reply_msg.resetParams();
+			continue ;
+		}
+	}
+	return (batch);
 }
