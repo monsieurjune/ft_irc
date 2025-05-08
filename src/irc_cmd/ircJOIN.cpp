@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/07 18:38:34 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:26:39 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 		// General/valid joining case here.
 		{
 			channel->addUserToChannel(sender, "");
-			// (WIP) Replies to sender for the existing channel here.
+			// Replies to sender for the existing channel here.
 			reply_msg.setSource(sender->constructSource());
 			reply_msg.setCommand("JOIN");
 			reply_msg.pushParam(channel_name);
@@ -199,13 +199,16 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			}
 			batch.push_back(reply_sender);
 			
-			// TODO: Then, code for announcement to channel members here.
+			// Joining announcement to channel members here.	
+			reply_msg.setSource(sender->constructSource());
+			reply_msg.setCommand("JOIN");
+			reply_msg.pushParam(channel->getName());
+			obj->pushChannelReplyOthers(reply_msg, channel, batch, sender);
+			reply_msg.resetParams();
 			
 			continue ;
 		}
 	}
-	// Moved this line into each case in the primary for loop.
-	// batch.push_back(reply_sender);
 
 	return (batch);
 }

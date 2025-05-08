@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FtIrc.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 06:55:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:23:12 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,18 @@ class FtIrc
 		 * @warning Don't use this method in scenario that client joined multiple channels
 		 */
 		void	pushChannelReplyAll(Message const & reply_msg, Channel * const channel, t_replyBatch & batch);
+
+		/**
+		 * @brief Push Message in Reply Batch for all Clients EXCEPT the sender of the command in this Channel
+		 * 
+		 * @param reply_msg Message that want to send
+		 * @param channel Target Channel that want to broadcast
+		 * @param batch Reply Batch Data Structure
+		 * @param sender Client who send the command that causes this reply/response
+		 * 
+		 * @warning Don't use this method in scenario that client joined multiple channels
+		 */
+		void	pushChannelReplyOthers(Message const & reply_msg, Channel * const channel, t_replyBatch & batch, Client * sender);
 
 		/**
 		 * @brief Push Message in Reply Batch for all Clients in server

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FtIrcMethodHelper.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 00:40:23 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/15 00:41:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:23:09 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,26 @@ void    FtIrc::pushChannelReplyAll(Message const & reply_msg, Channel * const ch
 
 	for (it_umap = userMap.begin(); it_umap != it_umap_end; it_umap++)
 	{
+		reply.first = it_umap->first;
+		batch.push_back(reply);
+	}
+}
+
+void    FtIrc::pushChannelReplyOthers(Message const & reply_msg, Channel * const channel, t_replyBatch & batch, Client * sender)
+{
+	Channel::t_userMap				userMap = channel->getUserMap();
+	Channel::t_userMap::iterator	it_umap;
+	Channel::t_userMap::iterator	it_umap_end = userMap.end();
+	t_reply							reply;
+
+	reply.second.push(reply_msg);
+
+	for (it_umap = userMap.begin(); it_umap != it_umap_end; it_umap++)
+	{
+		if (it_umap->first == sender)
+		{
+			continue ;
+		}
 		reply.first = it_umap->first;
 		batch.push_back(reply);
 	}
