@@ -5,12 +5,12 @@ Unwrite:
 - WHO
 
 Incomplete:
-- JOIN
 
 Complete but Untest:
 - TOPIC
 - KICK
 - MODE
+- JOIN
 
 Complete and Tested:
 - PASS
