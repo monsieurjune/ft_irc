@@ -1,6 +1,5 @@
 Unwrite:
 - INVITE
-- PART
 - QUIT
 - WHO
 
@@ -11,6 +10,7 @@ Complete but Untest:
 - KICK
 - MODE
 - JOIN
+- PART
 
 Complete and Tested:
 - PASS
