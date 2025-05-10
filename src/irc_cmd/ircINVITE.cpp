@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/10 14:18:51 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/10 19:10:46 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,22 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 
     if (params.size() == 0)
     {
-        // Reply with list of channels sender is invited to.
-        return (batch);
+        // Iterate through list of channels in server
+		// for ()
+		{
+			// if (channel has sender in invite list)
+			{
+				// reply_msg.setSource(obj->_serverName);
+				// reply_msg.setCommand(RPL_INVITELIST);
+				// reply_msg.pushParam(sender->getNickname());
+				// reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
+				// reply_msg.pushParam("No such channel.");
+				// reply_sender.second.push(reply_msg);
+				// reply_msg.resetParams();
+				// batch.push_back(reply_sender);
+			}
+		}
+		return (batch);
     }
     
     if (params.size() == 1 || params.at(0).empty() || params.at(1).empty())

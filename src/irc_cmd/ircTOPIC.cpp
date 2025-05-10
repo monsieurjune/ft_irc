@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircTOPIC.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/13 23:14:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/10 19:26:26 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	{
 		reply_msg.setCommand(ERR_NOSUCHCHANNEL);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("No such channel");
 		reply.first = sender;
 		reply.second.push(reply_msg);
@@ -52,7 +52,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 		{
 			reply_msg.setCommand(RPL_NOTOPIC);
 			reply_msg.pushParam(sender->getNickname());
-			reply_msg.pushParam("#" + channel_name);
+			reply_msg.pushParam(channel_name);
 			reply_msg.pushParam("No topic is set");
 			reply.first = sender;
 			reply.second.push(reply_msg);
@@ -69,7 +69,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	{
 		reply_msg.setCommand(ERR_NOTONCHANNEL);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("You're not on that channel");
 		reply.first = sender;
 		reply.second.push(reply_msg);
@@ -81,7 +81,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	{
 		reply_msg.setCommand(ERR_CHANOPRIVSNEEDED);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("You're not channel operator");
 		reply.first = sender;
 		reply.second.push(reply_msg);
@@ -94,7 +94,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 	channel->setTopic(message.getParams().at(1), sender);
 
 	reply_msg.setCommand("TOPIC");
-	reply_msg.pushParam("#" + channel_name);
+	reply_msg.pushParam(channel_name);
 	reply_msg.pushParam(channel->getTopic());
 	obj->pushChannelReplyAll(reply_msg, channel, batch);
 
