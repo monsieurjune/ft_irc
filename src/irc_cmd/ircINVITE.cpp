@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/10 19:10:46 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/10 22:34:37 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,5 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 	// 		continue ;
 	// 	}
 	// }
-	// return (batch);
+	return (batch);
 }
