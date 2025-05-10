@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/08 15:56:31 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/10 13:39:16 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, C
     std::vector<std::string>	channel_name_vec = ft_std::split(params.at(0), ",");
 
 	// Primary for loop here.
-	for (int idx = 0; idx < channel_name_vec.size(); idx++)
+	for (unsigned long idx = 0; idx < channel_name_vec.size(); idx++)
 	{
 		std::string	channel_name = channel_name_vec.at(idx);
 		Channel *	channel = channel_name.empty() ? NULL : obj->getChannelByName(channel_name);
