@@ -1,9 +1,9 @@
 Unwrite:
-- INVITE
 - QUIT
 - WHO
 
 Incomplete:
+- INVITE
 
 Complete but Untest:
 - TOPIC
