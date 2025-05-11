@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/10 13:39:16 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:55:23 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
+
+static void	queueclear(std::queue<Message> &q)
+{
+	std::queue<Message>	empty;
+	std::swap(q, empty);
+}
 
 FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, Client * const sender)
 {
@@ -52,6 +58,7 @@ FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 
@@ -65,6 +72,7 @@ FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 
@@ -80,6 +88,7 @@ FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, C
             }
             reply_sender.second.push(reply_msg);
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			// PARTing announcement to other channel members here.	
 			obj->pushChannelReplyOthers(reply_msg, channel, batch, sender);
 			reply_msg.resetParams();

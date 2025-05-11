@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 19:11:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/08 14:26:39 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:51:50 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,19 @@
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
 
+static void	queueclear(std::queue<Message> &q)
+{
+	std::queue<Message>	empty;
+	std::swap(q, empty);
+}
+
 FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, Client * const sender)
 {
 	std::vector<std::string>	params = message.getParams();
 	Message						reply_msg;
 	t_reply						reply_sender;
 	t_replyBatch				batch;
-
+	
 	if (params.size() < 1 || params.at(0).empty())
 	{
 		return (obj->errNeedMoreParams(sender, message));
@@ -90,6 +96,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 		
@@ -113,6 +120,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 				tmp.pop();
 			}
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ; 
 		}
 
@@ -131,6 +139,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 
@@ -144,6 +153,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 
@@ -157,6 +167,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 			reply_sender.second.push(reply_msg);
 			reply_msg.resetParams();
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			continue ;
 		}
 
@@ -198,6 +209,7 @@ FtIrc::t_replyBatch FtIrc::ircJOIN(FtIrc * const obj, Message const & message, C
 				tmp.pop();
 			}
 			batch.push_back(reply_sender);
+			queueclear(reply_sender.second);
 			
 			// Joining announcement to channel members here.	
 			reply_msg.setSource(sender->constructSource());

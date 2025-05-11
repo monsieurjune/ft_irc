@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/10 22:34:37 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:02:25 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,34 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 	Message						reply_msg;
 	t_reply						reply_sender;
 	t_replyBatch				batch;
+	std::string					nick = sender->getNickname();
 
 	reply_sender.first = sender;
 
     if (params.size() == 0)
     {
-        // Iterate through list of channels in server
-		// for ()
+		reply_msg.setSource(obj->_serverName);
+		reply_msg.setCommand(RPL_INVITELIST);
+		// Iterate through list of channels in server
+		std::map<std::string, Channel *>			tmpChannelMap = obj->_channelMapByName;
+		std::map<std::string, Channel *>::iterator	it = tmpChannelMap.begin();
+		for (it; it != tmpChannelMap.end(); it++)
 		{
-			// if (channel has sender in invite list)
+			Channel * channel = it->second;
+			if (channel->isClientInvited(sender))
 			{
-				// reply_msg.setSource(obj->_serverName);
-				// reply_msg.setCommand(RPL_INVITELIST);
-				// reply_msg.pushParam(sender->getNickname());
-				// reply_msg.pushParam(channel_name.empty() ? "*" : channel_name);
-				// reply_msg.pushParam("No such channel.");
-				// reply_sender.second.push(reply_msg);
-				// reply_msg.resetParams();
-				// batch.push_back(reply_sender);
+				reply_msg.pushParam(nick);
+				reply_msg.pushParam(channel->getName());
+				reply_sender.second.push(reply_msg);
+				reply_msg.resetParams();
 			}
 		}
+		// RPL_ENDOFINVITELIST
+		reply_msg.setCommand(RPL_INVITELIST);
+		reply_msg.pushParam(nick);
+		reply_msg.pushParam("End of /INVITE list.");
+		reply_sender.second.push(reply_msg);
+		batch.push_back(reply_sender);
 		return (batch);
     }
     
