@@ -3,7 +3,6 @@ Unwrite:
 - WHO
 
 Incomplete:
-- INVITE
 
 Complete but Untest:
 - TOPIC
@@ -11,6 +10,7 @@ Complete but Untest:
 - MODE
 - JOIN
 - PART
+- INVITE
 
 Complete and Tested:
 - PASS
