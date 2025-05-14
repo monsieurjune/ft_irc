@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircINVITE.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/13 22:51:46 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:56:09 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 	if (params.size() == 0)
     {
 		reply_msg.setCommand(RPL_INVITELIST);
-		// Iterate through list of channels in serve             r
+
 		std::map<std::string, Channel *>			tmpChannelMap = obj->_channelMapByName;
-		std::map<std::string, Channel *>::iterator	it = tmpChannelMap.begin();
-		for (it; it != tmpChannelMap.end(); it++)
+		std::map<std::string, Channel *>::iterator	it;
+
+		// Iterate through list of channels in serverc
+		for (it = tmpChannelMap.begin(); it != tmpChannelMap.end(); it++)
 		{
 			Channel * channel = it->second;
 			if (channel->isClientInvited(sender))
@@ -136,9 +138,9 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
 		reply_msg.resetParams();
-		
+
 		t_reply	reply_invitee;
-		
+
 		reply_invitee.first = invitee;
 		reply_msg.setSource(sender->constructSource());
 		reply_msg.setCommand("INVITE");
