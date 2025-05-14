@@ -1,10 +1,11 @@
 Unwrite:
 - QUIT
-- WHO
+- WHO (Maybe Useless)
 
 Incomplete:
 
 Complete but Untest:
+- PRIVMSG
 - TOPIC
 - KICK
 - MODE
