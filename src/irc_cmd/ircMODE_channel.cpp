@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:10 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/14 11:48:33 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:43:24 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 			continue ;
 		}
 
+		reply_msg.resetParams();
+		reply_msg.setSource(sender->constructSource());
 		reply_msg.setCommand("MODE");
 		
 		it_umap = userMap.begin();
@@ -179,6 +181,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					// No parameter
 					if (params.size() <= mode_arg_idx || params.at(mode_arg_idx).empty())
 					{
+						reply_msg.setSource(_serverName);
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
 						reply_msg.pushParam(channel_name);
@@ -218,6 +221,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					// No parameter.
 					if (params.size() <= mode_arg_idx || params.at(mode_arg_idx).empty())
 					{
+						reply_msg.setSource(_serverName);
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
 						reply_msg.pushParam(channel_name);
@@ -233,6 +237,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					// Invalid limit mode parameter.
 					if (!ft_std::isnumber(limit_arg.c_str()) || ft_std::stoi(limit_arg) < 1)
 					{
+						reply_msg.setSource(_serverName);
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
 						reply_msg.pushParam(channel_name);
@@ -261,6 +266,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				// No parameter.
 				if (params.size() <= mode_arg_idx || params.at(mode_arg_idx).empty())
 				{
+					reply_msg.setSource(_serverName);
 					reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 					reply_msg.pushParam(sender->getNickname());
 					reply_msg.pushParam(channel_name);
@@ -277,6 +283,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				// ERR_NOSUCHNICK
 				if (!target)
 				{
+					reply_msg.setSource(_serverName);
 					reply_msg.setCommand(ERR_NOSUCHNICK);
 					reply_msg.pushParam(sender->getNickname());
 					reply_msg.pushParam(target_str);
@@ -288,6 +295,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				// ERR_USERNOTINCHANNEL
 				if (!(channel->hasThisClient(target)))
 				{
+					reply_msg.setSource(_serverName);
 					reply_msg.setCommand(ERR_USERNOTINCHANNEL);
 					reply_msg.pushParam(sender->getNickname());
 					reply_msg.pushParam(target_str);
@@ -342,6 +350,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 
 			default:
 			{
+				reply_msg.setSource(_serverName);
 				reply_msg.setCommand(ERR_UNKNOWNMODE);
 				reply_msg.pushParam(sender->getNickname());
 				reply_msg.pushParam(std::string(1, *it));
