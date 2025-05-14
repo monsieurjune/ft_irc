@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircMODE_channel.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:10 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/19 08:15:34 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:11:59 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static std::string const set_of_char_to_string(std::set<char> const & set)
 FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * const sender)
 {
 	std::vector<std::string> const &	params = message.getParams();
-	std::string const 					channel_name = params.at(0).substr(1, std::string::npos);
+	std::string const 					channel_name = params.at(0);
 	Channel * const 					channel = getChannelByName(channel_name);
 	Message								reply_msg;
 	t_reply								reply_sender;
