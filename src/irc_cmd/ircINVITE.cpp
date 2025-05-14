@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/14 11:52:12 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:07:38 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 		reply_msg.pushParam(sender_nick);
 		reply_msg.pushParam(invitee_nick);
 		reply_msg.pushParam(channel_name);
-		reply_msg.pushParam("Invitee is already on channel/.");
+		reply_msg.pushParam("Invitee is already on channel.");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
 		return (batch);
