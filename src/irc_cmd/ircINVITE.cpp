@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/14 11:47:17 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:52:12 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 
 	// SUCCESS_CASE
 	{
+		channel->addClientToInviteSet(invitee);
+		
 		reply_msg.setCommand(RPL_INVITING);
 		reply_msg.pushParam(sender_nick);
 		reply_msg.pushParam(invitee_nick);
