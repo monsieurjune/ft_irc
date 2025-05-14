@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/14 11:26:48 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:47:17 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ FtIrc::t_replyBatch FtIrc::ircINVITE(FtIrc * const obj, Message const & message,
 		reply_msg.setCommand("INVITE");
 		reply_msg.pushParam(invitee_nick);
 		reply_msg.pushParam(channel_name);
-		reply_sender.second.push(reply_msg);
+		reply_invitee.second.push(reply_msg);
 		batch.push_back(reply_invitee);
 
 		return (batch);

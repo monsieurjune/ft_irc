@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:10 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/14 11:11:59 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:48:33 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	{
 		reply_msg.setCommand(ERR_NOSUCHCHANNEL);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("No such channel");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
@@ -59,7 +59,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 
 		reply_msg.setCommand(RPL_CHANNELMODEIS);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam(modestr);
 		// <mode arguments> // Only deal with MODE_USERLIMET ('l'); MODE_CHANNELKEY ('k')'s argument (the password) is secret.
 		if (modestr.find(MODE_USERLIMIT) != std::string::npos)
@@ -71,7 +71,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 		reply_msg.resetParams();
 		reply_msg.setCommand(RPL_CREATIONTIME);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam(ft_std::itoa(channel->getTimeCreated()));
 		reply_sender.second.push(reply_msg);
 
@@ -84,7 +84,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	{
 		reply_msg.setCommand(ERR_NOTONCHANNEL);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("You're not on that channel");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
@@ -96,7 +96,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 	{
 		reply_msg.setCommand(ERR_CHANOPRIVSNEEDED);
 		reply_msg.pushParam(sender->getNickname());
-		reply_msg.pushParam("#" + channel_name);
+		reply_msg.pushParam(channel_name);
 		reply_msg.pushParam("You're not channel operator");
 		reply_sender.second.push(reply_msg);
 		batch.push_back(reply_sender);
@@ -143,7 +143,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (channel->hasThisMode(MODE_INVITEONLY) && sign == '-')
 				{
 					channel->removeMode(MODE_INVITEONLY);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("-i");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
@@ -152,7 +152,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (!(channel->hasThisMode(MODE_INVITEONLY)) && sign == '+')
 				{
 					channel->addMode(MODE_INVITEONLY);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("+i");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
@@ -166,7 +166,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				{
 					channel->setPassword("");
 					channel->removeMode(MODE_CHANNELKEY);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("-k");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
@@ -181,7 +181,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					{
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
-						reply_msg.pushParam("#" + channel_name);
+						reply_msg.pushParam(channel_name);
 						reply_msg.pushParam("k");
 						reply_msg.pushParam("*");
 						reply_msg.pushParam("You must specify a parameter for the key mode.");
@@ -191,7 +191,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					
 					channel->addMode(MODE_CHANNELKEY);
 					channel->setPassword(params.at(2));
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("+k");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
@@ -205,7 +205,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				{
 					channel->removeMode(MODE_USERLIMIT);
 					channel->setUserCountLimit(0);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("-l");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
@@ -220,7 +220,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					{
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
-						reply_msg.pushParam("#" + channel_name);
+						reply_msg.pushParam(channel_name);
 						reply_msg.pushParam("l");
 						reply_msg.pushParam("*");
 						reply_msg.pushParam("You must specify a parameter for the limit mode.");
@@ -235,7 +235,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					{
 						reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 						reply_msg.pushParam(sender->getNickname());
-						reply_msg.pushParam("#" + channel_name);
+						reply_msg.pushParam(channel_name);
 						reply_msg.pushParam("l");
 						reply_msg.pushParam(limit_arg);
 						reply_msg.pushParam("Invalid limit mode parameter.");
@@ -245,7 +245,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 
 					channel->setUserCountLimit(ft_std::stoi(limit_arg));
 					channel->addMode(MODE_USERLIMIT);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("+l");
 					reply_msg.pushParam(limit_arg);
 					pushChannelReplyAll(reply_msg, channel, batch);
@@ -263,7 +263,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				{
 					reply_msg.setCommand(ERR_INVALIDMODEPARAM);
 					reply_msg.pushParam(sender->getNickname());
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("o");
 					reply_msg.pushParam("*");
 					reply_msg.pushParam("You must specify a parameter for the op mode.");
@@ -291,7 +291,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					reply_msg.setCommand(ERR_USERNOTINCHANNEL);
 					reply_msg.pushParam(sender->getNickname());
 					reply_msg.pushParam(target_str);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("They aren't on that channel.");
 					reply_sender.second.push(reply_msg);
 					continue ;
@@ -300,7 +300,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (channel->hasThisClientMembershipMode(target, MODE_OPERATOR) && sign == '-')
 				{
 					channel->removeThisClientMembershipMode(target, MODE_OPERATOR);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("-o");
 					reply_msg.pushParam(target_str);
 					pushChannelReplyAll(reply_msg, channel, batch);
@@ -310,7 +310,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (!(channel->hasThisClientMembershipMode(target, MODE_OPERATOR)) && sign == '+')
 				{
 					channel->addThisClientMembershipMode(target, MODE_OPERATOR);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("+o");
 					reply_msg.pushParam(target_str);
 					pushChannelReplyAll(reply_msg, channel, batch);
@@ -324,7 +324,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (channel->hasThisMode(MODE_PROTECTTOPIC) && sign == '-')
 				{
 					channel->removeMode(MODE_PROTECTTOPIC);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("-t");
 					pushChannelReplyAll(reply_msg, channel, batch);
 				}
@@ -332,7 +332,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 				if (!(channel->hasThisMode(MODE_PROTECTTOPIC)) && sign == '+')
 				{
 					channel->addMode(MODE_PROTECTTOPIC);
-					reply_msg.pushParam("#" + channel_name);
+					reply_msg.pushParam(channel_name);
 					reply_msg.pushParam("+t");
 					pushChannelReplyAll(reply_msg, channel, batch);
 					continue ;
