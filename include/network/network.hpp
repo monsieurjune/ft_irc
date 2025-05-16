@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:07 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:22 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 03:44:19 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ namespace ft_net
 /**
  * @brief Initialize listener socket
  * 
- * @return Listenner Socket fd
+ * @return Listener Socket fd
+ * 
+ * - -1: failed
+ * 
+ * - >0: succesful
  */
 int	get_listener_scoket_fd(const char *port_str);
 
