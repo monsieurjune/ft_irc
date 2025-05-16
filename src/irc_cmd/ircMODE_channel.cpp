@@ -6,7 +6,7 @@
 /*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:57:10 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/14 12:43:24 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:43:50 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ FtIrc::t_replyBatch FtIrc::ircMODE_channel(Message const & message, Client * con
 					continue ;
 				}
 
-				if (!(channel->hasThisMode(MODE_USERLIMIT)) && sign == '+')
+				if (sign == '+')
 				{
 					++mode_arg_idx;
 					
