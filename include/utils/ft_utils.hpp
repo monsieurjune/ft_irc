@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 15:01:25 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:03:36 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 02:05:01 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,16 @@
 namespace ft_utils
 {
 
-void	logger(std::string name, std::string msg);
+typedef enum e_loglevel
+{
+    DEBUG,
+    INFO,
+    WARN,
+    ERROR,
+    CRITICAL,
+}   t_loglevel;
+
+void	logger(t_loglevel level, std::string const& name, std::string const& msg);
 int		signal_init(void (*killer)(int), void (*ignorer)(int));
 
 }
