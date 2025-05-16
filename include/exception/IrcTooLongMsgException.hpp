@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:01:23 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:05:14 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 01:29:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class IrcTooLongMsgException : public std::exception
 		std::string	_msg;
 
 	public:
-		IrcTooLongMsgException(const char *msg);
+		explicit IrcTooLongMsgException(std::string const& msg);
 		virtual ~IrcTooLongMsgException() throw();
 		virtual const char* what() const throw();
 };

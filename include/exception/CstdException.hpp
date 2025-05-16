@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:52:19 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:05:10 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 01:28:13 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class CstdException : public std::exception
 		std::string	_msg;
 
 	public:
-		CstdException(int code);
+		explicit CstdException(int code);
 		virtual ~CstdException() throw();
 		virtual const char* what() const throw();
 };

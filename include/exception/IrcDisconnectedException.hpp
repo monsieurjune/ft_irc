@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:52:22 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:05:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 01:28:46 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class IrcDisconnectedException : public std::exception
 		std::string	_msg;
 
 	public:
-		IrcDisconnectedException(const char *msg);
+		explicit IrcDisconnectedException(std::string const& msg);
 		virtual ~IrcDisconnectedException() throw();
 		virtual const char* what() const throw();
 };

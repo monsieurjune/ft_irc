@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:52:25 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:05:12 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 01:29:04 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class IrcInvalidPacketException : public std::exception
 		std::string	_msg;
 	
 	public:
-		IrcInvalidPacketException(const char *msg);
+		explicit IrcInvalidPacketException(std::string const& msg);
 		virtual ~IrcInvalidPacketException() throw();
 		virtual const char* what() const throw();
 };
