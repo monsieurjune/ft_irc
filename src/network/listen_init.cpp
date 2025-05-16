@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:36 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 02:55:50 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 03:36:28 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static inline void	sb_setsockopt_helper(int listener_sockfd)
 	}
 }
 
-static int	sb_binding(struct addrinfo **pai)
+static inline int	sb_binding(struct addrinfo **pai)
 {
 	int				listen_socketfd;
 	struct addrinfo *node	= NULL;
@@ -107,10 +107,10 @@ static int	sb_binding(struct addrinfo **pai)
 		// Bind this listen socket
 		if (bind(listen_socketfd, node->ai_addr, node->ai_addrlen) == 0)
 		{
-			ft_utils::logger(ft_utils::INFO, LOCAL_LOG_NAME, "Binding socket is succesful");
 			break;
 		}
 
+		// Close, if binding is failed
 		close(listen_socketfd);
 	}
 
@@ -135,29 +135,40 @@ int	get_listener_scoket_fd(const char *port_str)
 	struct addrinfo*	ai				= NULL;
 	int					listen_socketfd	= 0;
 
-	// Check if port_no is valid
-	sb_check_port_str(port_str);
-
-	// Check if getaddrinfo is success
-	sb_get_addr_info(port_str, &ai);
-
-	// Binding Socket
-	listen_socketfd = sb_binding(&ai);
-
-	// Set listen socket to Non-Blocking
-	if (fcntl(listen_socketfd, F_SETFL, O_NONBLOCK) < 0)
+	try
 	{
-		close(listen_socketfd);
-		throw IrcListenBindingException("Set socket to non-blocking is failed");
-	}
+		// Check if port_no is valid
+		sb_check_port_str(port_str);
 
-	// Set this socket to listen now
-	if (listen(listen_socketfd, 1024) < 0)
-	{
-		close(listen_socketfd);
-		throw IrcListenBindingException("Set listen() to socket is failed");
+		// Check if getaddrinfo is success
+		sb_get_addr_info(port_str, &ai);
+
+		// Binding Socket
+		listen_socketfd = sb_binding(&ai);
+
+		// Set listen socket to Non-Blocking
+		if (fcntl(listen_socketfd, F_SETFL, O_NONBLOCK) < 0)
+		{
+			close(listen_socketfd);
+			throw IrcListenBindingException("Set socket to non-blocking is failed");
+		}
+
+		// Set this socket to listen now
+		if (listen(listen_socketfd, 1024) < 0)
+		{
+			close(listen_socketfd);
+			throw IrcListenBindingException("Set listen() to socket is failed");
+		}
+		ft_utils::logger(ft_utils::INFO, LOCAL_LOG_NAME, "Binding listener socket is succesful");
+
+		return listen_socketfd;
 	}
-	return listen_socketfd;
+	catch (IrcListenBindingException const& e)
+	{
+		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, e.what());
+
+		return -1;
+	}
 }
 
 }
