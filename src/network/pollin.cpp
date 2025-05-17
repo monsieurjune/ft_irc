@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:55 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 20:52:19 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:43:49 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
-// marco
-#define LOCAL_LOG_NAME "pollin"
 
 static inline void	sb_accept_new_client(FtIrc *main_obj, int listen_fd)
 {
@@ -99,7 +96,7 @@ static inline void	sb_handle_too_long(FtIrc *main_obj, int fd, std::string const
 
 	// Do first time thing
 	main_obj->notifyErrTooLongOnThisClient(fd);
-	ft_utils::logger(ft_utils::DEBUG, LOCAL_LOG_NAME, msg);
+	ft_utils::logger(ft_utils::DEBUG, "pollin", msg);
 
 	// set isflush toggle
 	ptr->setIsFlushing();
@@ -133,7 +130,7 @@ void	pollin(FtIrc *main_obj, int fd, int revents)
 	}
 	catch (IrcInvalidPacketException const& e)
 	{
-		ft_utils::logger(ft_utils::DEBUG, LOCAL_LOG_NAME, e.what());
+		ft_utils::logger(ft_utils::DEBUG, "pollin", e.what());
 	}
 	catch (IrcDisconnectedException const&)
 	{

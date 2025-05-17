@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/05/17 20:12:07 by tponutha         ###   ########.fr        #
+#    Updated: 2025/05/17 21:15:19 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ NETWORK_SRC		:= listen_init.cpp \
 					irc_flush.cpp \
 					pollin.cpp \
 					pollout.cpp \
+					pollhup.cpp \
 					recv_wrapper.cpp
 NETWORK_SRCS	:= $(addprefix $(NETWORK_SRC_DIR), $(NETWORK_SRC))
 

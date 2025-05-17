@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 21:01:50 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:46:18 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include "ft_irc/FtIrc.hpp"
 #include "network/network.hpp"
 #include "utils/ft_utils.hpp"
-
-// macro
-#define LOCAL_LOG_NAME "main"
 
 // Use for check running
 bool	g_run	= true;
@@ -32,25 +29,48 @@ static void	sb_ignorer(int signum)
 	(void)signum;	// ignore
 }
 
+static inline void	sb_print_attribute()
+{
+	std::string	msg;
+
+	msg.append("DEBUG = ");
+	msg.append(DEBUG_MODE ? "TRUE" : "FALSE");
+	ft_utils::logger(ft_utils::INFO, "main", msg);
+	msg.clear();
+
+	msg.append("VERSION = ");
+	msg.append(FT_IRC_VERSION);
+	ft_utils::logger(ft_utils::INFO, "main", msg);
+	msg.clear();
+
+	msg.append("SERVER = irc.localhost.test");
+	ft_utils::logger(ft_utils::INFO, "main", msg);
+	msg.clear();
+
+	msg.append("NETWORK = FtIrcNetwork");
+	ft_utils::logger(ft_utils::INFO, "main", msg);
+	msg.clear();
+}
+
 static inline bool	sb_check_argv(const int argc, const char *argv[])
 {
 	bool	ret = true;
 
 	if (argc != 3)
 	{
-		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Arguments must have exactly 2 params");
+		ft_utils::logger(ft_utils::CRITICAL, "main", "Arguments must have exactly 2 params");
 		return false;
 	}
 
 	if (argv[1][0] == '\0')
 	{
-		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Port musn\'t empty");
+		ft_utils::logger(ft_utils::CRITICAL, "main", "Port musn\'t empty");
 		ret = false;
 	}
 
 	if (argv[2][0] == '\0')
 	{
-		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Password musn\'t empty");
+		ft_utils::logger(ft_utils::CRITICAL, "main", "Password musn\'t empty");
 		ret = false;
 	}
 
@@ -64,7 +84,7 @@ static inline void	sb_network_loop(FtIrc *main_obj)
 
 	if (poll_count < 0)
 	{
-		ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, "Encounter error after ran poll()");
+		ft_utils::logger(ft_utils::ERROR, "main", "Encounter error after ran poll()");
 		return;
 	}
 
@@ -81,7 +101,7 @@ static inline void	sb_network_loop(FtIrc *main_obj)
 		}
 		catch (std::exception const& e)
 		{
-			ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
+			ft_utils::logger(ft_utils::ERROR, "main", e.what());
 		}
 	}
 }
@@ -104,7 +124,7 @@ static inline void	sb_server(int listener_socket_fd, const char* password)
 		}
 		catch (std::exception const& e)
 		{
-			ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
+			ft_utils::logger(ft_utils::ERROR, "main", e.what());
 			continue;
 		}
 	}
@@ -112,6 +132,10 @@ static inline void	sb_server(int listener_socket_fd, const char* password)
 
 int	main(const int argc, const char *argv[])
 {
+	// show
+	sb_print_attribute();
+
+	// actual logic
 	try
 	{
 		int	listener_socket_fd = 0;
@@ -140,7 +164,7 @@ int	main(const int argc, const char *argv[])
 	}
 	catch (std::exception const& e)
 	{
-		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, e.what());
+		ft_utils::logger(ft_utils::CRITICAL, "main", e.what());
 	}
 
 	return 0;

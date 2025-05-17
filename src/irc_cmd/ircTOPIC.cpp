@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircTOPIC.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:26:39 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/10 19:26:26 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:43:20 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 
 	std::string	channel_name = message.getParams().at(0);
 	Channel *	channel = obj->getChannelByName(channel_name);
-	
+
 	if (!channel)
 	{
 		reply_msg.setCommand(ERR_NOSUCHCHANNEL);
@@ -88,9 +88,8 @@ FtIrc::t_replyBatch FtIrc::ircTOPIC(FtIrc * const obj, Message const & message, 
 		batch.push_back(reply);
 		return (batch);
 	}
-	
-	// Topic will be changed (general case) from here.
 
+	// Topic will be changed (general case) from here.
 	channel->setTopic(message.getParams().at(1), sender);
 
 	reply_msg.setCommand("TOPIC");

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 09:08:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:28:23 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@
 
 #ifndef NICKLEN
 #define NICKLEN 9
+#endif
+
+#ifndef TOPICLEN
+#define TOPICLEN 300
+#endif
+
+#ifndef CHANNELLEN
+#define CHANNELLEN 50
 #endif
 
 #ifndef MARKED_REMOVE_FD

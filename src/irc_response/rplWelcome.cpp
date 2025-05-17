@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:33:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/19 07:06:05 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:47:59 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ static Message sb_rpl_ISUPPORT(FtIrc * const obj, Client * const client)
     reply_msg.pushParam("PREFIX=(o)@");
     reply_msg.pushParam("MODES=" + ft_std::itoa(3));
     reply_msg.pushParam("NICKLEN=" + ft_std::itoa(NICKLEN));
-    reply_msg.pushParam("TOPICLEN=" + ft_std::itoa(300));
-    reply_msg.pushParam("CHANNELLEN=" + ft_std::itoa(50));
-    reply_msg.pushParam("USERLEN=" + ft_std::itoa(10));
+    reply_msg.pushParam("TOPICLEN=" + ft_std::itoa(TOPICLEN));
+    reply_msg.pushParam("CHANNELLEN=" + ft_std::itoa(CHANNELLEN));
+    reply_msg.pushParam("USERLEN=" + ft_std::itoa(USERLEN));
     reply_msg.pushParam("NETWORK=" + obj->getNetworkName());
     reply_msg.pushParam("are supported by this server");
 
@@ -131,7 +131,6 @@ FtIrc::t_replyBatch FtIrc::rplWelcome(Client * const client)
     issuport_reply.second.push(sb_rpl_ISUPPORT(this, client));
 
     // 375, 372, 376
-    // TODO: do later
 
     // Append to Reply Batch
     FtIrc::t_replyBatch batch(2);

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:36 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 03:36:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:45:17 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 #include <netdb.h>
 
 // marcro
-#define LOCAL_LOG_NAME "listen_init"
+#define LOCAL_LOG_NAME 
 
 static inline void	sb_check_port_str(const char *num)
 {
@@ -53,7 +53,7 @@ static inline void	sb_check_port_str(const char *num)
 
 	if (port_no >= 0 && port_no <= 1023)
 	{
-		ft_utils::logger(ft_utils::WARN, LOCAL_LOG_NAME, "Trying to use Well-Known ports [0, 1023]");
+		ft_utils::logger(ft_utils::WARN, "listen_init", "Trying to use Well-Known ports [0, 1023]");
 	}
 }
 
@@ -79,7 +79,7 @@ static inline void	sb_setsockopt_helper(int listener_sockfd)
 	// Set Socket to be reuse quickly after restart Program
 	if (setsockopt(listener_sockfd, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr)) != 0)
 	{
-		ft_utils::logger(ft_utils::WARN, LOCAL_LOG_NAME, "Error occur when trying to set socket\'s option");
+		ft_utils::logger(ft_utils::WARN, "listen_init", "Error occur when trying to set socket\'s option");
 		return;
 	}
 }
@@ -159,13 +159,13 @@ int	get_listener_scoket_fd(const char *port_str)
 			close(listen_socketfd);
 			throw IrcListenBindingException("Set listen() to socket is failed");
 		}
-		ft_utils::logger(ft_utils::INFO, LOCAL_LOG_NAME, "Binding listener socket is succesful");
+		ft_utils::logger(ft_utils::INFO, "listen_init", "Binding listener socket is succesful");
 
 		return listen_socketfd;
 	}
 	catch (IrcListenBindingException const& e)
 	{
-		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, e.what());
+		ft_utils::logger(ft_utils::CRITICAL, "listen_init", e.what());
 
 		return -1;
 	}

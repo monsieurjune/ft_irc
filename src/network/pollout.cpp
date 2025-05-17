@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:58 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 20:19:09 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:44:07 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 
 // C Header
 #include <sys/socket.h>
-
-// macro
-#define LOCAL_LOG_NAME "pollout"
 
 namespace ft_net
 {
@@ -59,7 +56,7 @@ void	pollout(FtIrc *main_obj, int fd, int revents)
 	}
 	catch (std::exception const& e)
 	{
-		ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
+		ft_utils::logger(ft_utils::ERROR, "pollout", e.what());
 	}
 }
 
