@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 20:10:32 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:01:50 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include "ft_irc/FtIrc.hpp"
 #include "network/network.hpp"
 #include "utils/ft_utils.hpp"
-
-// Exception
-#include "exception/IrcDisconnectedException.hpp"
 
 // macro
 #define LOCAL_LOG_NAME "main"
@@ -67,6 +64,7 @@ static inline void	sb_network_loop(FtIrc *main_obj)
 
 	if (poll_count < 0)
 	{
+		ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, "Encounter error after ran poll()");
 		return;
 	}
 
@@ -77,13 +75,9 @@ static inline void	sb_network_loop(FtIrc *main_obj)
 
 		try
 		{
+			ft_net::pollhup(main_obj, fd, revents);
 			ft_net::pollin(main_obj, fd, revents);
 			ft_net::pollout(main_obj, fd, revents);
-		}
-		catch (IrcDisconnectedException const& e)
-		{
-			// TODO: Use something else
-			main_obj->deleteClient(fd);
 		}
 		catch (std::exception const& e)
 		{

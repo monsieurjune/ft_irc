@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:55 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 20:33:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:52:19 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "exception/IrcContinueException.hpp"
 #include "exception/IrcInvalidPacketException.hpp"
 #include "exception/IrcTooLongMsgException.hpp"
+#include "exception/IrcDisconnectedException.hpp"
 
 // C Header
 #include <sys/socket.h>
@@ -133,6 +134,10 @@ void	pollin(FtIrc *main_obj, int fd, int revents)
 	catch (IrcInvalidPacketException const& e)
 	{
 		ft_utils::logger(ft_utils::DEBUG, LOCAL_LOG_NAME, e.what());
+	}
+	catch (IrcDisconnectedException const&)
+	{
+		main_obj->notifyQuitOnThisClient(fd, "Connection is closed");
 	}
 	catch (IrcContinueException const&)
 	{
