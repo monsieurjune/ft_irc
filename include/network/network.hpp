@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:07 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 03:44:19 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 09:08:06 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,6 @@
 
 // CPP Header
 #include <string>
-
-#ifndef LISTEN_QUEUE_SIZE
-#define LISTEN_QUEUE_SIZE 128
-#endif
-
-#ifndef POLL_TIMEOUT_MS
-#define POLL_TIMEOUT_MS 100
-#endif
 
 // Forward Declaration to avoid include too much dependencies
 class FtIrc;
