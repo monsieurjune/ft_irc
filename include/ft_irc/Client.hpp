@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/17 03:29:30 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:14:57 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,16 @@ class Client
 		 * @note This Attribute can be ignored if DEBUG flag is setted
 		 */
 		int	_authenLevel;
-		
+
+		/**
+		 * @brief Flag to indicate that is server send err_toolong yet
+		 * 
+		 * - true: already sent err_toolong, just wait proper irc msg
+		 * 
+		 * - false: there is no too long msg, or just encouter it right now
+		 */
+		bool	_isFlushingToggle;
+
 		/**
 		 * @brief UserMode for server level operation
 		 * 
@@ -226,6 +235,17 @@ class Client
 		std::set<char> const&	getModes()	const;
 
 		/**
+		 * @brief Get Flushing Status of this client
+		 * 
+		 * @return Buffer Flushing Status
+		 * 
+		 * - true: still flushing too long msg & already sent err_toolong
+		 * 
+		 * - false: normal condition or just encouter too long msg right now
+		 */
+		bool	getIsFlushing() const;
+
+		/**
 		 * @brief Check Flags combination of This Client
 		 * 
 		 * Multiple flags can be combined using the bitwise OR (`|`) operator.
@@ -321,6 +341,20 @@ class Client
 		 * @warning It must be called after Client is built
 		 */
 		void	setHost(std::string const& host);
+
+		/**
+		 * @brief Set Flushing Status to true
+		 * 
+		 * @note This method is basically toggle
+		 */
+		void	setIsFlushing();
+
+		/**
+		 * @brief Set Flushing Status to false
+		 * 
+		 * @note This method is basically toggle
+		 */
+		void	resetIsFlushing();
 
 		/**
 		 * @brief Add This Membership Mode to This Client

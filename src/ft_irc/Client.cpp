@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/28 16:06:12 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:28:10 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 Client::Client(int const fd): _fd(fd), _timeConnected(std::time(NULL))
 {
+	_isFlushingToggle = false;
 	_authenLevel = 0;
 
 	if (DEBUG_MODE)
@@ -73,6 +74,11 @@ std::set<char> const&	Client::getModes(void) const
 	return (_userMode);
 }
 
+bool	Client::getIsFlushing(void) const
+{
+	return (_isFlushingToggle);
+}
+
 bool	Client::hasMode(char c) const
 {
 	return (_userMode.find(c) != _userMode.end());
@@ -113,6 +119,16 @@ void	Client::setRealname(std::string const& name)
 void	Client::setHost(std::string const& host)
 {
 	_host = host;
+}
+
+void	Client::setIsFlushing()
+{
+	_isFlushingToggle = true;
+}
+
+void	Client::resetIsFlushing()
+{
+	_isFlushingToggle = false;
 }
 
 void	Client::addMode(char c)

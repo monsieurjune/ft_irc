@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/17 09:29:18 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:33:03 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,6 +386,20 @@ class FtIrc
 		 * @param batch Reply Batch Data Structure
 		 */
 		void	pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch);
+
+		/**
+		 * @brief Add ERR_TOOLONG Message to this client's message queue
+		 * 
+		 * @param fd Client's fd
+		 */
+		void	notifyErrTooLongOnThisClient(int const fd);
+
+		/**
+		 * @brief Handle Client Quit in IRC Style
+		 * 
+		 * @param fd Client's fd
+		 */
+		void	notifyQuitOnThisClient(int const fd, std::string const& quit_msg);
 
 	private:
 		/**

@@ -6,15 +6,22 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:54 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/20 12:58:15 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:10:32 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Project header
+#include "ft_irc/FtIrc.hpp"
 #include "network/network.hpp"
 #include "utils/ft_utils.hpp"
-#include "ft_irc/FtIrc.hpp"
+
+// Exception
 #include "exception/IrcDisconnectedException.hpp"
 
+// macro
+#define LOCAL_LOG_NAME "main"
+
+// Use for check running
 bool	g_run	= true;
 
 static void	sb_killer(int signum)
@@ -28,35 +35,36 @@ static void	sb_ignorer(int signum)
 	(void)signum;	// ignore
 }
 
-static inline int	sb_initializer(const int argc, const char *argv[])
+static inline bool	sb_check_argv(const int argc, const char *argv[])
 {
+	bool	ret = true;
+
 	if (argc != 3)
 	{
-		// TODO: Fix log here
-		return -1;
+		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Arguments must have exactly 2 params");
+		return false;
+	}
+
+	if (argv[1][0] == '\0')
+	{
+		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Port musn\'t empty");
+		ret = false;
 	}
 
 	if (argv[2][0] == '\0')
 	{
-		// TODO: Fix log here
-		return -1;
+		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, "Password musn\'t empty");
+		ret = false;
 	}
 
-	if (ft_utils::signal_init(sb_killer, sb_ignorer) != 0)
-	{
-		// TODO: Fix log here
-		return -1;
-	}
-
-	return ft_net::get_listener_scoket_fd(argv[1]);
+	return ret;
 }
 
-static inline void	sb_poll(FtIrc *main_obj)
+static inline void	sb_network_loop(FtIrc *main_obj)
 {
+	int							poll_count = main_obj->callPoll();
 	std::vector<struct pollfd>&	pollfd_vec = main_obj->getPollFdVector();
-	int	poll_count;
 
-	poll_count = poll(pollfd_vec.data(), pollfd_vec.size(), POLL_TIMEOUT_MS);
 	if (poll_count < 0)
 	{
 		return;
@@ -72,43 +80,73 @@ static inline void	sb_poll(FtIrc *main_obj)
 			ft_net::pollin(main_obj, fd, revents);
 			ft_net::pollout(main_obj, fd, revents);
 		}
-		catch (const IrcDisconnectedException& e)
+		catch (IrcDisconnectedException const& e)
 		{
+			// TODO: Use something else
 			main_obj->deleteClient(fd);
 		}
-		catch (const std::exception& e)
+		catch (std::exception const& e)
 		{
-			// Ignored
+			ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
 		}
 	}
-
-	// Clean any closed fd from pollfd
-	main_obj->cleanUnusedPollFd();
 }
 
-int	main(const int argc, const char *argv[])
+static inline void	sb_server(int listener_socket_fd, const char* password)
 {
-	int	listen_socketfd;
+	FtIrc	main_obj(
+				listener_socket_fd, 
+				"irc.localhost.test",
+				"FtIrcNetwork",
+				password
+			);
 
-	listen_socketfd = sb_initializer(argc, argv);
-	if (listen_socketfd == -1)
-	{
-		return 1;
-	}
-
-	FtIrc	main_obj(listen_socketfd, "irc.localhost.test", "FTIRC", argv[2]);
-
-	// Infinite Loop
+	// Run
 	while (g_run)
 	{
 		try
 		{
-			sb_poll(&main_obj);
+			sb_network_loop(&main_obj);
 		}
-		catch (const std::exception& e)
+		catch (std::exception const& e)
 		{
+			ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
 			continue;
 		}
+	}
+}
+
+int	main(const int argc, const char *argv[])
+{
+	try
+	{
+		int	listener_socket_fd = 0;
+
+		// Check argv
+		if (!sb_check_argv(argc, argv))
+		{
+			return 1;
+		}
+
+		// Init signal handlers
+		if (ft_utils::signal_init(sb_killer, sb_ignorer))
+		{
+			return 1;
+		}
+
+		// Binding socket
+		listener_socket_fd = ft_net::get_listener_scoket_fd(argv[1]);
+		if (listener_socket_fd < 0)
+		{
+			return 1;
+		}
+
+		// Run Server
+		sb_server(listener_socket_fd, argv[2]);
+	}
+	catch (std::exception const& e)
+	{
+		ft_utils::logger(ft_utils::CRITICAL, LOCAL_LOG_NAME, e.what());
 	}
 
 	return 0;

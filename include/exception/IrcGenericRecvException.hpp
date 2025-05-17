@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CstdException.hpp                                  :+:      :+:    :+:   */
+/*   IrcGenericRecvException.hpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:52:19 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 01:28:13 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:13:09 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 #include <exception>
 #include <string>
 
-class CstdException : public std::exception
+class IrcGenericRecvException : public std::exception
 {
 	private:
 		std::string	_msg;
 
 	public:
-		explicit CstdException(int code);
-		virtual ~CstdException() throw();
+		explicit IrcGenericRecvException(std::string const& msg);
+		virtual ~IrcGenericRecvException() throw();
 		virtual const char* what() const throw();
 };
 

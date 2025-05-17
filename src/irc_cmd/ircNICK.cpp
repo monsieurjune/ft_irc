@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/20 11:57:50 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:16:14 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static FtIrc::t_replyBatch	sb_authen(FtIrc * const obj, Message const & msg, Cli
 	Message							reply_msg;
 
 	// Set Nickname To Client
-	obj->changeClientNickname(old_nick, new_nick);
+	obj->changeClientNickname(old_nick, new_nick.substr(0, NICKLEN));
 
 	// Creating Broadcast MSG
 	reply_msg.setSource(old_source);

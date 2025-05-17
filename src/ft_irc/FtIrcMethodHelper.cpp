@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FtIrcMethodHelper.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 00:40:23 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/08 14:23:09 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:40:31 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
+#include "ft_irc/FtIrcFunctionHelper.hpp"
 #include "std/ft_cstd.hpp"
 
 void    FtIrc::pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch)
@@ -66,4 +67,48 @@ void    FtIrc::pushChannelReplyOthers(Message const & reply_msg, Channel * const
 		reply.first = it_umap->first;
 		batch.push_back(reply);
 	}
+}
+
+void	FtIrc::notifyErrTooLongOnThisClient(int const fd)
+{
+	Client*	ptr = getClientByFd(fd);
+
+	if (ptr == NULL)
+	{
+		return;
+	}
+
+	// Apply ERR_TOOLONG to client
+	t_replyBatch	batch = errInputTooLong(ptr);
+
+	applyReplyBatchToClient(batch);
+}
+
+void	FtIrc::notifyQuitOnThisClient(int const fd, std::string const& quit_msg)
+{
+	Client*	ptr = getClientByFd(fd);
+
+	if (ptr == NULL)
+	{
+		return;
+	}
+
+	// Get Client Set that joining same channels as this client
+	std::set<Channel*>	channelSet = getChannelSetByClient(ptr);
+	std::set<Client*>	clientSet = getClientSetByChannelSet(channelSet);
+	Message				msg;
+	std::string			trailing = std::string("QUIT: ") + quit_msg;
+
+	// Set QUIT Message
+	msg.setSource(ptr->constructSource());
+	msg.setCommand("QUIT");
+	msg.pushParam(trailing);
+	
+	// Get Batch & Send to everyone
+	t_replyBatch ret_batch = singleReplyMultiClientBatch(msg, clientSet);
+
+	applyReplyBatchToClient(ret_batch);
+
+	// Remove this client
+	deleteClient(fd);
 }

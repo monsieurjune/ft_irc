@@ -6,20 +6,23 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:58 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:04:34 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:19:09 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Project Header
 #include "network/network.hpp"
 #include "ft_irc/FtIrc.hpp"
+#include "utils/ft_utils.hpp"
 
-#include "exception/CstdException.hpp"
+// Custom Exception
 #include "exception/IrcDisconnectedException.hpp"
 
 // C Header
-#include <sys/errno.h>
 #include <sys/socket.h>
+
+// macro
+#define LOCAL_LOG_NAME "pollout"
 
 namespace ft_net
 {
@@ -31,8 +34,10 @@ void	pollout(FtIrc *main_obj, int fd, int revents)
 		return;
 	}
 
+	// Get Client
 	Client	*client = main_obj->getClientByFd(fd);
 
+	// Shouldn't happend
 	if (client == NULL)
 	{
 		return;
@@ -40,27 +45,21 @@ void	pollout(FtIrc *main_obj, int fd, int revents)
 
 	try
 	{
+		// Check queue
 		if (client->countReply() == 0)
 		{
 			return;
 		}
-		
-		std::string	msg	= client->dequeueReply();	
 
-		if (send(fd, msg.c_str(), msg.length(), 0) < 0)
-		{
-			if (errno == EPIPE)
-			{
-				throw IrcDisconnectedException(
-					"Client is disconnected when try to write"
-				);
-			}
-			throw CstdException(errno);
-		}
+		// Get string
+		std::string	msg	= client->dequeueReply();
+
+		// If send return -1, then let other part of program to check disconnect
+		send(fd, msg.c_str(), msg.length(), 0);
 	}
-	catch (const std::exception& e)
+	catch (std::exception const& e)
 	{
-		// Ignored
+		ft_utils::logger(ft_utils::ERROR, LOCAL_LOG_NAME, e.what());
 	}
 }
 
