@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircKICK.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 15:51:16 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 08:18:26 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 09:28:24 by tnualman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 #include "ft_irc/Channel.hpp"
 #include "ft_irc/Message.hpp"
 #include "std/ft_cppstd.hpp"
+
+static void	queueclear(std::queue<Message> &q)
+{
+	std::queue<Message>	empty;
+	std::swap(q, empty);
+}
 
 FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, Client * const sender)
 {
@@ -39,7 +45,7 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
         reply_msg.setSource(obj->getServerName());
         reply_msg.setCommand(ERR_NOSUCHCHANNEL);
         reply_msg.pushParam(sender->getNickname());
-        reply_msg.pushParam("#" + channel_name);
+        reply_msg.pushParam(channel_name);
         reply_msg.pushParam("No such channel.");
         reply_sender.second.push(reply_msg);
         batch.push_back(reply_sender);
@@ -51,7 +57,7 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
         reply_msg.setSource(obj->getServerName());
         reply_msg.setCommand(ERR_CHANOPRIVSNEEDED);
         reply_msg.pushParam(sender->getNickname());
-        reply_msg.pushParam("#" + channel_name);
+        reply_msg.pushParam(channel_name);
         reply_msg.pushParam("You're not a channel operator.");
         reply_sender.second.push(reply_msg);
         batch.push_back(reply_sender);
@@ -88,6 +94,9 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
             reply_msg.pushParam(*it);
             reply_msg.pushParam("No such nickname.");
             reply_sender.second.push(reply_msg);
+            reply_msg.resetParams();
+            batch.push_back(reply_sender);
+            queueclear(reply_sender.second);
             continue ;
         }
 
@@ -97,9 +106,12 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
             reply_msg.setCommand(ERR_USERNOTINCHANNEL);
             reply_msg.pushParam(sender->getNickname());
             reply_msg.pushParam(*it);
-            reply_msg.pushParam("#" + channel_name);
+            reply_msg.pushParam(channel_name);
             reply_msg.pushParam("They're not on that channel.");
             reply_sender.second.push(reply_msg);
+            reply_msg.resetParams();
+            batch.push_back(reply_sender);
+            queueclear(reply_sender.second);
             continue ;
         }
 
@@ -107,12 +119,12 @@ FtIrc::t_replyBatch FtIrc::ircKICK(FtIrc * const obj, Message const & message, C
 
         reply_msg.setSource(sender->constructSource());
         reply_msg.setCommand("KICK");
-        reply_msg.pushParam("#" + channel_name);
+        reply_msg.pushParam(channel_name);
         reply_msg.pushParam(*it);
         reply_msg.pushParam(reason);
         obj->pushChannelReplyAll(reply_msg, channel, batch);
+        reply_msg.resetParams();
     }
-    batch.push_back(reply_sender);
 
     return (batch);
 }
