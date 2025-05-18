@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircPRIVMSG.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scharuka <scharuka@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:36:40 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/14 18:50:16 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 09:21:28 by scharuka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ FtIrc::t_replyBatch FtIrc::ircPRIVMSG(FtIrc * const obj, Message const & msg, Cl
 
     if (message.empty())
     {
-        return batch; 
+        return batch;
     }
 
     Message reply;
@@ -79,7 +79,7 @@ FtIrc::t_replyBatch FtIrc::ircPRIVMSG(FtIrc * const obj, Message const & msg, Cl
 
             return batch;
         }
-        obj->pushChannelReplyAll(reply, channel, batch);
+        obj->pushChannelReplyOthers(reply, channel, batch, client);
     }
     else
     {
