@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
+#    By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/05/18 10:34:43 by tponutha         ###   ########.fr        #
+#    Updated: 2025/05/18 10:41:24 by tnualman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,10 @@ MKDIR	:= mkdir -p
 # Complier Propeties
 CXX			:= c++
 CXX_STDFLAG	:= -std=c++98
-CXX_WFLAG	:= -Wall -Werror -Wextra -pedantic
+CXX_WFLAG	:= -Wall -Werror -Wextra
 CXX_MFLAG	:= -MP -MD
-CXX_OFLAG	:= -O0
-CXX_DFLAG	:= 
+CXX_OFLAG	:=
+CXX_DFLAG	:=
 CXXFLAG		:= $(CXX_STDFLAG) $(CXX_WFLAG) $(CXX_OFLAG) $(CXX_DFLAG)
 
 # Directories
