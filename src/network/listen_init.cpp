@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:36 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/18 06:45:17 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:31:43 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 
 // C Header (Network)
 #include <sys/types.h>
-#include <sys/errno.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

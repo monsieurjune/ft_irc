@@ -6,7 +6,7 @@
 #    By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/01 14:04:58 by tponutha          #+#    #+#              #
-#    Updated: 2025/05/17 21:15:19 by tponutha         ###   ########.fr        #
+#    Updated: 2025/05/18 10:31:57 by tponutha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ MKDIR	:= mkdir -p
 # Complier Propeties
 CXX			:= c++
 CXX_STDFLAG	:= -std=c++98
-CXX_WFLAG	:= -Wall -Werror -Wextra
+CXX_WFLAG	:= -Wall -Werror -Wextra -pedantic
 CXX_MFLAG	:= -MP -MD
 CXX_OFLAG	:= -O0
 CXX_DFLAG	:= -g
