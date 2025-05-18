@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:58 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/18 06:44:07 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:40:34 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,17 @@ void	pollout(FtIrc *main_obj, int fd, int revents)
 		}
 
 		// Get string
-		std::string	msg	= client->dequeueReply();
+		std::string	msg	= client->getFrontReply();
 
 		// If send return -1, then let other part of program to check disconnect
-		send(fd, msg.c_str(), msg.length(), 0);
+		ssize_t n = send(fd, msg.c_str(), msg.length(), 0);
+		if (n < 0)
+		{
+			return;
+		}
+
+		// trim or pop msg out
+		client->dequeueReply(static_cast<size_t>(n));
 	}
 	catch (std::exception const& e)
 	{

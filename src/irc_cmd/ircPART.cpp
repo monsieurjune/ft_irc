@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ircPART.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/05/11 18:55:23 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:51:14 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ FtIrc::t_replyBatch	FtIrc::ircPART(FtIrc * const obj, Message const & message, C
 
         // General/valid PARTing case here.
 		{
-			channel->deleteUserFromChannel(sender);
+			obj->deleteClientFromChannel(channel_name, sender);
+			// channel->deleteUserFromChannel(sender);
 			reply_msg.setSource(sender->constructSource());
 			reply_msg.setCommand("PART");
 			reply_msg.pushParam(channel_name);
