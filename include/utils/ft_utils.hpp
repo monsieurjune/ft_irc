@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 15:01:25 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/18 07:01:57 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:33:14 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef enum e_loglevel
     INFO,
     WARN,
     ERROR,
-    CRITICAL,
+    CRITICAL
 }   t_loglevel;
 
 void	logger(t_loglevel level, std::string const& name, std::string const& msg);

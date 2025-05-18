@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/18 07:52:38 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:33:08 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ enum e_modes
 	MODE_CHANNELKEY = 'k',
 	MODE_OPERATOR = 'o',
 	MODE_USERLIMIT = 'l',
-	MODE_RESERVE_ERROR = '!',
+	MODE_RESERVE_ERROR = '!'
 };
 
 // Forward Decalration to avoid CIRCULAR include

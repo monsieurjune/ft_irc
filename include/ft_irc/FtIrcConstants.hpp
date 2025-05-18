@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:17:40 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/18 06:28:23 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:33:02 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ enum e_numerics
     ERR_SASLTOOLONG = 905,
     ERR_SASLABORTED = 906,
     ERR_SASLALREADY = 907,
-    RPL_SASLMECHS = 908,
+    RPL_SASLMECHS = 908
 };
 
 #endif
