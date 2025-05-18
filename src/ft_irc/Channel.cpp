@@ -6,13 +6,14 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/16 02:09:31 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:45:47 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Project Header
 #include "ft_irc/Client.hpp"
 #include "ft_irc/Channel.hpp"
+#include "utils/ft_utils.hpp"
 
 Channel::Channel(std::string const& name, Client * const creator) : _name(name), \
 																	_timeCreated(std::time(NULL)), \
@@ -23,16 +24,18 @@ Channel::Channel(std::string const& name, Client * const creator) : _name(name),
 
 	// Add certain mode that setted by default (i.e. topic mode)
 	addMode(MODE_PROTECTTOPIC);
+
+	// log
+	std::string	msg = std::string("Channel <") + name + std::string("> is created");
+
+	ft_utils::logger(ft_utils::INFO, "channel", msg);
 }
 
 Channel::~Channel()
 {
-	// Super edge case, which shouldn't happend in the first place
-	// i.e. Channel is destroyed while still has users
-	if (_userMap.size() > 0)
-	{
-		// TODO: might handle later
-	}
+	std::string	msg = std::string("Channel <") + _name + std::string("> is destroyed");
+
+	ft_utils::logger(ft_utils::INFO, "channel", msg);
 }
 
 std::string const&	Channel::getName(void) const
@@ -152,14 +155,11 @@ int	Channel::addUserToChannel(Client * const client, std::string const& modestr)
 {
 	if (_userMap.find(client) != _userMap.end())
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " already exists on channel " << _name << " !" << std::endl;
 		return (1);
 	}
 
 	if (hasThisMode(MODE_USERLIMIT) && getUserCount() >= getUserCountLimit())
 	{
-		// std::cerr << "Channel's user count limit reached!" << std::endl;
 		return (2);
 	}
 
@@ -181,8 +181,6 @@ int	Channel::deleteUserFromChannel(Client * const client)
 {
 	if (_userMap.find(client) == _userMap.end())
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " does not exist on channel " << _name << " !" << std::endl;
 		return (1);
 	}
 	_userMap.erase(client);
@@ -200,8 +198,6 @@ std::set<char>	Channel::getThisClientMembershipModes(Client * const client) cons
 	{
 		std::set<char> ret;
 
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		ret.insert(MODE_RESERVE_ERROR);
 		return (ret);
 	}	
@@ -215,8 +211,6 @@ bool	Channel::hasThisClientMembershipMode(Client * const client, char const c) c
 	}
 	catch (std::exception const & e)
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (false);
 	}	
 }
@@ -233,8 +227,6 @@ int	Channel::addThisClientMembershipMode(Client * const client, char const c)
 	}
 	catch (std::exception const & e)
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
 }
@@ -257,8 +249,6 @@ int	Channel::addThisClientMembershipMode(Client * const client, std::string cons
 	}
 	catch (std::exception const & e)
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}
 }
@@ -275,8 +265,6 @@ int	Channel::removeThisClientMembershipMode(Client * const client, char const c)
 	}
 	catch (std::exception const & e)
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}	
 }
@@ -300,8 +288,6 @@ int	Channel::removeThisClientMembershipMode(Client * const client, std::string c
 	}
 	catch (std::exception const & e)
 	{
-		// std::cerr << "Client named " << client->getNickname() << ", socket " << client->getFd()
-		// 	<< " not found on channel " << _name << " !" << std::endl;
 		return (-1);
 	}
 }

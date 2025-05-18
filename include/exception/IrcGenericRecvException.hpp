@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rplWhoReply.cpp                                    :+:      :+:    :+:   */
+/*   IrcGenericRecvException.hpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 09:35:05 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/13 21:41:29 by tponutha         ###   ########.fr       */
+/*   Created: 2025/01/30 10:52:19 by tponutha          #+#    #+#             */
+/*   Updated: 2025/05/17 20:13:09 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Project Header
-#include "ft_irc/FtIrc.hpp"
-#include "ft_irc/Client.hpp"
-#include "ft_irc/Channel.hpp"
-#include "ft_irc/Message.hpp"
-#include "std/ft_cppstd.hpp"
+#ifndef __CSTD_EXCEPTION_HPP__
+#define __CSTD_EXCEPTION_HPP__
+#include <exception>
+#include <string>
 
-FtIrc::t_replyBatch FtIrc::rplWhoReply(Channel * const channel)
+class IrcGenericRecvException : public std::exception
 {
-    (void)channel;
+	private:
+		std::string	_msg;
 
-    return t_replyBatch();
-}
+	public:
+		explicit IrcGenericRecvException(std::string const& msg);
+		virtual ~IrcGenericRecvException() throw();
+		virtual const char* what() const throw();
+};
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/04/19 06:56:24 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 09:05:48 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 // C Header
 #include <unistd.h>
-#include <fcntl.h>
 
 FtIrc::FtIrc(
 		int const listen_fd, 
@@ -110,16 +109,14 @@ std::vector<struct pollfd>&	FtIrc::getPollFdVector()
 	return (_mainPollfdVec);
 }
 
-
 Client*	FtIrc::getClientByFd(int const fd) const
 {
     try
 	{
 		return (_clientMapByFd.at(fd));
 	}
-	catch (std::exception const & e)
+	catch (std::exception const&)
 	{
-		// std::cerr << "Client with socket " << fd << " not found!" << std::endl;
 		return (NULL);
 	}	
 }
@@ -130,9 +127,8 @@ Client*	FtIrc::getClientByNickname(std::string const& name) const
 	{
 		return (_clientMapByNickname.at(name));
 	}
-	catch (std::exception const & e)
+	catch (std::exception const&)
 	{
-		// std::cerr << "Client with username " << name << " not found!" << std::endl;
 		return (NULL);
 	}	
 }
@@ -143,9 +139,8 @@ Channel* FtIrc::getChannelByName(std::string const& name) const
 	{
 		return (_channelMapByName.at(name));
 	}
-	catch (std::exception const & e)
+	catch (std::exception const&)
 	{
-		// std::cerr << "Channel named " << name << " not found!" << std::endl;
 		return (NULL);
 	}	
 }
@@ -212,6 +207,7 @@ void	FtIrc::changeClientNickname(std::string const& old_nick, std::string const&
 		return;
 	}
 
+	// replace old nickname with new one
 	Client*	ptr = it_old->second;
 
 	ptr->setNickname(new_nick);
@@ -231,165 +227,6 @@ void	FtIrc::setClientNickname(Client * const client, std::string const& nick)
 
 	client->setNickname(nick);
 	_clientMapByNickname[nick] = client;
-}
-
-void	FtIrc::cleanUnusedPollFd()
-{
-	_tempPollfdVec.clear();
-
-	for (size_t i = 0; i < _mainPollfdVec.size(); i++)
-	{
-		if (_mainPollfdVec[i].fd != MARKED_REMOVE_FD)
-		{
-			_tempPollfdVec.push_back(_mainPollfdVec[i]);
-		}
-	}
-	std::swap(_mainPollfdVec, _tempPollfdVec);
-}
-
-int	FtIrc::createChannel(std::string const& channel_name, Client * const creator)
-{
-	Channel*	ptr = NULL;
-	
-	if (_channelMapByName.find(channel_name) != _channelMapByName.end())
-	{
-		return (1);
-	}
-
-	try
-	{
-		ptr = new Channel(channel_name, creator);
-		_channelMapByName[channel_name] = ptr;
-		
-		return (0);
-	}
-	catch (std::bad_alloc const& e)
-	{
-		if (ptr != NULL)
-		{
-			delete ptr;
-		}
-		return (-1);
-	}
-}
-
-int	FtIrc::deleteClientFromChannel(std::string const& channel_name, Client * const client)
-{
-	Channel*	ptr = NULL;
-
-	if (_channelMapByName.find(channel_name) == _channelMapByName.end())
-	{
-		return (1);
-	}
-
-	ptr = _channelMapByName[channel_name];
-
-	// Unjoin Client from channel
-	if (ptr->deleteUserFromChannel(client) != 0)
-	{
-		return (2);
-	}
-
-	// Check if Channel's members is 0
-	if (ptr->getUserCount() == 0)
-	{
-		_channelMapByName.erase(channel_name);
-		delete ptr;
-	}
-	return (0);
-}
-
-void	FtIrc::addClient(int const fd, const char *ip)
-{
-	Client*	ptr = NULL;
-
-	if (_clientMapByFd.find(fd) != _clientMapByFd.end())
-	{
-		return;
-	}
-
-	try
-	{
-		struct pollfd	new_pollfd;
-
-		ft_std::memset(&new_pollfd, 0, sizeof(new_pollfd));
-		ptr = new Client(fd);
-		ptr->setHost(ip);
-
-		// Set NON BLOCKING to fd
-		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
-		{
-			delete ptr;
-			return;
-		}
-
-		// Set pollfd value
-		new_pollfd.fd = fd;
-		new_pollfd.events = POLLIN | POLLOUT;
-		_mainPollfdVec.push_back(new_pollfd);
-		_clientMapByFd[fd] = ptr;
-	}
-	catch (std::bad_alloc const& e)
-	{
-		if (ptr != NULL)
-		{
-			_mainPollfdVec.pop_back();
-			delete ptr;
-		}
-		else
-		{
-			close(fd);
-		}
-	}
-}
-
-void	FtIrc::deleteClient(int const fd)
-{
-	Client*	ptr = NULL;
-
-	if (_clientMapByFd.find(fd) == _clientMapByFd.end())
-	{
-		return;
-	}
-
-	// Obtain pointer to Client
-	ptr = _clientMapByFd[fd];
-
-	// Get object attributes
-	std::string const&	nick = ptr->getNickname();
-
-	// Exit from Channel
-	for (std::map<std::string, Channel*>::iterator it = _channelMapByName.begin(); it != _channelMapByName.end();)
-	{
-		if (it->second->hasThisClient(ptr))
-		{
-			std::map<std::string, Channel*>::iterator	toErase = it;
-
-			it++;
-			deleteClientFromChannel(toErase->first, ptr);
-		}
-		else
-		{
-			it++;
-		}
-	}
-
-	// Erase Client from ClientMap (No Free yet)
-	_clientMapByNickname.erase(nick);
-	_clientMapByFd.erase(fd);
-
-	// Remove fd from pollfd vector by mark it with MARKED_REMOVE_FD
-	for (std::vector<struct pollfd>::iterator it = _mainPollfdVec.begin(); it != _mainPollfdVec.end(); it++)
-	{
-		if (it->fd == fd)
-		{
-			it->fd = MARKED_REMOVE_FD;
-			break;
-		}
-	}
-
-	// Free Client (close fd here)
-	delete ptr;
 }
 
 void	FtIrc::applyReplyBatchToClient(t_replyBatch& batch)

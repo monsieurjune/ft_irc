@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:33:57 by tponutha          #+#    #+#             */
-/*   Updated: 2025/02/01 14:05:11 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 01:28:33 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class IrcContinueException : public std::exception
 		std::string	_msg;
 
 	public:
-		IrcContinueException(const char *msg);
+		explicit IrcContinueException(std::string const& msg);
 		virtual ~IrcContinueException() throw();
 		virtual const char* what() const throw();
 };

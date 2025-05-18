@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:33:17 by scharuka          #+#    #+#             */
-/*   Updated: 2025/04/17 17:56:43 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:16:46 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ FtIrc::t_replyBatch	FtIrc::ircUSER(FtIrc * const obj, Message const & msg, Clien
     std::string const&  username    = params.at(0);
     std::string const&  realname    = params.at(3);
 
-    client->setUsername(username);
+    client->setUsername(username.substr(0, USERLEN));
     client->setRealname(realname);
     client->setAuthenLevel(client->getAuthenLevel() | USER_FLAG);
 

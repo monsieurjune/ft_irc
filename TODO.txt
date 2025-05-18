@@ -25,3 +25,15 @@ Complete and Omitted:
 
 Improvements (uncessary):
 - Name reply with 16 names for each message.
+
+FIX:
+- make listen_init flow look better
+- make main.cpp look better
+- trim out extra user & nick
+- handle too long properly
+- use better method to 'clear' poll_vector
+- better way to check NUL in msg
+- make QUIT command possible
+- handle pollhup
+- make log
+- read thing from file

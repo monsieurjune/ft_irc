@@ -6,18 +6,21 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:52:55 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/20 12:58:32 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 06:43:49 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Project Header
-#include "network/network.hpp"
 #include "ft_irc/FtIrc.hpp"
 #include "ft_irc/Message.hpp"
+#include "network/network.hpp"
+#include "utils/ft_utils.hpp"
 
+// Custom Exception
 #include "exception/IrcContinueException.hpp"
 #include "exception/IrcInvalidPacketException.hpp"
 #include "exception/IrcTooLongMsgException.hpp"
+#include "exception/IrcDisconnectedException.hpp"
 
 // C Header
 #include <sys/socket.h>
@@ -41,24 +44,62 @@ static inline void	sb_accept_new_client(FtIrc *main_obj, int listen_fd)
 	main_obj->addClient(client_fd, client_ip);
 }
 
-static inline void	sb_read_msg_from_client(FtIrc *main_obj, int fd)
+static inline void	sb_reading(FtIrc *main_obj, Client *client)
 {
-	std::string	raw_msg = ft_net::irc_recv(fd);
-	Message	msg(raw_msg);
-	Client	*client = main_obj->getClientByFd(fd);
+	std::string	raw_msg = ft_net::irc_recv(client->getFd());
+	Message		msg(raw_msg);
 
-	// Client is not exist (shouldn't happen)
-	if (client == NULL)
-	{
-		return;
-	}
-
+	// message format is wrong
 	if (!msg.isValid())
 	{
 		return;
 	}
 
+	// handle message
 	main_obj->ircMessageHandler(msg, client);
+}
+
+static inline void	sb_read_msg_from_client(FtIrc *main_obj, int fd)
+{
+	Client*	client = main_obj->getClientByFd(fd);
+
+	// Client is not exist (shouldn't happend)
+	if (client == NULL)
+	{
+		return;
+	}
+
+	// Check flsuhing status
+	if (client->getIsFlushing())
+	{
+		if (ft_net::irc_flush(client->getFd()) == 0)
+		{
+			client->resetIsFlushing();
+		}
+		return;
+	}
+
+	// run normal thing
+	sb_reading(main_obj, client);
+}
+
+
+static inline void	sb_handle_too_long(FtIrc *main_obj, int fd, std::string const& msg)
+{
+	Client*	ptr = main_obj->getClientByFd(fd);
+
+	// Client is not exist (shouldn't happend)
+	if (ptr == NULL)
+	{
+		return;
+	}
+
+	// Do first time thing
+	main_obj->notifyErrTooLongOnThisClient(fd);
+	ft_utils::logger(ft_utils::DEBUG, "pollin", msg);
+
+	// set isflush toggle
+	ptr->setIsFlushing();
 }
 
 namespace ft_net
@@ -73,26 +114,31 @@ void	pollin(FtIrc *main_obj, int fd, int revents)
 
 	try
 	{
+		// for listen socket
 		if (fd == main_obj->getListenFd())
 		{
 			sb_accept_new_client(main_obj, fd);
+			return;
 		}
-		else
-		{
-			sb_read_msg_from_client(main_obj, fd);
-		}
+
+		// for client socket
+		sb_read_msg_from_client(main_obj, fd);
 	}
-	catch (const IrcTooLongMsgException& e)
+	catch (IrcTooLongMsgException const& e)
 	{
-		// TODO: later
+		sb_handle_too_long(main_obj, fd, e.what());
 	}
-	catch (const IrcInvalidPacketException& e)
+	catch (IrcInvalidPacketException const& e)
 	{
-		// Ignored
+		ft_utils::logger(ft_utils::DEBUG, "pollin", e.what());
 	}
-	catch (const IrcContinueException& e)
+	catch (IrcDisconnectedException const&)
 	{
-		// Ignored
+		main_obj->notifyQuitOnThisClient(fd, "Connection is closed");
+	}
+	catch (IrcContinueException const&)
+	{
+		// Do literal nothing
 	}
 }
 

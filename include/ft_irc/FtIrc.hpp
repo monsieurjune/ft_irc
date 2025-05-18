@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FtIrc.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnualman <tnualman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 01:57:58 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/08 14:23:12 by tnualman         ###   ########.fr       */
+/*   Updated: 2025/05/17 16:33:03 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,21 +284,15 @@ class FtIrc
 		void	setClientNickname(Client * const client, std::string const& nick);
 
 		/**
-		 * @brief Clean up the "disconnected" pollfd from vector
+		 * @brief Call poll() within class and get result
 		 * 
-		 * This method will remove all fd that marked by deleteClient()
+		 * @return poll's result
 		 * 
-		 * @note This method existed to avoid O(N^2) of constant erase()
+		 * @note This method handle 'cleaning' pollfd array too
 		 * 
-		 * @warning This method must be called after pollfd loop is ended with these reason
-		 * 
-		 * - avoid "skipping" the index in loop
-		 * 
-		 * - avoid poll() to interact with invalid fd (marked fd)
-		 * 
-		 * - this method "swap" the original pollfd, so update the reference after that
+		 * @warning Please get pollFdVec after run this command
 		 */
-		void	cleanUnusedPollFd();
+		int	callPoll();
 
 		/**
 		 * @brief IRC CMD Main Handler
@@ -392,6 +386,20 @@ class FtIrc
 		 * @param batch Reply Batch Data Structure
 		 */
 		void	pushServerReplyAll(Message const & reply_msg, t_replyBatch & batch);
+
+		/**
+		 * @brief Add ERR_TOOLONG Message to this client's message queue
+		 * 
+		 * @param fd Client's fd
+		 */
+		void	notifyErrTooLongOnThisClient(int const fd);
+
+		/**
+		 * @brief Handle Client Quit in IRC Style
+		 * 
+		 * @param fd Client's fd
+		 */
+		void	notifyQuitOnThisClient(int const fd, std::string const& quit_msg);
 
 	private:
 		/**
@@ -556,59 +564,100 @@ class FtIrc
 		static t_replyBatch ircPONG(FtIrc * const obj, Message const & msg, Client * const client);
 
 		/**
+		 * @brief Handle channel part of ircMODE
 		 * 
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	ircMODE_channel(Message const & message, Client * const sender);
 
 		/**
+		 * @brief Handle user part of ircMODE
 		 * 
+		 * @param msg Message Object
+		 * @param client Client Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	ircMODE_user(Message const & message, Client * const sender);
 
 		/**
+		 * @brief Create ERR_NEEDMOREPARAMS Message
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * @param message Message object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	errNeedMoreParams(Client * const client, Message const & message);
 
 		/**
+		 * @brief Create ERR_UNKNOWNCOMMAND Message
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * @param cmd Unknown Command Name
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	errUnknownCmd(Client * const client, std::string const& cmd);
 
 		/**
+		 * @brief Create ERR_ALREADYREGISTERED Message
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	errAlreadyRegistered(Client * const client);
 
 		/**
+		 * @brief Create ERR_NOTREGISTERED Message
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	errNotRegistered(Client * const client);
 
 		/**
+		 * @brief Create ERR_INPUTTOOLONG Message
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	errInputTooLong(Client * const client);
 
 		/**
+		 * @brief Create RPL_TOPIC & RPL_TOPICWHOTIME Messages Chain
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * @param channel Channel Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	rplTopicWhoTime(Client * const sender, Channel * const channel);
 
 		/**
+		 * @brief Create RPL_NAMEREPLY Message & RPL_ENDOFNAME Messages Chain
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * @param channel Channel Object
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	rplNameReply(Client * const client, Channel * const channel);
 
 		/**
+		 * @brief Create 001 to 005 Messages Chain
 		 * 
+		 * @param client Client Object, you want to seed this message
+		 * 
+		 * @return Vector of reply Message Objects of associate clients
 		 */
 		t_replyBatch	rplWelcome(Client * const client);
-
-		/**
-		 * 
-		 */
-		t_replyBatch	rplWhoReply(Channel * const channel);
 };
 
 #endif
