@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 20:13:51 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 02:44:28 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:00:38 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,6 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-
-// ANSI color codes
-#define COLOR_RESET     "\033[0m"
-#define COLOR_BOLD      "\033[1m"
-
-#define COLOR_BLACK     "\033[30m"
-#define COLOR_RED       "\033[31m"
-#define COLOR_GREEN     "\033[32m"
-#define COLOR_YELLOW    "\033[33m"
-#define COLOR_BLUE      "\033[34m"
-#define COLOR_MAGENTA   "\033[35m"
-#define COLOR_CYAN      "\033[36m"
-#define COLOR_WHITE     "\033[37m"
 
 namespace ft_utils
 {
