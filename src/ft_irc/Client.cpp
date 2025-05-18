@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:26:36 by tnualman          #+#    #+#             */
-/*   Updated: 2025/05/18 06:23:32 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:36:52 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,15 +146,27 @@ size_t	Client::countReply(void) const
 	return (_replyQueue.size());
 }
 
+std::string const&	Client::getFrontReply(void) const
+{
+	return (_replyQueue.front());
+}
+
 void	Client::enqueueReply(std::string const& msg)
 {
 	_replyQueue.push(msg);
 }
 
-std::string	Client::dequeueReply(void)
+void	Client::dequeueReply(size_t n)
 {
-	std::string	msg = _replyQueue.front();
+	std::string&	msg = _replyQueue.front();
 
-	_replyQueue.pop();
-	return (msg);
+	// if N >= msg, then dequeue
+	if (msg.length() <= n)
+	{
+		_replyQueue.pop();
+		return;
+	}
+
+	// otherwise, just trim first N of msg out
+	msg = msg.substr(n);
 }

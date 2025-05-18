@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:56:42 by tponutha          #+#    #+#             */
-/*   Updated: 2025/04/16 02:08:51 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:52:38 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ class Channel
 		 * 
 		 * - 1: client doesn't existed here
 		 * 
-		 * @note Should be used under PART, QUIT, KICK, and hardcore disconnect
+		 * @note Should be used under wrapper method of class that contain STL of channel
 		 */
 		int	deleteUserFromChannel(Client * const client);
 

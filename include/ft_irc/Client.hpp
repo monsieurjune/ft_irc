@@ -6,7 +6,7 @@
 /*   By: tponutha <tponutha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:31:35 by tponutha          #+#    #+#             */
-/*   Updated: 2025/05/17 12:14:57 by tponutha         ###   ########.fr       */
+/*   Updated: 2025/05/18 07:37:27 by tponutha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,6 +378,15 @@ class Client
 		size_t	countReply()	const;
 
 		/**
+		 * @brief Get first message in queue
+		 * 
+		 * @return First string as lvalue
+		 * 
+		 * @warning Only Use it in function that send msg out
+		 */
+		std::string const&	getFrontReply() const;
+
+		/**
 		 * @brief Enqueue This Message
 		 * 
 		 * @param msg IRC Response Message
@@ -385,13 +394,11 @@ class Client
 		void	enqueueReply(std::string const& msg);
 
 		/**
-		 * @brief Dequeue This Message
-		 * 
-		 * @return IRC Response Message in rvalue
+		 * @brief Remove first N amount of first message or dequeue, if N >= message
 		 * 
 		 * @warning Only Use it in function that send msg out
 		 */
-		std::string dequeueReply();
+		void dequeueReply(size_t n);
 };
 
 #endif
